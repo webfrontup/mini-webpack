@@ -1,0 +1,58 @@
+{
+	"name": "mini-webpack",
+	"version": "0.0.1",
+	"description": "vue cli",
+	"main": "index.js",
+	"scripts": {
+		"dev": "webpack-dev-server --progress --config build/webpack.config.dev.js",
+		"prod": "webpack --config build/webpack.config.prod.js"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/webfrontup/mini-webpack.git"
+	},
+	"keywords": [
+		"vue",
+		"cli"
+	],
+	"author": "",
+	"license": "MIT",
+	"dependencies": {
+		"vue": "^2.5.17",
+		"vue-router": "^3.0.2"
+	},
+	"devDependencies": {
+		"@babel/core": "^7.2.0",
+		"@babel/preset-env": "^7.2.0",
+		"@vue/test-utils": "^1.0.0-beta.26",
+		"autoprefixer": "^9.3.1",
+		"babel-core": "^7.0.0-bridge.0",
+		"babel-loader": "^8.0.4",
+		"copy-webpack-plugin": "^4.6.0",
+		"css-loader": "^1.0.1",
+		"html-webpack-plugin": "^3.2.0",
+		"less": "^3.9.0",
+		"less-loader": "^4.1.0",
+		"mini-css-extract-plugin": "^0.5.0",
+		"node-sass": "^4.11.0",
+		"postcss-loader": "^3.0.0",
+		"sass-loader": "^7.1.0",
+		"style-loader": "^0.23.1",
+		"stylus": "^0.54.5",
+		"stylus-loader": "^3.0.2",
+		"uglify-es": "^3.3.9",
+		"url-loader": "^1.1.2",
+		"vue-loader": "^15.4.2",
+		"vue-server-renderer": "^2.5.17",
+		"vue-style-loader": "^4.1.2",
+		"vue-template-compiler": "^2.5.17",
+		"webpack": "^4.27.1",
+		"webpack-cli": "^3.1.2",
+		"webpack-dev-server": "^3.1.10",
+		"webpack-merge": "^4.1.4"
+	},
+	"bugs": {
+		"url": "https://github.com/webfrontup/mini-webpack/issues"
+	},
+	"homepage": "https://github.com/webfrontup/mini-webpack#readme"
+}

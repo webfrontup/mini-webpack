@@ -1,0 +1,14 @@
+.container[data-v-7ba5bd90] {
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  max-width: 1200px;
+}
+
+.full-width {
+  width: 100%;
+}
+.center-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
