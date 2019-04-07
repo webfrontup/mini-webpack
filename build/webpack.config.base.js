@@ -10,6 +10,10 @@ module.exports = {
 	resolve: {
 		extensions: [".js", ".vue", ".json"],
 		alias: {
+			'vue$': 'vue/dist/vue.esm.js',
+			'@': utils.resolve('src'),
+			'common': utils.resolve(__dirname, '/src/common'),
+			'base': utils.resolve('src/base'),
 			assets: utils.resolve("assets"),
 			views: utils.resolve("src/views"),
 			static: utils.resolve("static"),
