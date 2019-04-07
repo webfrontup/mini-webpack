@@ -5,7 +5,9 @@
 	"main": "index.js",
 	"scripts": {
 		"dev": "webpack-dev-server --progress --config build/webpack.config.dev.js",
-		"prod": "webpack --config build/webpack.config.prod.js"
+		"prod": "webpack --config build/webpack.config.prod.js",
+		"build:dll": "webpack --config ./build/webpack.dll.js",
+		"build": "npm run build:dll && npm run prod"
 	},
 	"repository": {
 		"type": "git",
@@ -38,7 +40,7 @@
 	"devDependencies": {
 		"@babel/plugin-syntax-dynamic-import": "^7.2.0",
 		"@babel/plugin-transform-runtime": "^7.4.3",
-		"clean-webpack-plugin": "^2.0.1",
+		"clean-webpack-plugin": "^1.0.0",
 		"extract-text-webpack-plugin": "^3.0.2",
 		"concurrently": "^4.1.0",
 		"@babel/core": "^7.2.0",
@@ -72,7 +74,10 @@
 		"webpack": "^4.27.1",
 		"webpack-cli": "^3.1.2",
 		"webpack-dev-server": "^3.1.10",
-		"webpack-merge": "^4.1.4"
+		"webpack-merge": "^4.1.4",
+		"add-asset-html-webpack-plugin": "^3.1.2",
+		"jquery": "^3.3.1",
+		"lodash": "^4.17.11"
 	},
 	"bugs": {
 		"url": "https://github.com/webfrontup/mini-webpack/issues"

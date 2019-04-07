@@ -1,10 +1,51 @@
 "use strict";
-
+const path = require("path");
+const fs = require("fs");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const { VueLoaderPlugin } = require("vue-loader");
+const CleanWebpackPlugin = require("clean-webpack-plugin");
+const AddAssetHtmlWebpackPlugin = require("add-asset-html-webpack-plugin");
+const webpack = require("webpack");
 
 const utils = require("./utils");
+
+const plugins = [
+	new HtmlWebpackPlugin({
+		filename: "index.html",
+		template: "index.html",
+		inject: true,
+		chunksSortMode: "none" //html-webpack-plugin 遇到 throw new Error('Cyclic dependency' + nodeRep)
+	}),
+	new CleanWebpackPlugin(["dist"], {
+		root: path.resolve(__dirname, "../")
+	}),
+	new VueLoaderPlugin(),
+	new CopyWebpackPlugin([
+		{
+			from: utils.resolve("static/img"),
+			to: utils.resolve("dist/static/img"),
+			toType: "dir"
+		}
+	])
+];
+const files = fs.readdirSync(path.resolve(__dirname, "../dll"));
+files.forEach(file => {
+	if (/.*\.dll.js/.test(file)) {
+		plugins.push(
+			new AddAssetHtmlWebpackPlugin({
+				filepath: path.resolve(__dirname, "../dll", file)
+			})
+		);
+	}
+	if (/.*\.manifest.json/.test(file)) {
+		plugins.push(
+			new webpack.DllReferencePlugin({
+				manifest: path.resolve(__dirname, "../dll", file)
+			})
+		);
+	}
+});
 
 module.exports = {
 	resolve: {
@@ -76,22 +117,5 @@ module.exports = {
 			}
 		]
 	},
-
-	plugins: [
-		new HtmlWebpackPlugin({
-			filename: "index.html",
-			template: "index.html",
-			inject: true,
-			//html-webpack-plugin 遇到 throw new Error('Cyclic dependency' + nodeRep)
-			chunksSortMode: "none"
-		}),
-		new VueLoaderPlugin(),
-		new CopyWebpackPlugin([
-			{
-				from: utils.resolve("static/img"),
-				to: utils.resolve("dist/static/img"),
-				toType: "dir"
-			}
-		])
-	]
+	plugins
 };
