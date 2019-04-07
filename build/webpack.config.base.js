@@ -10,10 +10,10 @@ module.exports = {
 	resolve: {
 		extensions: [".js", ".vue", ".json"],
 		alias: {
-			'vue$': 'vue/dist/vue.esm.js',
-			'@': utils.resolve('src'),
-			'common': utils.resolve(__dirname, '/src/common'),
-			'base': utils.resolve('src/base'),
+			vue$: "vue/dist/vue.esm.js",
+			"@": utils.resolve("src"),
+			common: utils.resolve(__dirname, "/src/common"),
+			base: utils.resolve("src/base"),
 			assets: utils.resolve("assets"),
 			views: utils.resolve("src/views"),
 			static: utils.resolve("static"),
@@ -35,7 +35,13 @@ module.exports = {
 			{
 				test: /\.js$/,
 				use: {
-					loader: "babel-loader"
+					loader: "babel-loader",
+					options: {
+						//预设
+						presets: ["@babel/preset-env"],
+						//插件
+						plugins: ["@babel/plugin-syntax-dynamic-import"]
+					}
 				}
 			},
 			{
@@ -75,7 +81,9 @@ module.exports = {
 		new HtmlWebpackPlugin({
 			filename: "index.html",
 			template: "index.html",
-			inject: true
+			inject: true,
+			//html-webpack-plugin 遇到 throw new Error('Cyclic dependency' + nodeRep)
+			chunksSortMode: "none"
 		}),
 		new VueLoaderPlugin(),
 		new CopyWebpackPlugin([

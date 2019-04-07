@@ -7,11 +7,5 @@
         "node": "current"
       }
     }]
-  ],
-  "plugins": [
-    "syntax-dynamic-import",
-    [
-      "transform-runtime"
-    ]
   ]
 }
