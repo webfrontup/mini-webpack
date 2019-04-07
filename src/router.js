@@ -25,12 +25,12 @@ export default new Router({
 			path: "/games",
 			name: "games",
 			component: Games
-		}
-		// {
-		// 	path: "/settings",
-		// 	name: "settings",
-		// 	component: require(/* webpackChunkName: "index" */ "./views/index/Settings.vue")
-		// },
+		},
+		{
+			path: "/settings",
+			name: "settings",
+			component: ()=> import(/* webpackChunkName: "index" */ "./views/index/Settings.vue")
+		},
 		// //登录
 		// {
 		// 	path: "/login",
