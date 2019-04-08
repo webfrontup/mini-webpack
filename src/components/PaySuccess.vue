@@ -26,29 +26,28 @@ export default {
     }
 }
 </script>
-<style lang="less" scoped>
-@import url('../components/less/common.less');
+<style lang="scss" scoped>
 .pay-success{
-    padding-bottom: 6.62667rem /* 497/75 */;
     .pay-success-box{
         margin-top: .53333rem /* 40/75 */;
+        margin-bottom: 1rem;
         padding: 0 .4rem /* 30/75 */;
         display: flex;
         flex-direction: column;
         i{
             font-size: 2.4rem /* 180/75 */;
-            color: @color-green;
+            color: $primary-color;
             margin: 0 auto;
         }
         p.desc{
             font-size: .37333rem /* 28/75 */;
-            color: @color-323233;
+            color: $color-C;
             margin-top: .21333rem /* 16/75 */;
             margin-bottom: .26667rem /* 20/75 */;
             line-height: 1.5;
         }
         .order-details{
-            background: #fff;
+            background: $default-color;
             border-radius: .13333rem /* 10/75 */;
             padding: .26667rem /* 20/75 */;
             margin-bottom: .26667rem /* 20/75 */;
@@ -57,7 +56,7 @@ export default {
                     display: flex;
                     justify-content: space-between;
                     font-size: .37333rem /* 28/75 */;
-                    color: @color-323233;
+                    color: $color-C;
                     margin-bottom: .26667rem /* 20/75 */;
                     &:last-child{
                         margin-bottom: 0;
@@ -77,14 +76,14 @@ export default {
             height: 1.06667rem /* 80/75 */;
             line-height: 1.06667rem /* 80/75 */;
             text-align: center;
-            color: #fff;
-            background: @color-green;
+            color: $default-color;
+            background: $primary-color;
             border:none;
             border-radius: .13333rem /* 10/75 */;
             font-size: .37333rem /* 28/75 */;
-            box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.12);
+            box-shadow: 0px 2px 5px 0px $nondefault-color;
             &:active{
-                background: @color-00cc8f;
+                background: $primary-color;
             }
         }
     }

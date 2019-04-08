@@ -1,161 +1,171 @@
 <template>
-    <div id="selfHelp">
-    
-        <Header :rooter="'-1'" :title="'优惠申请记录'" :hasNoBack="true" :iFontsize="'.58667rem'" :isShowHome="false"></Header>
-        <div class="self-total">
-            <span>最近一个月累计获得<span class="money">{{money}}元优惠</span>申请金额</span>
+	<div id="selfmore">
+        <div v-if="loading" class="skeleton">
+            <column>
+                <skeleton-square 
+                    width="9rem" 
+                    height="1rem"
+                    :count="9" 
+                    margin="0.2rem 0.5rem"
+                ></skeleton-square>
+            </column>
         </div>
-        <div class="more-content">
-            <div class="list">
-                <div class="more-title">
-                    <div class="name">
-                        <span>活动名称</span>
+        <nut-navbar class="pk-title"  @on-click-back="$router.go(-1)">
+            我的优惠记录
+            <a slot="more-icon">
+                累计获得优惠
+                <div>{{list.money}}</div>
+            </a>
+        </nut-navbar>
+        <div v-if="!loading" class="selfmoreContent">
+            <nut-tab @tab-switch="selfSwitch">
+                <nut-tab-panel v-for="(tab,index) in tabTit" :key="index"  :tabTitle="tab.title">
+                    <div v-if="forList.length === 0" class="noData">
+                        <img src="../../../assets/img/bet-record-no-data.png">
                     </div>
-                    <div class="progress">
-                        <span>申请进度</span>
+                    <div v-if="forList.length > 0" class="threeBox">
+                        <nut-row class="threetit">
+                            <nut-col :span="8">
+                                <div class="flex-content">活动名称</div>
+                            </nut-col>
+                            <nut-col :span="8">
+                                <div class="flex-content">申请金额</div>
+                            </nut-col>
+                            <nut-col :span="8">
+                                <div class="flex-content">实得金额</div>
+                            </nut-col>
+                        </nut-row>
+                        <!--列表-->
+                        <nut-row v-for="(infoList,index) in forList" :key="index" type="flex" align="center" class="threeList">
+                            <nut-col :span="8">
+                                <div class="flex-content">
+                                    <div>{{infoList.activityTitle}}</div>
+                                    <span>{{infoList.createTime | filterDate}}</span>
+                                </div>
+                            </nut-col>
+                            <nut-col :span="8">
+                                <div class="flex-content">{{infoList.depositMoney}}</div>
+                            </nut-col>
+                            <nut-col :span="8">
+                                <div class="flex-content" :class="{'blue':infoList.status === 1,'red':infoList.status === 2,'yellow':infoList.status === 3}">{{infoList.actualMoney}}</div>
+                            </nut-col>
+                        </nut-row>
                     </div>
-                    <div class="amount">
-                        <span>实际金额</span>
-                    </div>
-                </div>
-                <div class="more-list" v-for="data in list" :key="data.id" v-if="list.length > 0">
-                    <div class="list-name">
-                        <span>{{data.activityTitle}}</span>
-                        <span class="time">{{data.createTime | filterDate}}</span>
-                    </div>
-                    <div class="list-progress">
-                        <span>{{data.status == 1?'申请中':data.status == 2?"成功":"失败"}}</span>
-                        <span>{{data.depositMoney}}</span>
-                    </div>
-                    <div class="list-amount">
-                        <span>{{data.actualMoney}}</span>
-                    </div>
-                </div>
-                <div v-show="list.length <= 0 " class="no-data">
-                    <div class="no-data-img">
-                        <i class="iconfont icon-list-zanwusj"></i>
-                    </div>
-                    <p class="no-data-text">当前还没有投注记录</p>
-                </div>
-    
-            </div>
+                </nut-tab-panel>
+            </nut-tab>
         </div>
-    </div>
+	</div>
 </template>
 
 <script>
-    import Header from "../../../components/Header";
-    import {
-        getList
-    } from "@/api/Selfmore";
-    
-    export default {
-        name: "selfmore",
-        components: {
-            Header
-        },
-        data() {
-            return {
-                list: [],
-                money: 0
+import {
+    getSelfInfo
+} from "../../../services/center.js"
+export default {
+    name: "selfmore",
+    data () {
+        return {
+            loading: true,
+            haveNewVersion: false,
+            list:'',
+            forList:{},
+            awarded:{},
+            notpass: {},
+            audited:{},
+            tabTit: [{value:0,title:'全部优惠'},
+                {value:1,title:'已通过'},
+                {value:3,title:'未通过'},
+                {value:2,title:'待审核'}]
+        }
+    },
+    mounted () {
+        this.getlist();
+    },
+    methods: {
+        getlist(){
+            let data = {
+                id: parseInt(this.thisId),
             };
-        },
-        mounted() {
-            this.getList();
-        },
-        methods: {
-            getList() {
-                getList()
-                    .then(res => {
-                        // console.log(res);
-                        this.list = res.promotionRecord;
-                        this.money = res.money;
-                    }).catch({
-                        msg: '信息获取失败',
-                        duration: 2000
+            getSelfInfo().then(res => {
+                if (res.success) {
+                    this.loading = false;
+                    this.list = res.data;
+                    this.forList = this.list.promotionRecord;
+                    let data = res.data.promotionRecord;
+                    this.audited = data.filter((item) => item.status === 1);
+                    this.awarded = data.filter((item) => item.status === 2);//待审核
+                    this.notpass = data.filter((item) => item.status === 3);
+                } else {
+                    this.$toast.fail(res.message, {
+                        cover: true,
+                        duration: 1000
                     });
-    
+                }
+            });
+        },
+        selfSwitch:function(index,event){
+            if(index==1){
+                this.forList = this.awarded
+            }else if(index==2){
+                this.forList = this.notpass
+            }else if(index==3){
+                this.forList = this.audited;//待审核
+            }else{
+                this.forList = this.list.promotionRecord
             }
         }
-    };
+    }
+}
 </script>
 
-<style lang="less" scoped>
-    #selfHelp {
-        box-sizing: border-box;
-        line-height: 1;
-        .self-total {
-            padding-top: 1.22667rem;
-            /* 92/75 */
-            height: 1.067rem;
-            background-color: #ffffff;
-            padding-left: 0.4rem;
-            line-height: 1.067rem;
-            span {
-                .money {
-                    color: #00d897;
-                }
+<style scoped lang="scss">
+#selfmore{
+    .skeleton{
+        background-color: $default-color;
+    }
+    .pk-title{
+        /deep/ .nav-right{
+            margin-top: -$four;
+            .more{
+                line-height: $four;
+                font-size: 0.32rem;
+                text-align: right;
             }
         }
-        .more-content {
-            background-color: #ffffff;
-            .list {
-                padding-left: 0.4rem;
-                padding-right: 0.4rem;
-                .more-title {
-                    display: flex;
-                    height: 1.067rem;
-                    border-bottom: solid 0.013rem #c8c8cc;
-                    .name {
-                        flex: 1;
-                        text-align: center;
-                        line-height: 1.067rem;
-                    }
-                    .progress {
-                        flex: 1;
-                        text-align: center;
-                        line-height: 1.067rem;
-                    }
-                    .amount {
-                        flex: 1;
-                        text-align: center;
-                        line-height: 1.067rem;
+    }
+    .selfmoreContent{
+        /deep/ .nut-tab{
+            border: 0; 
+            padding: 0;
+            font-size: 0.427rem;
+            color: $text-color;
+            .nut-tab-title{
+                height: $fourtrem;
+                line-height: $fourtrem;
+                .nut-title-nav-list{
+                    .nut-tab-link{
+                        font-size: 0.42rem;
+                        &:hover{
+                            text-decoration: none;
+                        }
                     }
                 }
-                .more-list {
-                    display: flex;
-                    border-bottom: solid 0.013rem #c8c8cc;
-                    .list-name {
-                        padding: 0.3rem;
-                        text-align: center;
-                        flex: 1;
-                        span {
-                            display: inline-block;
-                            padding-top: 0.2rem;
-                        }
-                        .time {
-                            font-size: 0.32rem;
-                            color: #969699;
-                        }
+                .nut-tab-active{
+                    .nut-tab-link{
+                        color: $tabtit-color;
                     }
-                    .list-progress {
-                        padding: 0.3rem;
-                        text-align: center;
-                        flex: 1;
-                        span {
-                            display: block;
-                            padding-top: 0.2rem;
-                        }
-                    }
-                    .list-amount {
-                        padding: 0.3rem;
-                        text-align: center;
-                        flex: 1;
-                        span {
-                            display: block;
-                            padding-top: 0.2rem;
-                            color: #00d897;
-                            font-weight: normal;
+                }
+            }
+            .nut-tab-item{
+                margin-top: $tenrem;
+                padding: 0 $four;
+                height: auto;
+                border: 0;
+                border-top: $onerem solid $border-color;
+                border-bottom: $onerem solid $border-color;
+                .threeBox{
+                    .threeList{
+                        .nut-col:last-child{
                             font-size: 0.427rem;
                         }
                     }
@@ -163,4 +173,20 @@
             }
         }
     }
+}
+.blue{
+    color: $tabtit-color;
+}
+.red{
+    color: $color-a;
+}
+.yellow{
+    color: $yellow-color;
+}
+/deep/ .nav-bar{
+    z-index: 9;
+    bottom: 0;
+    height: $onerem*2;
+    background: $tabtit-color;
+}
 </style>

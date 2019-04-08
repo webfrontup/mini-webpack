@@ -1,88 +1,124 @@
 <template>
-    <div class="more">
-        <Header :title="'更多'" :rooter="'-1'" :hasNoBack="true" :iFontsize="'.58667rem'" :isShowHome="false"></Header>
-        <div class="morebox">
-            <img :src="picUrl" alt="">
+	<div id="more">
+        <div v-show="loading" class="skeleton">
+            <column>
+                <skeleton-square 
+                    width="9rem" 
+                    height="1rem"
+                    :count="9" 
+                    margin="0.2rem 0.5rem"
+                ></skeleton-square>
+            </column>
         </div>
-        <ul class="morelist">
-            <router-link v-for="(infoList,index) in list" :key="index" tag="li" :to="{name:'morepage',query:{id:infoList.id}}" class="pk-1px-b">
-                <div class="moretitle">{{infoList.title}}</div>
-                <i class="iconfont icon-dlzhgl"></i>
-            </router-link>
-        </ul>
-    </div>
+        <nut-navbar class="pk-title" :rightShow="false"
+        @on-click-back="$router.go(-1)">
+            更多
+        </nut-navbar>
+        <div v-show="!loading" class="morebox">
+            <img :src="list.logo" alt="">
+        </div>
+        <div v-show="!loading" class="moreBody">
+            <ul>
+                <div v-for="(infoList,index) in list.iword" :key="index">
+                    <router-link v-if="infoList.itype===1" tag="li" :to="infoList.url">
+                        <div class="moretitle">{{infoList.title}}</div>
+                        <nut-icon type="right" color="#666" size="0.4rem"></nut-icon>
+                    </router-link>
+                    <router-link v-if="infoList.itype===2" tag="li" :to="{name:'morelist',query:{id:infoList.id,position:infoList.position}}">
+                        <div class="moretitle">{{infoList.title}}</div>
+                        <nut-icon type="right" color="#666" size="0.4rem"></nut-icon>
+                    </router-link>
+                    <router-link v-if="infoList.itype===3" tag="li" :to="{name:'morepage',query:{id:infoList.id,position:infoList.position}}">
+                        <div class="moretitle">{{infoList.title}}</div>
+                        <nut-icon type="right" color="#666" size="0.4rem"></nut-icon>
+                    </router-link>
+                    <li v-if="infoList.itype===4">
+                        <a class="moretitle" :src="infoList.url">{{infoList.title}}</a>
+                        <nut-icon type="right" color="#666" size="0.4rem"></nut-icon>
+                    </li>
+                </div>
+            </ul>
+        </div>
+        
+	</div>
 </template>
 
 <script>
-    import Header from "../../../components/Header";
-    // import contact from "@/proto/contact_pb";
-    // const contact = proto.pb;
     import {
-        getMore
-    } from '@/api/my'
+        getMorelists
+    } from "../../../services/center.js"
     export default {
-        components: {
-            Header
-        },
         name: "more",
-        data() {
+        data () {
             return {
-                picUrl: '',
-                list: [],
-            }
+                loading: true,
+                list:'',
+			}
         },
-        mounted() {
-            this.info();
+        mounted () {
+            this.getlists();
         },
         methods: {
-            info() {
-                getMore().then(res => {
-                    // console.log(res);
-                    this.picUrl = res.logo;
-                    this.list = res.iword
+            getlists(){
+                getMorelists().then(res => {
+                    if (res.success) {
+                        this.loading = false;
+                        this.list = res.data;
+                    } else {
+                        this.$toast.fail(res.message, {
+                            cover: true,
+                            duration: 1000
+                        });
+                    }
                 });
             }
         }
     }
 </script>
 
-<style lang="less" scoped>
-    @import url('../../../components/less/common.less');
-    .more {
-        padding-top: 1.22667rem;
-        .morebox {
-            img {
-                margin: 0.27rem 0;
-                width: 100%;
-                height: 4rem;
-            }
+<style scoped lang="scss">
+#more{
+    .skeleton{
+        background-color: $default-color;
+    }
+    .morebox {
+        img {
+            margin: 0.27rem 0 0;
+            width: 100%;
+            height: 4rem;
         }
-        ul.morelist {
-            li {
-                padding: 0 0.4rem;
-                height: 1rem;
-                line-height: 1rem;
-                background-color: #fff;
-                .moretitle {
-                    float: left;
-                    font-size: 0.37rem;
-                    color: @color-323233;
+    }
+    .moreBody{
+        margin-top: $tenrem*2;
+        background-color: $default-color;
+        border-top: $onerem solid $border-color;
+        border-bottom: $onerem solid $border-color;
+        ul{
+            padding-left: $fourtrem/2;
+            li{
+                position: relative;
+                height: $fourtrem;
+                line-height: $fourtrem;
+                font-size: 0.373rem;
+                color: $text-color;
+                border-bottom: $onerem solid $border-color;
+                a{
+                    display: block;
                 }
-                .iconfont {
-                    float: right;
-                    height: 1rem;
-                    vertical-align: middle;
+                /deep/ .nut-icon{
+                    position: absolute;
+                    top: 0;
+                    right: 0.2rem;
+                    margin: 0.08rem;
                 }
             }
-            &>li:last-child {
-                &:after {
-                    border-bottom: 0;
+            div:last-child{
+                li{
+                    border: 0;
                 }
             }
         }
     }
-    
-    .pk-1px-b:after {
-        left: 0.4rem;
-    }
+}
+
 </style>

@@ -15,11 +15,11 @@ const plugins = [
 		filename: "index.html",
 		template: "index.html",
 		inject: true,
-		chunksSortMode: "none" //html-webpack-plugin 遇到 throw new Error('Cyclic dependency' + nodeRep)
+		chunksSortMode: "none"
 	}),
-	new CleanWebpackPlugin(["dist"], {
-		root: path.resolve(__dirname, "../")
-	}),
+	// new CleanWebpackPlugin(["dist"], {
+	// 	root: path.resolve(__dirname, "../")
+	// }),
 	new VueLoaderPlugin(),
 	new CopyWebpackPlugin([
 		{
@@ -85,6 +85,17 @@ module.exports = {
 					}
 				}
 			},
+			// {
+			// 	test: /\.(sa|sc)ss$/,
+			// 	use: [
+			// 		{
+			// 			loader: "sass-loader",
+			// 			options: {
+			// 				data: `@import "@nutui/nutui/dist/styles/index.scss";@import "@/components/scss/skin.scss";@import "@/components/scss/common.scss"; `
+			// 			}
+			// 		}
+			// 	]
+			// },
 			{
 				test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
 				use: {

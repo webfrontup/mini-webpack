@@ -1,7 +1,0 @@
-syntax = "proto3";
-
-package pb;
-
-message Maintain {
-    string msg = 1;
-}

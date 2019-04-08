@@ -1,10 +1,7 @@
 import Vue from "vue";
 import Router from "vue-router";
-import Index from "./views/index/Index.vue";
-import Games from "./views/index/Games.vue";
 
 Vue.use(Router);
-
 export default new Router({
 	// mode: 'history',
 	base: process.env.BASE_URL,
@@ -19,344 +16,367 @@ export default new Router({
 		{
 			path: "/index",
 			name: "index",
-			component: Index
+			component: () =>
+				import(/* webpackChunkName: "index" */ "./views/index/Index.vue")
 		},
+		//首页
 		{
-			path: "/games",
-			name: "games",
-			component: Games
+			path: "/gameList",
+			name: "gameList",
+			component: () =>
+				import(/* webpackChunkName: "index" */ "./views/index/GameList.vue")
 		},
+		//注册
 		{
-			path: "/settings",
-			name: "settings",
-			component: ()=> import(/* webpackChunkName: "index" */ "./views/index/Settings.vue")
+			path: "/register",
+			name: "register",
+			component: () =>
+				import(/* webpackChunkName: "index" */ "./views/auth/Register.vue")
+		},
+		//注册 协议
+		{
+			path: "/registerAgreement",
+			name: "registerAgreement",
+			component: () =>
+				import(/* webpackChunkName: "index" */ "./views/auth/Agreement.vue")
 		},
 		//登录
 		{
 			path: "/login",
 			name: "login",
-			component: ()=> import("./views/auth/Login.vue")
-		},
-		{
-			path: "/register",
-			name: "register",
-			component: ()=> import("./views/auth/Register.vue")
-		},
-
-		//活动
-		{
-			path: "/activity",
-			name: "activity",
-			component: ()=> import(/* webpackChunkName: "activity" */ "./views/activity/Activity.vue")
-		},
-		//活动详情
-		{
-			path: "/actDetail",
-			name: "actDetail",
-			component: ()=> import(/* webpackChunkName: "activity" */ "./views/activity/ActDetail.vue")
-		},
-		//幸运大转盘
-		{
-			path: "/luckdraw",
-			name: "luckdraw",
-			meta: { auth: true },
-			component: ()=> import(/* webpackChunkName: "activity" */ "./views/activity/Luckdraw.vue")
-		},
-		//钱包
-		{
-			path: "/purse",
-			name: "purse",
-			meta: { auth: true },
-			component: ()=> import(/* webpackChunkName: "purse" */ "./views/purse/Purse.vue")
-		},
-		//钱包-稽核查询
-		{
-			path: "/auditQuery",
-			name: "auditQuery",
-			meta: { auth: true },
-			component: ()=> import(/* webpackChunkName: "auditQuery" */ "./views/purse/auditQuery/AuditQuery.vue")
-		},
-		//钱包余额
-		{
-			path: "/purseDeposit",
-			name: "purseDeposit",
-			meta: { auth: true },
-			component: ()=> import(/* webpackChunkName: "purseDeposit" */ "./views/purse/PurseDeposit.vue")
+			component: () =>
+				import(/* webpackChunkName: "index" */ "./views/auth/Login.vue")
 		},
 		//存款
 		{
 			path: "/deposit",
 			name: "deposit",
-			meta: { auth: true },
-			component: ()=> import(/* webpackChunkName: "deposit" */ "./views/purse/deposit/Deposit.vue")
+			meta: {
+				auth: true
+			},
+			component: () =>
+				import(/* webpackChunkName: "deposits" */ "./views/deposit/Deposit.vue")
 		},
-		//存款-线上入款-支付宝/微信
+		//存款-线上入款-网银/支付宝/微信
 		{
-			path: "/online/alipay",
-			name: "onlineAlipay",
-			meta: { auth: true },
-			component: ()=> import(/* webpackChunkName: "onlineAlipay" */ "./views/purse/deposit/DepositOnlineAlipay.vue")
+			path: "/deposit/online",
+			name: "online",
+			meta: {
+				auth: true
+			},
+			component: () =>
+				import(/* webpackChunkName: "onlineAlipay" */ "./views/deposit/DepositOnline.vue")
 		},
-		//存款-线上入款-网银
+		//存款-公司存款-有无二维码
 		{
-			path: "/online/ebank",
-			name: "onlineEBank",
-			meta: { auth: true },
-			component: ()=> import(/* webpackChunkName: "onlineEBank" */ "./views/purse/deposit/DepositOnlineEBank.vue")
+			path: "/deposit/company",
+			name: "company",
+			meta: {
+				auth: true
+			},
+			component: () =>
+				import(/* webpackChunkName: "companyAlipay" */ "./views/deposit/DepositCompany.vue")
 		},
-		//存款-线上入款-点卡
-		{
-			path: "/online/timeCard",
-			name: "timeCard",
-			meta: { auth: true },
-			component: ()=> import(/* webpackChunkName: "timeCard" */ "./views/purse/deposit/DepositOnlineTimeCard.vue")
-		},
+
 		//存款-线上入款/公司存款-支付返回结果页
 		{
-			path: "/payResult",
+			path: "/deposit/payResult",
 			name: "payResult",
-			meta: { auth: true },
-			component: ()=> import(/* webpackChunkName: "payResult" */ "./views/purse/deposit/DepositPayResult.vue")
+			meta: {
+				auth: true
+			},
+			component: () =>
+				import(/* webpackChunkName: "payResult" */ "./views/deposit/DepositPayResult.vue")
 		},
 		//存款-线上入款/公司存款-支付成功页
 		{
-			path: "/paySuccess",
+			path: "/deposit/paySuccess",
 			name: "paySuccess",
-			meta: { auth: true },
-			component: ()=> import(/* webpackChunkName: "paySuccess" */ "./views/purse/deposit/DepositPaySuccess.vue")
-		},
-		//存款-公司存款-支付宝/微信
-		{
-			path: "/company/alipay",
-			name: "companyAlipay",
-			meta: { auth: true },
-			component: ()=> import(/* webpackChunkName: "companyAlipay" */ "./views/purse/deposit/DepositCompanyAlipay.vue")
-		},
-		//存款-公司存款-银行卡
-		{
-			path: "/company/ebank",
-			name: "companyEBank",
-			meta: { auth: true },
-			component: ()=> import(/* webpackChunkName: "companyEBank" */ "./views/purse/deposit/DepositCompanyEBank.vue")
-		},
-
-		//存款-线上存款/公司存款-记录
-		{
-			path: "/deposit/record",
-			name: "depositRecord",
-			meta: { auth: true },
-			component: ()=> import(/* webpackChunkName: "depositRecord" */ "./views/purse/deposit/DepositRecord.vue")
+			meta: {
+				auth: true
+			},
+			component: () =>
+				import(/* webpackChunkName: "paySuccess" */ "./views/deposit/DepositPaySuccess.vue")
 		},
 
 		//取款
 		{
 			path: "/withdraw",
 			name: "withdraw",
-			meta: { auth: true },
-			component: ()=> import(/* webpackChunkName: "withdraw" */ "./views/purse/withdraw/Withdraw.vue")
+			meta: {
+				auth: true
+			},
+			component: () =>
+				import(/* webpackChunkName: "withdraw" */ "./views/withdraw/Withdraw.vue")
 		},
 		//取款-稽核
 		{
 			path: "/withdraw/audit",
 			name: "withdrawAudit",
-			meta: { auth: true },
-			component: ()=> import(/* webpackChunkName: "withdrawAudit" */ "./views/purse/withdraw/WithdrawAudit.vue")
+			meta: {
+				auth: true
+			},
+			component: () =>
+				import(/* webpackChunkName: "withdrawAudit" */ "./views/withdraw/WithdrawAudit.vue")
 		},
 		//取款-成功
 		{
 			path: "/withdraw/success",
 			name: "withdrawSuccess",
-			meta: { auth: true },
-			component: ()=> import(/* webpackChunkName: "withdrawSuccess" */ "./views/purse/withdraw/WithdrawSuccess.vue")
+			meta: {
+				auth: true
+			},
+			component: () =>
+				import(/* webpackChunkName: "withdrawSuccess" */ "./views/withdraw/WithdrawSuccess.vue")
 		},
 		//额度转换
 		{
 			path: "/transfer",
 			name: "transfer",
-			meta: { auth: true },
-			component: ()=> import(/* webpackChunkName: "transfer" */ "./views/purse/transfer/Transfer.vue")
-		},
-		//自助返水
-		{
-			path: "/backwater",
-			name: "backwater",
-			meta: { auth: true },
-			component: ()=> import(/* webpackChunkName: "backwater" */ "./views/purse/backwater/Backwater.vue")
-		},
-		//会员返佣
-		{
-			path: "/backCommission",
-			name: "backCommission",
-			meta: { auth: true },
-			component: ()=> import(/* webpackChunkName: "backCommission" */ "./views/purse/backCommission/BackCommission.vue")
-		},
-		//现金流水
-		{
-			path: "/moneyWater",
-			name: "moneyWater",
-			meta: { auth: true },
-			component: ()=> import(/* webpackChunkName: "moneyWater" */ "./views/purse/moneyWater/MoneyWater.vue")
-		},
-		//订单
-		{
-			path: "/order",
-			name: "order",
-			meta: { auth: true },
-			component: ()=> import(/* webpackChunkName: "order" */ "./views/order/Order.vue"),
-			children: [
-				//彩票
-				{
-					path: "lottery",
-					name: "lottery",
-					component: ()=> import(/* webpackChunkName: "order" */ "./views/order/Lottery.vue")
-				},
-				//棋牌
-				{
-					path: "chess",
-					name: "chess",
-					component: ()=> import(/* webpackChunkName: "order" */ "./views/order/Chess.vue")
-				},
-				//视讯
-				{
-					path: "directvideo",
-					name: "directvideo",
-					component: ()=> import(/* webpackChunkName: "order" */ "./views/order/Directvideo.vue")
-				},
-				//电子
-				{
-					path: "tvgame",
-					name: "tvgame",
-					component: ()=> import(/* webpackChunkName: "order" */ "./views/order/Tvgame.vue")
-				},
-				//体育
-				{
-					path: "sports",
-					name: "sports",
-					component: ()=> import(/* webpackChunkName: "order" */ "./views/order/Sports.vue")
-				}
-			]
-		},
-		//报表
-		{
-			path: "/reportform",
-			name: "reportform",
-			meta: { auth: true },
-			component: ()=> import(/* webpackChunkName: "order" */ "./views/order/Reportform.vue")
+			meta: {
+				auth: true
+			},
+			component: () =>
+				import(/* webpackChunkName: "transfer" */ "./views/transfer/Transfer.vue")
 		},
 		//我的
 		{
 			path: "/my",
 			name: "my",
-			meta: { auth: true },
-			component: ()=> import(/* webpackChunkName: "my" */ "./views/my/My.vue")
+			component: () => import(/* webpackChunkName: "my" */ "./views/my/My.vue")
 		},
 		{
 			path: "/about",
 			name: "about",
-			meta: { auth: true },
-			component: ()=> import(/* webpackChunkName: "my" */ "./views/my/about/About.vue")
+			component: () =>
+				import(/* webpackChunkName: "my" */ "./views/my/about/About.vue")
+        },
+        //及时稽核查询
+        {
+			path: "/auditQuery",
+			name: "auditQuery",
+			component: () =>
+				import(/* webpackChunkName: "my" */ "./views/my/auditQuery/AuditQuery.vue")
+        },
+        
+
+		/* 安全中心 */
+		{
+			path: "/securityCenter",
+			name: "securityCenter",
+			component: () =>
+				import(/* webpackChunkName: "my" */ "./views/my/securityCenter/SecurityCenter.vue")
 		},
 		{
-			path: "/bankCard",
-			name: "bankCard",
-			meta: { auth: true },
-			component: ()=> import(/* webpackChunkName: "my" */ "./views/my/bankCard/BankCard.vue"),
-			children: []
+            path: "/securityCenter/EditLoginpwd",
+            name: "editLoginpwd",
+			component: () =>
+                import(/* webpackChunkName: "my" */ "./views/my/securityCenter/EditLoginpwd.vue")
 		},
 		{
-			path: "/bankCardadd",
-			name: "bankCardadd",
-			meta: { auth: true },
-			component: ()=> import(/* webpackChunkName: "my" */ "./views/my/bankCard/AddBankCard.vue")
-		},
-		//密码管理
-		{
-			path: "/password",
-			name: "password",
-			meta: { auth: true },
-			component: ()=> import(/* webpackChunkName: "my" */ "./views/my/password/Password.vue")
-		},
-		//消息中心
-		{
-			path: "/msgcenter",
-			name: "msgcenter",
-			meta: { auth: true },
-			component: ()=> import(/* webpackChunkName: "my" */ "./views/my/msgCenter/MsgCenter.vue")
+			path: "/securityCenter/securitypwd",
+			name: "securitypwd",
+			component: () =>
+				import(/* webpackChunkName: "my" */ "./views/my/securityCenter/Securitypwd.vue")
 		},
 		{
-			path: "/msgcenters",
-			name: "msgcenters",
-			meta: { auth: true },
-			component: ()=> import(/* webpackChunkName: "my" */ "./views/my/msgCenter/MsgCenters.vue")
+			path: "/securityCenter/videopwd",
+			name: "videopwd",
+			component: () =>
+				import(/* webpackChunkName: "my" */ "./views/my/securityCenter/Videopwd.vue")
 		},
-		//代理账号
 		{
-			path: "/agencyappli",
-			name: "agencyappli",
-			meta: { auth: true },
-			component: ()=> import(/* webpackChunkName: "my" */ "./views/my/agencyApplication/Agencyapplication.vue")
+			path: "/securityCenter/bankcard",
+			name: "bankcard",
+			component: () =>
+				import(/* webpackChunkName: "my" */ "./views/my/securityCenter/Bankcard.vue")
 		},
-		//我要推广
+		/* 消息中心 */
+		{
+			path: "/msgCenter",
+			name: "msgCenter",
+			component: () =>
+				import(/* webpackChunkName: "my" */ "./views/my/msgCenter/MsgCenter.vue"),
+			children: [
+				{
+					path: "systemAnnounce",
+					name: "systemAnnounce",
+					component: () =>
+						import(/* webpackChunkName: "deposits" */ "./views/my/msgCenter/systemAnnounce/SystemAnnounce.vue")
+				},
+				{
+					path: "gameAnnounce",
+					name: "gameAnnounce",
+					component: () =>
+						import(/* webpackChunkName: "deposits" */ "./views/my/msgCenter/gameAnnounce/GameAnnounce.vue")
+				}
+			]
+		},
+		{
+			path: "/msgCenter/msgDetail",
+			name: "msgDetail",
+			component: () =>
+				import(/* webpackChunkName: "my" */ "./views/my/msgCenter/msgDetail/MsgDetail.vue")
+		},
+		/* 我要推广 */
 		{
 			path: "/spread",
 			name: "spread",
-			meta: { auth: true },
-			component: ()=> import(/* webpackChunkName: "my" */ "./views/my/Spread.vue")
-		},
-		//联系我们
+			component: () =>
+				import(/* webpackChunkName: "spread" */ "./views/my/spread/Spread.vue")
+        },
+        //下级报表
 		{
-			path: "/contactus",
-			name: "contactus",
-			component: ()=> import(/* webpackChunkName: "my" */ "./views/my/Contactus.vue")
-		},
-		//更多
+			path: "/spread/subordinate",
+			name: "subordinate",
+			component: () =>
+				import(/* webpackChunkName: "spread" */ "./views/my/spread/Subordinate.vue")
+        },
+        //推广说明
 		{
-			path: "/more",
-			name: "more",
-			component: ()=> import(/* webpackChunkName: "my" */ "./views/my/more/More.vue")
-		},
-		//关于我们
+			path: "/spread/promote",
+			name: "promote",
+			component: () =>
+				import(/* webpackChunkName: "spread" */ "./views/my/spread/Promote.vue")
+        },
+        //推广链接
 		{
-			path: "/morepage",
-			name: "morepage",
-			component: ()=> import(/* webpackChunkName: "my" */ "./views/my/more/Morepage.vue")
+			path: "/spread/generalizeLink",
+			name: "generalizeLink",
+			component: () =>
+				import(/* webpackChunkName: "spread" */ "./views/my/spread/GeneralizeLink.vue")
+        },
+        //推广统计
+		{
+			path: "/spread/statisics",
+			name: "statisics",
+			component: () =>
+				import(/* webpackChunkName: "spread" */ "./views/my/spread/Statisics.vue")
+        },
+        //下级会员管理
+		{
+			path: "/spread/memberManagement",
+			name: "memberManagement",
+			component: () =>
+				import(/* webpackChunkName: "spread" */ "./views/my/spread/MemberManagement.vue")
 		},
 		{
-			path: "/selfHelp",
-			name: "selfHelp",
-			component: ()=> import(/* webpackChunkName: "my" */ "./views/my/selfHelp/SelfHelp.vue")
+			path: "/capitalrecord",
+			name: "capitalrecord",
+			// meta: { auth: true },
+			component: () =>
+				import(/* webpackChunkName: "my" */ "./views/my/capitalrecord/Capitalrecord.vue")
+		},
+		/*自助优惠申请*/
+		{
+			path: "/selfhelp",
+			name: "selfhelp",
+			// meta: { auth: true },
+			component: () =>
+				import(/* webpackChunkName: "my" */ "./views/my/selfHelp/SelfHelp.vue")
 		},
 		{
 			path: "/selfDetail",
 			name: "selfDetail",
-			component: ()=> import(/* webpackChunkName: "my" */ "./views/my/selfHelp/SelfHelpDetail.vue")
-		},
-		{
-			path: "/apply",
-			name: "apply",
-			component: ()=> import(/* webpackChunkName: "my" */ "./views/my/selfHelp/Apply.vue")
+			// meta: { auth: true },
+			component: () =>
+				import(/* webpackChunkName: "my" */ "./views/my/selfHelp/SelfDetail.vue")
 		},
 		{
 			path: "/selfmore",
 			name: "selfmore",
-			component: ()=> import(/* webpackChunkName: "my" */ "./views/my/selfHelp/Selfmore.vue")
+			// meta: { auth: true },
+			component: () =>
+				import(/* webpackChunkName: "my" */ "./views/my/selfHelp/Selfmore.vue")
+		},
+		/** 自主返水*/
+		{
+			path: "/backwater",
+			name: "backwater",
+			// meta: { auth: true },
+			component: () =>
+				import(/* webpackChunkName: "my" */ "./views/my/backwater/Backwater.vue")
+		},
+		/*更多*/
+		{
+			path: "/more",
+			name: "more",
+			// meta: { auth: true },
+			component: () =>
+				import(/* webpackChunkName: "my" */ "./views/my/more/More.vue")
 		},
 		{
-			path: "/agencyaccount",
-			name: "agencyaccount",
-			component: ()=> import(/* webpackChunkName: "my" */ "./views/my/agencyappliction/Agencyaccount.vue")
-		},
-
-		//维护
-		{
-			path: "/maintainweb",
-			name: "maintainweb",
-			component: ()=> import(/* webpackChunkName: "my" */ "./views/Maintainweb.vue")
+			path: "/morepage",
+			name: "morepage",
+			// meta: { auth: true },
+			component: () =>
+				import(/* webpackChunkName: "my" */ "./views/my/more/Morepage.vue")
 		},
 		{
-			path: "/maintaingame",
-			name: "maintaingame",
-			component: ()=> import(/* webpackChunkName: "my" */ "./views/MaintainGame.vue")
+			path: "/morelist",
+			name: "morelist",
+			// meta: { auth: true },
+			component: () =>
+				import(/* webpackChunkName: "my" */ "./views/my/more/Morelist.vue")
+		},
+		{
+			path: "/contactus",
+			name: "contactus",
+			// meta: { auth: true },
+			component: () =>
+				import(/* webpackChunkName: "my" */ "./views/my/more/Contactus.vue")
+		},
+		/* 投注记录 */
+		{
+			path: "/betRecord",
+			name: "betRecord",
+			meta: { auth: true },
+			component: () =>
+				import(/* webpackChunkName: "activity" */ "./views/my/betRecord/BetRecord.vue")
+		},
+		{
+			path: "/detailRecord",
+			name: "detailRecord",
+			meta: { auth: true },
+			component: () =>
+				import(/* webpackChunkName: "activity" */ "./views/my/betRecord/DetailRecord.vue")
+		},
+		//活动
+		{
+			path: "/activity",
+			name: "activity",
+			component: () =>
+				import(/* webpackChunkName: "activity" */ "./views/activity/Activity.vue")
+		},
+		//活动详情
+		{
+			path: "/actDetail",
+			name: "actDetail",
+			component: () =>
+				import(/* webpackChunkName: "activity" */ "./views/activity/ActDetail.vue")
+		},
+		//活动领取记录
+		{
+			path: "/activityRecord",
+			name: "activityRecord",
+			component: () =>
+				import(/* webpackChunkName: "activity" */ "./views/activity/ActivityRecord.vue")
+		},
+		//幸运大转盘
+		{
+			path: "/luckdraw",
+			name: "luckdraw",
+			meta: { auth: true },
+			component: () =>
+				import(/* webpackChunkName: "activity" */ "./views/activity/Luckdraw.vue")
+		},
+		//
+		{
+			path: "/agencyappli",
+			name: "agencyappli",
+			meta: { auth: true },
+			component: () =>
+				import(/* webpackChunkName: "activity" */ "./views/my/agencyApplication/Agencyapplication.vue")
 		}
 	]
 });

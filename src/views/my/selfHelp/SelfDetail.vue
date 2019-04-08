@@ -1,0 +1,451 @@
+<template>
+    <div id="selfDetail">
+        <nut-navbar class="pk-title" 
+            @on-click-back="$router.go(-1)"
+            @on-click-more="selfmore">
+            自助优惠申请
+            <a slot="more-icon">
+                <div class="selfmore"></div>
+            </a>
+        </nut-navbar>
+        <div v-show="loading" class="skeleton">
+            <skeleton-square 
+                width="9rem" 
+                height="3rem"
+                margin="0.2rem 0.5rem"
+            ></skeleton-square>
+            <column>
+                <skeleton-square 
+                    width="9rem"
+                    :count="3" 
+                    margin="0.2rem 0.5rem"
+                ></skeleton-square>
+            </column>
+            <skeleton-square 
+                width="2rem" 
+                margin="0.4rem 0.5rem 0.2rem"
+            ></skeleton-square>
+            <skeleton-square 
+                width="9rem" 
+                height="0.8rem"
+                margin="0.2rem 0.5rem"
+            ></skeleton-square>
+             <skeleton-square 
+                width="2rem" 
+                margin="0.4rem 0.5rem 0.2rem"
+            ></skeleton-square>
+            <skeleton-square 
+                width="9rem" 
+                height="1.8rem"
+                margin="0.2rem 0.5rem"
+            ></skeleton-square>
+             <skeleton-square 
+                width="2rem" 
+                margin="0.4rem 0.5rem 0.2rem"
+            ></skeleton-square>
+            <row padding="0.4rem 0.5rem 0.2rem">
+                <skeleton-square 
+                    width="7rem"
+                    height="0.5rem"
+                    margin="0 0.5rem 0 0"
+                ></skeleton-square>
+                <skeleton-square 
+                    width="1.5rem" 
+                    height="0.5rem"
+                ></skeleton-square>
+            </row>
+            <skeleton-square 
+                width="8rem" 
+                height="0.8rem"
+                margin="0.4rem 1rem 0"
+            ></skeleton-square>
+            <skeleton-square 
+                width="8rem" 
+                height="0.8rem"
+                margin="0.3rem 1rem"
+            ></skeleton-square>
+        </div>
+        <div class="self-content" v-show="!loading">
+            <div class="self-img">
+                <img :src="info.wapImg">
+            </div>
+            <div class="self-info">
+                <div class="self-title">
+                    <h2 @click="showProContent = !showProContent">
+                        <span>{{info.proTitle}}</span>
+                        <i
+                        class="iconfont icon-list-more"
+                        :class="{'show':showProContent}"
+                        v-if="info.proContent"
+                        ></i>
+                    </h2>
+                </div>
+                <div class="selfdetail-content" v-html="info.proContent" v-show="showProContent"></div>
+            </div>
+
+            <div class="apply-from">
+                <div class="apply-input">
+                    <div class="title">
+                        <span>*</span>申请金额
+                    </div>
+                    <div class="input">
+                        <input
+                        onkeypress="if((event.keyCode&lt;48 || event.keyCode&gt;57) &amp;&amp; event.keyCode!=46 || /\.\d\d$/.test(value))event.returnValue=false" 
+                        name="money"
+                        autocomplete="off"
+                        v-model="depositMoney"
+                        type="tel"
+                        placeholder="请输入申请金额"
+                        >
+                    </div>
+                </div>
+                <div class="apply-input">
+                    <div class="title">
+                        <span>*</span>申请理由
+                    </div>
+                    <div class="input">
+                        <textarea
+                        name="reason"
+                        rows="5"
+                        @input="inputReason"
+                        :maxlength="max"
+                        placeholder="请输入申请理由"
+                        v-model="reason"
+                        ></textarea>
+                        <div class="apply-counter">最多输入{{max}}字，还能输入<span class="num">{{current}}</span>字以内</div>
+                    </div>
+                </div>
+                <div class="apply-input">
+                    <div class="title">
+                        <span>*</span>验证码
+                    </div>
+                    <div class="apply-code">
+                        <div class="input-code">
+                        <input
+                            onkeyup="value=value.replace(/\D/g,'')"
+                            name="captcha"
+                            autocomplete="off"
+                            v-model="code"
+                            maxlength="4"
+                            type="tel"
+                            placeholder="请输入右侧验证码"
+                        >
+                        </div>
+                        <div class="input-code-img">
+                            <img :src="codeImg" @click="getCode">
+                        </div>
+                    </div>
+                </div>
+                <div class="divs"></div>
+            </div>
+            <div class="self-btn" @click="apply">
+                <span>立即申请</span>
+            </div>
+            <router-link class="self-btn no-bg" tag="div" :to="{name:'selfmore'}">
+                <div>
+                <span>查看优惠申请记录</span>
+                </div>
+            </router-link>
+        </div>
+    </div>
+</template>
+
+<script>
+import {
+    getSelflist,
+    getSelfCode,
+    getSelfApply
+} from "../../../services/center.js"
+export default {
+    name: "selfDetail",
+    data() {
+        return {
+            loading: true,
+            id: this.$route.query.id,
+            info: {},
+            stusta: 1,
+            actPop: false,
+            resData: {},
+            codeImg: "",
+            codeId: "",
+            depositMoney: "",
+            code: "",
+            reason: "",
+            max: 255,
+            current: 0,
+            showProContent: false,
+        };
+    },
+    mounted() {
+        this.getInfo();
+        this.getCode();
+    },
+    methods: {
+        selfmore(){
+            this.$router.push({
+                name: "selfmore"
+            });
+        },
+        getInfo(){
+            getSelflist().then(res => {
+                if (res.success) {
+                    this.loading = false;
+                    res.data.map(v => {
+                        if(this.id == v.id){
+                            this.info = v
+                        }
+                    });
+                } else {
+                    this.$toast.fail(res.message, {
+                        cover: true,
+                        duration: 1000
+                    });
+                }
+            });
+        },
+        getCode() {
+            getSelfCode().then(res => {
+                if (res.success) {
+                    this.codeImg = "data:image/png;base64," + res.data.code;
+                    this.codeId = res.data.id;
+                } else {
+                    this.$toast.fail(res.message, {
+                        cover: true,
+                        duration: 1000
+                    });
+                }
+            });
+        },
+        apply() {
+            let data = {
+                activityId: parseInt(this.id),
+                depositMoney: parseFloat(this.depositMoney),
+                remark:this.reason,
+                code:this.code,
+                codeId:this.codeId
+            }
+            //验证空
+            if(data.depositMoney == ''){
+                this.$toast.fail("申请金额不能为空", {
+                    cover: true,
+                    duration: 1000
+                });
+                return false
+            }
+            if(data.remark == ''){
+                this.$toast.fail("申请理由不能为空", {
+                    cover: true,
+                    duration: 1000
+                });
+                return false
+            }
+            if(data.code == ''){
+                this.$toast.fail("验证码不能为空", {
+                    cover: true,
+                    duration: 1000
+                });
+                return false
+            }
+            //
+            if(!/^\d{1,8}(\.\d{1,2})?$/.test(data.depositMoney)){
+                this.$toast.fail("金额为0.00-99999999.99", {
+                    cover: true,
+                    duration: 1000
+                });
+                return false
+            }else if(!/^\d+$/.test(data.code)){
+                this.$toast.fail("验证码输入有误", {
+                    cover: true,
+                    duration: 1000
+                });
+                return false
+            }
+            getSelfApply(data).then(res => {
+                if (res.success) {
+                    this.$toast.fail("申请成功", {
+                        cover: true,
+                        duration: 1000
+                    });
+                    this.$router.push({
+                        name: "selfmore"
+                    });
+                } else {
+                    this.$toast.fail(res.message, {
+                        cover: true,
+                        duration: 1000
+                    });
+                }
+            });
+        },
+        inputReason() {
+            this.current = this.max - this.reason.length;
+        }
+    }
+};
+</script>
+
+<style lang="scss" scoped>
+#selfDetail{
+    /deep/ .selfmore{
+        margin-top: 0.2rem;
+        width: 0.6rem;
+        height: 0.6rem;
+        background: url("../../../assets/img/my-icon/icon-gift.png") no-repeat;
+        background-size: 100% 100%;
+    }
+    .skeleton{
+        background-color: $default-color;
+    }
+    .self-content {
+        padding-bottom: 0.88rem;
+        /* 92/75 */
+        .self-img {
+            width: 100%;
+            height: 4rem;
+            img {
+                width: 100%;
+                height: 100%;
+            }
+        }
+        .self-info {
+            padding-top: 0.4rem;
+            padding-bottom: 0.4rem;
+            background: $default-color;
+            .self-title {
+                h2 {
+                    padding-left: 0.4rem;
+                    font-size: 0.45rem;
+                    color: $text-color !important;
+                    i {
+                        font-size: 0.32rem;
+                        float: right;
+                        margin-right: 0.4rem;
+                        transform: rotate(90deg);
+                        transition: all 0.2s;
+                        &.show {
+                        transform: rotate(270deg);
+                        }
+                    }
+                }
+            }
+            .selfdetail-content {
+                padding: 0.2rem;
+                margin-top: 0.27rem;
+                margin-left: 0.4rem;
+                margin-right: 0.4rem;
+                background: $default-bg-color;
+                word-wrap:break-word
+            }
+        }
+        .self-btn {
+            margin-top: 0.4rem;
+            margin-left: 0.4rem;
+            margin-right: 0.4rem;
+            width: 9.2rem;
+            height: 1.067rem;
+            background-color: $nondefault-color;
+            border-radius: 0.133rem;
+            text-align: center;
+            line-height: 1.067rem;
+            color: $default-color;
+        }
+        .no-bg {
+            color: $text-color;
+            background-color: $default-bg-color;
+            border-radius: 0.1333rem;
+            border: solid 1px $nondefault-color;
+        }
+    }
+    //------
+    .apply-from {
+        padding-top: 0.2667rem;
+        padding-bottom: 0.2667rem;
+        margin-top: 0.27rem;
+        background: $default-bg-color;
+        .apply-input {
+        padding-left: 0.4rem;
+        padding-right: 0.4rem;
+        font-size: 0.32rem;
+        .title {
+            width: 100%;
+            span {
+                color: $must-color;
+            }
+        }
+        .input {
+            padding-top: 0.2rem;
+            padding-bottom: 0.2rem;
+            box-sizing: border-box;
+            input {
+            height: 0.8rem;
+            width: 100%;
+            border-radius: 0.133rem;
+            border: solid 0.013rem $border-color;
+            padding-left: 0.2rem;
+            box-sizing: border-box;
+            }
+            textarea {
+            border: solid 0.013rem $border-color;
+            width: 100%;
+            padding-left: 0.2rem;
+            padding-top: 0.2rem;
+            border-radius: 0.133rem;
+            box-sizing: border-box;
+            }
+        }
+        .apply-code {
+            padding-top: 0.2rem;
+            padding-bottom: 0.2rem;
+            display: -webkit-box;
+            /* 老版本语法: Safari, iOS, Android browser, older WebKit browsers. */
+            display: -moz-box;
+            /* 老版本语法: Firefox (buggy) */
+            display: -ms-flexbox;
+            /* 混合版本语法: IE 10 */
+            display: -webkit-flex;
+            display: flex;
+            .input-code {
+            flex: 7;
+            width: 100%;
+            margin-right: 0.2rem;
+            line-height: 0.8rem;
+            input {
+                height: 0.8rem;
+                width: 100%;
+                padding-left: 0.2rem;
+                border-radius: 0.133rem;
+                border: solid 0.013rem $border-color;
+                margin-right: 0.2rem;
+            }
+            }
+            .input-code-img {
+            margin-left: 0.3rem;
+            flex: 2;
+            border-radius: 0.133rem;
+            border: solid 0.013rem $border-color;
+            img {
+                width: 100%;
+                height: 0.7467rem;
+            }
+            }
+        }
+        .apply-counter {
+            color: $text-color;
+            text-align: right;
+            span.num {
+                color: $text-color;
+            }
+        }
+        }
+        .divs {
+            text-align: center;
+            min-height: auto;
+            height: 0.4rem;
+            p.errs {
+                padding: 0;
+                color: $text-color;
+            }
+        }
+    }
+}
+</style>

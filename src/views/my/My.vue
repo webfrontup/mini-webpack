@@ -1,461 +1,407 @@
 <template>
-    <div class="my">
-        <Header :showBack="true" :showRight="true" title="我的"></Header>
-        <div class="person-info clearfix">
-            <div class="left iconfont icon-sidebar_head"></div>
-            <div class="center">
-                <h2>{{account}}</h2>
-                <p v-show="isShowMoney">{{balance}}</p>
-                <mt-spinner v-show="!isShowMoney" type="fading-circle" color="#00d897" :size="size"></mt-spinner>
-    
-            </div>
-            <div class="right">
-                <a @click="refush()">
-                    <i class="iconfont icon-wallet-refresh"></i>
-                    <span>刷新余额</span>
-                </a>
-            </div>
-        </div>
-        <div class="menu-list">
-            <ul>
-                <li>
-                    <div class="left">
-                        <i class="iconfont icon-wd-ziliao"></i>
-                    </div>
-                    <router-link to="/about" tag="div" class="right pk-1px-b">
-                        <span>个人资料</span>
-                        <i class="iconfont icon-list-more"></i>
-                    </router-link>
-                </li>
-                <li>
-                    <div class="left">
-                        <i class="iconfont icon-wd-password"></i>
-                    </div>
-                    <router-link to="/password" tag="div" class="right pk-1px-b">
-                        <span>密码管理</span>
-                        <i class="iconfont icon-list-more"></i>
-                    </router-link>
-                </li>
-                <li>
-                    <div class="left">
-                        <i class="iconfont icon-wd-bank"></i>
-                    </div>
-                    <router-link to="/bankCard" tag="div" class="right pk-1px-b">
-                        <span>银行卡管理</span>
-                        <i class="iconfont icon-list-more"></i>
-                    </router-link>
-                </li>
-                <li>
-                    <div class="left">
-                        <i class="iconfont icon-wd-info"></i>
-                    </div>
-                    <router-link to="/msgcenter" tag="div" class="right pk-1px-b">
-                        <span>消息中心</span>
-                        <div class="spas" v-show="count>0&&count<10">
-                            {{count}}
-                        </div>
-                        <div class="spana" v-show="count>10&&count<100">
-                            {{count}}
-                        </div>
-                        <div class="spanas" v-show="count>99">
-                            99+
-                        </div>
-                        <i class="iconfont icon-list-more"></i>
-                    </router-link>
-                </li>
-            </ul>
-            <ul>
-                <router-link tag="li" :to="{name:'spread'}" v-show="isShow.isSpread">
-                    <div class="left">
-                        <i class="iconfont icon-wd-tuiguang"></i>
-                    </div>
-                    <div class="right pk-1px-b">
-                        <span>我要推广</span>
-                        <i class="iconfont icon-list-more"></i>
-                    </div>
-                </router-link>
-                <router-link tag="li" :to="{name:'agencyappli'}" v-show="isShow.isAgencyReg">
-                    <div class="left">
-                        <i class="iconfont icon-wd-daili"></i>
-                    </div>
-                    <div class="right pk-1px-b">
-                        <span>代理申请</span>
-                        <i class="iconfont icon-list-more"></i>
-                    </div>
-                </router-link>
-                <router-link tag="li" :to="{name:'selfHelp'}" v-show="isShow.isOfferSelf">
-                    <div class="left">
-                        <i class="iconfont icon-wd-youhui"></i>
-                    </div>
-                    <div class="right pk-1px-b">
-                        <span>自助优惠申请</span>
-                        <i class="iconfont icon-list-more"></i>
-                    </div>
-                </router-link>
-            </ul>
-            <ul>
-                <!-- 暂时隐藏 -->
-                <!-- <li>
-                                    <div class="left">
-                                        <i class="iconfont icon-wd-yuyan"></i>
-                                    </div>
-                                    <div class="right pk-1px-b">
-                                        <span>选择语言</span>
-                                        <i class="iconfont icon-list-more"></i>
-                                    </div>
-                                </li> -->
-                <router-link tag="li" :to="{name:'contactus'}">
-                    <div class="left">
-                        <i class="iconfont icon-wd-lianxi"></i>
-                    </div>
-                    <div class="right pk-1px-b">
-                        <span>联系我们</span>
-                        <i class="iconfont icon-list-more"></i>
-                    </div>
-                </router-link>
-                <!-- 暂时隐藏 -->
-                <!-- <li>
-                                    <div class="left">
-                                        <i class="iconfont icon-wd-banben"></i>
-                                    </div>
-                                    <div class="right pk-1px-b">
-                                        <span>版本检测</span>
-                                        <i class="iconfont icon-list-more"></i>
-                                    </div>
-                                </li> -->
-                <router-link tag="li" :to="{name:'more'}">
-                    <div class="left">
-                        <i class="iconfont icon-wd-gdinfo"></i>
-                    </div>
-                    <div class="right">
-                        <span>更多</span>
-                        <i class="iconfont icon-list-more"></i>
-                    </div>
-                </router-link>
-            </ul>
-            <ul>
-                <li v-show="isLogin" @click="loginOut">
-                    <div class="left">
-                        <i class="iconfont icon-wd-out"></i>
-                    </div>
-                    <div class="right">
-                        <span>退出登录</span>
-                    </div>
-                </li>
-            </ul>
-        </div>
-    </div>
+	<div class="my" ref="my">
+		<div class="topmy">
+			<nut-navbar class="info-header" :leftShow="false" @on-click-more="more('index')">
+				我的
+				<a class="spansright" slot="more-icon">
+					<img class="imgsbank" src="../../assets/img/zhuye.png">
+				</a>
+			</nut-navbar>
+			<div class="info">
+				<div class="makemid">
+					<img src="../../assets/img/my-icon/icon_visitor@3x.png" alt="tupian" class="src">
+					<p class="name">{{userinfo.account}}</p>
+					<p class="times">本次登录时间{{userinfo.lastLoginTime | filterDate}}</p>
+				</div>
+			</div>
+		</div>
+		<div class="content_container">
+			<ul class="pk-my-ul">
+				<li class="lis">
+					<div class="total_asset md-6 bdr">
+						<i>￥{{userinfo.totalBalance}}</i>
+						<span>总资产</span>
+					</div>
+					<div class="total_asset md-6">
+						<i>￥{{userinfo.gameBalance}}</i>
+						<span>钱包余额</span>
+					</div>
+				</li>
+				<li class="lis mgb2 pk-list">
+					<div class="total_asset bdr iconpfn md-6" @click="goPath('deposit')">
+						<i>
+							<img src="../../assets/img/my-icon/my_ico_1.png" alt>
+						</i>
+						<span class="spans">充值</span>
+					</div>
+					<div class="total_asset iconpfn md-6" @click="goPath('withdraw')">
+						<i>
+							<img src="../../assets/img/my-icon/my_ico_2.png" alt>
+						</i>
+						<span class="spans">提现</span>
+					</div>
+				</li>
+				<li class="lis pk-list">
+					<div class="total_asset bdr iconpfn md-6" @click="goPath('transfer')">
+						<i>
+							<img src="../../assets/img/my-icon/my_ico_11.png" alt>
+						</i>
+						<span class="spans">额度转换</span>
+					</div>
+					<div class="total_asset iconpfn md-6" @click="goPath('auditQuery')">
+						<i>
+							<img src="../../assets/img/my-icon/my_ico_12.png" alt>
+						</i>
+						<span class="spans">即时稽核查询</span>
+					</div>
+				</li>
+				<li class="lis fakes">
+					<div class="total_asset iconpfn md-6" @click="goPath('about')">
+						<i>
+							<img src="../../assets/img/my-icon/my_ico_13.png" alt>
+						</i>
+						<div class="divspans">
+							<div>账号信息</div>
+							<p>查看和编辑个人资料</p>
+						</div>
+					</div>
+					<div class="total_asset iconpfn md-6" @click="goPath('betRecord')">
+						<i>
+							<img src="../../assets/img/my-icon/my_ico_3.png" alt>
+						</i>
+						<div class="divspans">
+							<div>投注记录</div>
+							<p>查看所有参与的游戏记录</p>
+						</div>
+					</div>
+					<router-link to="/agencyappli" tag="div" class="total_asset iconpfn md-6" v-show="switchList.isAgencyReg">
+						<i>
+							<img src="../../assets/img/my-icon/dailishenq.png" alt>
+						</i>
+						<div class="divspans">
+							<div>代理申请</div>
+							<p>申请成为代理</p>
+						</div>
+					</router-link>
+					<router-link to="/capitalrecord" tag="div" class="total_asset iconpfn md-6">
+						<i>
+							<img src="../../assets/img/my-icon/my_ico_5.png" alt>
+						</i>
+						<div class="divspans">
+							<div>资金记录</div>
+							<p>查看所有资金来往记录</p>
+						</div>
+					</router-link>
+					<router-link to="/backwater" tag="div" class="total_asset iconpfn md-6" v-show="switchList.isWaterSelf">
+						<i>
+							<img src="../../assets/img/my-icon/jinrifanshuijilu.png" alt>
+						</i>
+						<div class="divspans">
+							<div>自助返水</div>
+							<p>投注即得返水奖励</p>
+						</div>
+					</router-link>
+					<div class="total_asset iconpfn md-6" @click="goPath('securityCenter')">
+						<i>
+							<img src="../../assets/img/my-icon/my_ico_7.png" alt>
+						</i>
+						<div class="divspans">
+							<div>安全中心</div>
+							<p>保护您的账号安全</p>
+						</div>
+					</div>
+					<router-link to="/selfHelp" tag="div" class="total_asset iconpfn md-6" v-show="switchList.isOfferSelf">
+						<i>
+							<img src="../../assets/img/my-icon/my_ico_6.png" alt>
+						</i>
+						<div class="divspans">
+							<div>自助优惠申请</div>
+							<p>所有申请优惠与优惠记录</p>
+						</div>
+					</router-link>
+					<div class="total_asset iconpfn md-6" @click="goPath('spread')" v-show="switchList.isSpread">
+						<i>
+							<img src="../../assets/img/my-icon/my_ico_15.png" alt>
+						</i>
+						<div class="divspans">
+							<div>推广返佣</div>
+							<p>查看团队信息</p>
+						</div>
+					</div>
+				</li>
+				<li class="lis">
+					<div class="total_asset iconpfn md-6" @click="goPath('msgCenter')">
+						<i>
+							<img src="../../assets/img/my-icon/my_ico_8.png" alt>
+						</i>
+						<div class="divspans">
+							<div>消息中心</div>
+							<p>查看历史消息内容</p>
+						</div>
+					</div>
+					<router-link to="/more" tag="div" class="total_asset iconpfn md-6">
+						<i>
+							<img src="../../assets/img/my-icon/my_ico_14.png" alt>
+						</i>
+						<div class="divspans">
+							<div>更多</div>
+							<p>保护你的账号安全</p>
+						</div>
+					</router-link>
+				</li>
+			</ul>
+		</div>
+	</div>
 </template>
 
 <script>
-    import Header from "@/components/Header.vue";
-    import func from "@/api/my";
-    
-    export default {
-        name: "my",
-        components: {
-            Header
-        },
-        data() {
-            return {
-                isShowMoney: true,
-                size: parseInt(this.HTML_FONT_SIZE * 0.4),
-                account: "", //账号
-                balance: 0, //余额
-                isShow: {},
-                count: "",
-                isLogin:sessionStorage.getItem("session")?true:false
-            };
-        },
-        created() {
-            this.getMemberCenterInfo();
-        },
-        methods: {
-            getMemberCenterInfo(t) {
-                func.getMemberCenter().then((res) => {
-                    this.count = res.unread.count ? res.unread.count:'';
-                    this.account = res.info.account;
-                    sessionStorage.setItem('account',this.account);
-                    this.balance = res.info.balance ? res.info.balance : 0;
-                    this.isShow = res.switch;
-                    this.isShowMoney = true;
-                    if (t) {
-                        this.$toast({
-                            message: "刷新成功",
-                            duration: 2000
-                        });
-                    }
-                }).catch(err => {
-                    this.$toast({
-                        message: err,
-                        duration: 2000
-                    });
-                });
-            },
-            //刷新
-            refush() {
-                this.isShowMoney = false;
-                this.getMemberCenterInfo(1);
-            },
-            loginOut() {
-                this.$messagebox({
-                    title: ' ',
-                    message: '确认退出登录?',
-                    showCancelButton: true,
-                    confirmButtonText: "确定",
-                    cancelButtonText: "取消"
-                }).then(action => {
-                    if(action == 'confirm'){
-                        func.postLoginOut()
-                            .then(res => {
-                                sessionStorage.removeItem("session");
-                                this.$router.push({
-                                    name: "login"
-                                });
-                            })
-                            .catch(err => {
-                                this.$toast({
-                                    message: err,
-                                    duration: 2000
-                                });
-                            });
-                    }
-                })
-            },
-    
-        }
-    };
+import { getInfo } from "../../services/auth.js";
+export default {
+	data() {
+		return {
+			userinfo:{
+				account:"",
+				lastLoginTime:"",
+				totalBalance:"",
+				gameBalance:"",
+			},
+			switchList:{
+				isSpread: true, //是否开启会员推广
+				isAgencyReg: true,   //是否开启代理注册
+				isOfferSelf: true,  //是否开启自助优惠
+				isWaterSelf: true, //是否开启自助返水
+			}
+		};
+	},
+	mounted() {
+		this.hasHeight();
+		this.getMyInfo();
+	},
+	methods: {
+		hasHeight() {
+			this.$refs.my.style.height = window.innerHeight + "px";
+		},
+		more(path) {
+			this.$router.push({
+				name: path
+			});
+		},
+		goPath(path) {
+			this.$router.push({
+				name: path
+			});
+		},
+		getMyInfo(){
+            getInfo().then(res => {
+				if (res.success) {
+					console.log(res);
+					this.userinfo = res.data.user;
+					this.switchList = res.data.switch
+
+				} else {
+					this.$toast.fail(res.message, {
+						cover: true,
+						duration: 1500
+					});
+				}
+			});
+		},
+		
+	}
+};
 </script>
+<style lang="scss" scoped>
+	.my {
+		background: #dedede;
+		margin-top: -1.22667rem;
+		.topmy {
+			height: 5.14667rem /* 386/75 */;
+			width: 100%;
+			background: url("../../assets/img/mybg.png") no-repeat 0 center;
+			background-size: cover;
+			background-position: 0 0;
+			.info-header {
+				height: 1.22667rem /* 92/75 */;
+				padding: 0 0.4rem /* 30/75 */;
+				padding-left: 0;
+				line-height: 1.22667rem /* 92/75 */;
+				font-size: 0.48rem;
+				background: none;
+				background-size: cover;
+				color: #fff;
+				.spans {
+					font-size: 0.48rem;
+				}
+			}
+			.info {
+				height: 3.6rem /* 270/75 */;
+				display: flex;
+				flex-direction: column;
+				justify-content: space-around;
+				align-items: center;
+				padding-top: 1.22667rem /* 92/75 */;
+				.makemid {
+					text-align: center;
+					img {
+						height: 1.38667rem /* 104/75 */;
+						width: 1.38667rem /* 104/75 */;
+					}
+					.name {
+						color: #333;
+						font-size: 0.37333rem /* 28/75 */;
+					}
+					.times {
+						color: #666;
+						font-size: 0.32rem /* 24/75 */;
+						font-weight: 600;
+					}
+				}
+			}
+		}
+	}
 
-<style lang="less" scoped>
-    @import url("../../components/less/common.less");
-    .icon-wd-ziliao {
-        color: @color-00cc8f;
-    }
-    
-    .icon-wd-password {
-        color: #50aae5;
-    }
-    
-    .icon-wd-bank {
-        color: #5a6fb0;
-    }
-    
-    .icon-wd-info {
-        color: #f19938;
-    }
-    
-    .icon-wd-tuiguang {
-        color: #eb445a;
-    }
-    
-    .icon-wd-youhui {
-        color: #ec572e;
-    }
-    
-    .icon-wd-daili {
-        color: #8678c6;
-    }
-    
-    .icon-wd-yuyan {
-        color: #a3629e;
-    }
-    
-    .icon-wd-lianxi {
-        color: #a58bb9;
-    }
-    
-    .icon-wd-banben {
-        color: #da70a0;
-    }
-    
-    .icon-wd-gdinfo {
-        color: #1b4797;
-    }
-    
-    .icon-wd-out {
-        color: #94cac8;
-    }
-    
-    .spas,
-    .spana,
-    .spanas {
-        width: 0.58667rem/* 44/75 */
-        ;
-        height: 0.37333rem/* 28/75 */
-        ;
-        border-radius: 0.4rem/* 30/75 */
-        ;
-        font-size: 0.26667rem/* 20/75 */
-        ;
-        line-height: 0.37333rem/* 28/75 */
-        ;
-        text-align: center;
-        color: #fff;
-        background: #ff0000;
-        position: absolute;
-        right: 13%;
-        top: 34%;
-        padding: 0 0.04rem/* 3/75 */
-        ;
-    }
-    
-    .spanas {
-        width: 0.8rem/* 60/75 */
-        ;
-    }
-    
-    .spas {
-        width: 0.37333rem/* 28/75 */
-        ;
-    }
-    
-    .my {
-        padding-top: 1.22667rem/* 92/75 */
-        ;
-        padding-bottom: 1.30667rem/* 98/75 */
-        ;
-    }
-    
-    .person-info {
-        background: #252232 url("../../assets/img/headbg.png") center 30px no-repeat;
-        overflow: hidden;
-        background-size: cover;
-        .left {
-            margin: 0.4rem/* 30/75 */
-            ;
-            float: left;
-            font-size: 1.70667rem;
-            color: @color-green;
-        }
-        .center {
-            float: left;
-            color: @color-green;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: flex-start;
-            height: 2.50667rem/* 188/75 */
-            ;
-            h2 {
-                margin-bottom: 0.26667rem/* 20/75 */
-                ;
-                font-size: 0.48rem/* 36/75 */
-                ;
-            }
-            p {
-                font-size: 0.4rem/* 30/75 */
-                ;
-            }
-        }
-        .right {
-            float: right;
-            height: 2.50667rem/* 188/75 */
-            ;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            padding-right: 0.4rem/* 30/75 */
-            ;
-            a {
-                color: @color-green;
-                border: 1px solid @color-green;
-                border-radius: 0.08rem/* 6/75 */
-                ;
-                height: 0.58667rem/* 44/75 */
-                ;
-                line-height: 0.58667rem/* 44/75 */
-                ;
-                padding: 0 0.13333rem/* 10/75 */
-                ;
-                box-sizing: border-box;
-                text-decoration: none;
-                span {
-                    color: @color-green;
-                    font-size: 0.32rem/* 24/75 */
-                    ;
-                }
-                .iconfont {
-                    font-size: 0.32rem/* 24/75 */
-                    ;
-                    font-family: "iconfont" !important;
-                    font-style: normal;
-                    -webkit-font-smoothing: antialiased;
-                    -moz-osx-font-smoothing: grayscale;
-                }
-            }
-        }
-    }
-    
-    .menu-list {
-        margin-top: 0.26667rem/* 20/75 */
-        ;
-        padding-bottom: 0.53333rem/* 40/75 */
-        ;
-        ul {
-            li {
-                background-color: #fff;
-                display: flex;
-                &:active {
-                    background: rgba(162, 100, 85, 0.2);
-                }
-                .left {
-                    flex: 1;
-                    padding: 0.27rem 0.4rem/* 30/75 */
-                    ;
-                    .iconfont {
-                        font-size: 0.53333rem/* 40/75 */
-                        ;
-                        display: block;
-                    }
-                }
-                .right {
-                    color: @color-323233;
-                    flex: 10;
-                    display: flex;
-                    justify-content: space-between;
-                    align-items: center;
-                    padding-right: 0.4rem/* 30/75 */
-                    ;
-                    font-size: 0.42667rem/* 32/75 */
-                    ;
-                    .iconfont {
-                        font-size: 0.32rem/* 24/75 */
-                        ;
-                        color: @color-818181;
-                    }
-                    .has-msg {
-                        position: relative;
-                        &::before {
-                            content: "";
-                            display: block;
-                            position: absolute;
-                            width: 0.18667rem/* 14/75 */
-                            ;
-                            height: 0.18667rem/* 14/75 */
-                            ;
-                            background-color: @color-red;
-                            right: 0.45333rem/* 34/75 */
-                            ;
-                            border-radius: 50%;
-                            top: 50%;
-                            margin-top: -0.09333rem/* 7/75 */
-                            ;
-                        }
-                    }
-                }
-                &:last-child {
-                    .right {
-                        border-bottom: none;
-                    }
-                }
-            }
-            &:nth-child(n+1) {
-                margin-top: 0.26667rem/* 20/75 */
-                ;
-            }
-        }
-    }
+	.content_container {
+		position: relative;
+		height: auto;
+		width: 100%;
+		padding: 0 2.5%;
+	}
+
+	.pk-my-ul {
+		width: 95%;
+		position: fixed;
+		top: 4.5rem;
+		z-index: 100;
+		background-color: transparent;
+		overflow: scroll;
+		.bdr0 {
+			border-radius: 0 !important;
+		}
+
+		.mgb2 {
+			margin-bottom: 0.01333rem /* 1/75 */ !important;
+
+		}
+		.fakebot {
+			border-radius: 0 0 0.13333rem 0.13333rem !important;
+		}
+		.fakes {
+			border-radius: 0.13333rem !important;
+			flex-flow: row wrap;
+			align-content: flex-start;
+			justify-content: flex-start !important;
+			.total_asset{
+				margin-bottom: .02rem /* 1.5/75 */ !important;
+				flex: 0 0 50%;
+				box-sizing: border-box;
+				padding: .2rem /* 15/75 */ /* 10/75 */ 0;
+				// border-top: 1px solid $center-background;
+			}
+			// .total_asset:nth-child(1),.total_asset:nth-child(2){
+			// 	border-top: none;
+			// }
+		}
+
+		.fake {
+			border-radius: 0 !important;
+			margin-bottom: 0.01333rem /* 1/75 */ !important;
+		}
+		.lis {
+			cursor: pointer;
+			height: auto;
+			display: flex;
+			flex-direction: row;
+			justify-content: center;
+			align-items: center;
+			background-color: #fff;
+			border-radius: 0.13333rem /* 10/75 */;
+			padding: 0.14667rem /* 11/75 */ 0;
+			margin-bottom: 0.26667rem /* 20/75 */;
+			text-align: center;
+			.md-6 {
+				width: 50%;
+			}
+			.bdr {
+				border-right: 0.02667rem /* 2/75 */ solid #f2f4f3;
+			}
+			.total_asset {
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				i {
+					font-style: normal;
+					color: #2ba6fe;
+					font-size: 0.48rem /* 36/75 */;
+				}
+
+				span {
+					color: #333;
+					font-size: 0.32rem /* 24/75 */;
+					&.spans {
+						font-size: 0.37333rem /* 28/75 */;
+					}
+				}
+				.divspans {
+					padding-left: 0.2rem /* 15/75 */;
+					font-size: 0.37333rem /* 28/75 */;
+					color: #141414;
+					text-align: left;
+					p {
+						font-size: 0.28rem;
+						color: #999;
+					}
+				}
+			}
+			.iconpfn {
+				flex-direction: row;
+				padding-left: 0.2rem /* 30/75 */;
+				i {
+					width: 0.93333rem /* 70/75 */;
+					height: 0.93333rem /* 70/75 */;
+					img {
+						width: 100%;
+					}
+				}
+				span {
+					margin-left: 0.4rem /* 30/75 */;
+				}
+			}
+			.text-lefts {
+				text-align: left;
+				width: 100%;
+			}
+		}
+		.pk-list{
+			.total_asset{
+				i{
+					margin-left: .26667rem /* 20/75 */
+				}
+			}
+		}
+	}
+	@import "../../components/scss/pk-pwd.scss";
+	.info-header {
+		.spans {
+			position: relative;
+			img {
+				position: absolute;
+				left: 0.4rem /* 30/75 */;
+				top: 0.13333rem /* 10/75 */ /* 10/75 */;
+			}
+		}
+	}
+	.spans {
+		.imgsbank {
+			left: 0.26667rem /* 20/75 */ !important;
+			width: 0.46667rem /* 35/75 */;
+		}
+	}
+	.spansright,.spansleft {
+		position: absolute;
+		right: 0.66667rem /* 50/75 */;
+		top: 0.2rem /* 15/75 */;
+		.imgsbank {
+			width: .6rem /* 45/75 */;
+		}
+	}
 </style>
-
-

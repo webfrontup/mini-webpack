@@ -8,7 +8,7 @@ const HOST = "localhost";
 const PORT = 8080;
 
 module.exports = merge(baseConfig, {
-	mode: 'development',
+	mode: "development",
 
 	devServer: {
 		clientLogLevel: "warning",
@@ -17,7 +17,7 @@ module.exports = merge(baseConfig, {
 		compress: true,
 		host: HOST,
 		port: PORT,
-		open: true,
+		open: false,
 		overlay: { warnings: false, errors: true },
 		publicPath: "/",
 		quiet: true,
@@ -52,7 +52,13 @@ module.exports = merge(baseConfig, {
 			},
 			{
 				test: /\.less$/,
-				use: ["vue-style-loader","style-loader", "css-loader", "less-loader", "postcss-loader"]
+				use: [
+					"vue-style-loader",
+					"style-loader",
+					"css-loader",
+					"less-loader",
+					"postcss-loader"
+				]
 			}
 		]
 	},

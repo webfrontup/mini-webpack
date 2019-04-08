@@ -1,240 +1,507 @@
 <template>
-    <div>
-        <Header :title="title" :rooter="rooter" :hasNoBack="true" :ty="ty" @ty="findaccount" :isShowHome="false"></Header>
-        <div class="hasbox"></div>
-        <div class="gray"></div>
-        <div class="content" v-show="ty==1">
-            <div class="pk-input pk-inputpro ">
-                <label class="title muster fs-14">代理账号</label>
-                <div class="input fs-12 input_pro inputs">
-                    <input name="agencyAccount" class="relative" autocomplete="off" v-model="addData.account" v-validate="'required|min:5|max:12'" :class="{'input': true, 'is-danger': errors.has('agencyAccount') }" type="text" placeholder="请输入5-12位英文数字组合">
-                    <i type="clear" v-show="errors.has('agencyAccount')" class="fs-15 iconfont icon-login-error tj"></i>
-                </div>
-            </div>
-    
-            <div class="pk-input pk-inputpro ">
-                <label class="title muster fs-14">登录密码</label>
-                <div class="input fs-12 input_pro inputs">
-                    <input type="password" class="relative" name="password" autocomplete="off" v-model="addData.password" v-validate="'required|max:11|min:6'" :class="{'input': true, 'is-danger': errors.has('password') }" placeholder="请输入6-11位英文数字组合">
-                    <i type="clear" v-show="errors.has('password')" class="fs-15 iconfont icon-login-error tj"></i>
-                </div>
-            </div>
-    
-            <div class="pk-input pk-inputpro">
-                <label class="title muster fs-14">确认密码</label>
-                <div class="input fs-12 input_pro inputs">
-                    <input name="confirmPassword" class="" autocomplete="off" v-model="addData.rePassword" v-validate="'required|max:11|min:6'" :class="{'input': true, 'is-danger': errors.has('confirmPassword') }" type="password" placeholder="请再次输入登录密码">
-                    <i type="clear" v-show="errors.has('confirmPassword')" class="fs-15 iconfont icon-login-error tj"></i>
-                </div>
-            </div>
-    
-            <div class="pk-input pk-inputpro makd">
-                <label class="title muster fs-14">验证码</label>
-                <div class="input fs-12 input_pro max80b dis-inb ficon">
-                    <input name="captcha" class="no-bod-bot" autocomplete="off" v-model="addData.code" v-validate="'required|max:4|min:4'" :class="{'input': true, 'is-danger': errors.has('captcha') }" type="text" placeholder="请输入验证码">
-                    <i type="clear" v-show="errors.has('captcha')" class="fs-15 iconfont icon-login-error tj"></i>
-                </div>
-                <div class="input-code-img fr">
-                    <img :src="codeImg" @click="getCode">
-                </div>
-            </div>
-        </div>
-        <div class="content" v-show="ty==2">
-    
-            <div class="pk-input pk-inputpro ">
-                <label class="title muster fs-14">真实姓名</label>
-                <div class="input fs-12 input_pro inputs">
-                    <input tit="realName" name="name" class="relative" autocomweChatplete="off" v-model="addData.realName" v-validate="'required|max:20'" :class="{'input': true, 'is-danger': errors.has('name') }" type="text" placeholder="请输入您的真实姓名">
-                    <i type="clear" v-show="errors.has('name')" class="fs-15 iconfont icon-login-error tj"></i>
-                </div>
-            </div>
-            <div class="pk-input pk-inputpro">
-                <label class="title muster fs-14">身份证</label>
-                <div class="input fs-12 input_pro inputs ">
-                    <input tit="idCard" name="IDCard" class="relative" autocomplete="off" v-model="addData.idCard" v-validate="'max:18|min:15|required'" :class="{'input': true, 'is-danger': errors.has('IDCard') }" type="text" placeholder="请输入您的身份证">
-                    <i type="clear" v-show="errors.has('IDCard')" class="fs-15 iconfont icon-login-error tj"></i>
-                </div>
-            </div>
-            <div class="pk-input pk-inputpro ">
-                <label class="title titlesr fs-14">邮箱</label>
-                <div class="input fs-12 input_pro inputs">
-                    <input tit="email" type="text" class="relative" name="email" autocomplete="off" v-model="addData.email" v-validate="'email'" :class="{'input': true, 'is-danger': errors.has('email') }" placeholder="请输入您的邮箱地址">
-                    <i type="clear" v-show="errors.has('email')" class="fs-15 iconfont icon-login-error tj"></i>
-                </div>
-            </div>
-    
-            <div class="pk-input pk-inputpro">
-                <label class="title titlesr fs-14">QQ</label>
-                <div class="input fs-12 input_pro inputs ">
-                    <input tit="QQ" name="QQ" class="relative" autocomplete="off" v-model="addData.qq" v-validate="'numeric|max:20|min:5'" :class="{'input': true, 'is-danger': errors.has('QQ') }" type="number" placeholder="请输入您的QQ号">
-                    <i type="clear" v-show="errors.has('QQ')" class="fs-15 iconfont icon-login-error tj"></i>
-                </div>
-            </div>
-            <div class="pk-input pk-inputpro">
-                <label class="title titlesr fs-14">微信</label>
-                <div class="input fs-12 input_pro inputs ">
-                    <input tit="wechat" name="weChat" class="relative" autocomplete="off" v-model="addData.wechat" v-validate="'max:20|min:5'" :class="{'input': true, 'is-danger': errors.has('weChat') }" type="text" placeholder="请输入您的微信号">
-                    <i type="clear" v-show="errors.has('weChat')" class="fs-15 iconfont icon-login-error tj"></i>
-                </div>
-            </div>
-            <div class="pk-input pk-inputpro">
-                <label class="title titlesr fs-14">手机号</label>
-                <div class="input fs-12 input_pro inputs ">
-                    <input tit="telephone" name="mobilePhone" class="relative" autocomplete="off" v-model="addData.telephone" v-validate="'max:20|min:10'" :class="{'input': true, 'is-danger': errors.has('mobilePhone') }" type="text" placeholder="请输入您的手机号">
-                    <i type="clear" v-show="errors.has('mobilePhone')" class="fs-15 iconfont icon-login-error tj"></i>
-                </div>
-            </div>
-            <div class="pk-input pk-inputpro">
-                <label class="title titlesr fs-14">英文昵称</label>
-                <div class="input fs-12 input_pro inputs">
-                    <input tit="englishNickName" name="englishNickName" class="relative" autocomplete="off" v-model="addData.englishNickName" v-validate="'max:12|min:1'" :class="{'input': true, 'is-danger': errors.has('englishNickName') }" type="text" placeholder="请输入英文昵称">
-                    <i type="clear" v-show="errors.has('englishNickName')" class="fs-15 iconfont icon-login-error tj"></i>
-                </div>
-            </div>
-            <div class="pk-input pk-inputpro">
-                <label class="title titlesr fs-14">中文昵称</label>
-                <div class="input fs-12 input_pro inputs ">
-                    <input tit="chineseNickName" name="chineseNickName" class="relative" autocomplete="off" v-model="addData.chineseNickName" v-validate="'max:12|min:1'" :class="{'input': true, 'is-danger': errors.has('chineseNickName') }" type="text" placeholder="请输入您的中文昵称">
-                    <i type="clear" v-show="errors.has('chineseNickName')" class="fs-15 iconfont icon-login-error tj"></i>
-                </div>
-            </div>
-    
-            <div class="pk-input pk-inputpro">
-                <label class="title titlesr fs-14">推广网址</label>
-                <div class="input fs-12 input_pro inputs ">
-                    <input tit="promoteSite" name="promoteSite" class="relative" autocomplete="off" v-model="addData.promoteSite" v-validate="'http|max:20|min:5'" :class="{'input': true, 'is-danger': errors.has('promoteSite') }" type="text" placeholder="请输入完整网址,不包含http://">
-                    <i type="clear" v-show="errors.has('promoteSite')" class="fs-15 iconfont icon-login-error tj"></i>
-                </div>
-            </div>
-            <div class="pk-input pk-inputpro">
-                <label class="title titlesr fs-14">其它方式</label>
-                <div class="input fs-12 input_pro inputs ">
-                    <input tit="otherpromoteway" name="otherpromoteway" class="relative" autocomplete="off" v-model="addData.otherpromoteway" v-validate="'max:20|min:5'" :class="{'input': true, 'is-danger': errors.has('otherpromoteway') }" type="text" placeholder="其他推广方式,请用文字描述">
-                    <i type="clear" v-show="errors.has('otherpromoteway')" class="fs-15 iconfont icon-login-error tj"></i>
-                </div>
-            </div>
-            <div class="pk-input pk-inputpro">
-                <label class="title fs-14 titlesr">备注</label>
-                <div class="input fs-12 input_pro ">
-                    <input tit="remark" name="remark" class="no-bod-bot" autocomplete="off" v-model="addData.remark" v-validate="'max:20'" :class="{'input': true, 'is-danger': errors.has('remark') }" type="text" placeholder="请输入备注信息">
-                    <i type="clear" v-show="errors.has('remark')" class="fs-15 iconfont icon-login-error tj"></i>
-                </div>
-            </div>
-        </div>
-        <div class="content" v-show="ty==3">
-            <mt-popup :closeOnClickModal="true" :position="'bottom'" v-model="popupVisible" style="width: 100%;z-index: 2003;">
-                <div class="popup-title pk-1px-b">
-                    <span @click="cancel()">取消</span>
-                    <span>请选择银行</span>
-                    <span @click="sure()">确定</span>
-                </div>
-                <mt-picker ref="picker" value-key="title" :itemHeight="itemHeight" :slots="mainType" @change="onValuesChange"></mt-picker>
-            </mt-popup>
-            <mt-popup :closeOnClickModal="true" :position="'bottom'" v-model="popupVisibles" style="width: 100%;z-index: 2003;">
-                <div class="popup-title pk-1px-b">
-                    <span @click="cancels()">取消</span>
-                    <span>请选择支行地址</span>
-                    <span @click="sures()">确定</span>
-                </div>
-                <picker :slots="myAddressSlots" :itemHeight="itemHeight" @change="onMyAddressChange"></picker>
-            </mt-popup>
-            <div class="pk-input pk-inputpro ">
-                <label class="title muster fs-14">银行名称</label>
-                <div class="input fs-12 input_pro inputs">
-                    <input @click="popupVisible = true" v-model="chooseMain" readonly type="text" placeholder="请选择银行" v-validate="'required'">
-                    <i class="fs-15 iconfont icon-jt-y tj color-84"></i>
-                </div>
-            </div>
-    
-            <div class="pk-input pk-inputpro ">
-                <label class="title muster fs-14">银行账号</label>
-                <div class="input fs-12 input_pro inputs">
-                    <input type="text" class="relative" name="bankName" autocomplete="off" v-model="addData.bankNum" v-validate="'required|max:18|min:15'" :class="{'input': true, 'is-danger': errors.has('bankName') }" placeholder="请输入您的银行账号">
-                    <i type="clear" v-show="errors.has('bankName')" class="fs-15 iconfont icon-login-error tj"></i>
-                </div>
-            </div>
-    
-            <div class="pk-input pk-inputpro ">
-                <label class="title muster fs-14">支行地址</label>
-                <div class="input fs-12 input_pro">
-                    <input type="text" readonly @click="popupVisibles = true" name="bankAddress" autocomplete="off" v-model="borthplace" v-validate="'required'" :class="{'input': true, 'is-danger': errors.has('bankAddress') }" placeholder="请选择支行地址">
-                    <i class="fs-15 iconfont icon-jt-y tj color-84"></i>
-                </div>
-            </div>
-        </div>
-    
-        <div class="else pdl30">
-            <span v-show="ty==1">
-                            <div class="divs">
-                                <p v-show="errors.has('agencyAccount')" class="errs help fds-12 is-danger">{{ errors.first('agencyAccount') }}</p>
-                                <p v-show="errors.has('password')&&!errors.has('agencyAccount')" class="errs help fds-12 is-danger">{{ errors.first('password') }}</p>
-                                <p v-show="errors.has('confirmPassword')&&!errors.has('password')&&!errors.has('agencyAccount')" class="errs help fds-12 is-danger">{{ errors.first('confirmPassword') }}</p>
-                                <p v-show="errors.has('captcha')&&!errors.has('confirmPassword')&&!errors.has('password')&&!errors.has('agencyAccount')" class="errs help fds-12 is-danger">{{ errors.first('captcha') }}</p>
-                            </div>
-                            <div class="btn">
-                                <mt-button class="btn-green" type="default" @click="changeone()">下一步</mt-button>
-                            </div>
-                        </span>
-            <span v-show="ty==2">
-                            <div class="divs">
-                                <p v-show="errors.has('name')" class="errs help is-danger">{{ errors.first('name') }}</p>
-                                <p v-show="errors.has('email')&&!errors.has('name')" class="errs help is-danger">{{ errors.first('email') }}</p>
-                                <p v-show="errors.has('QQ')&&!errors.has('email')&&!errors.has('name')" class="errs help is-danger">{{ errors.first('QQ') }}</p>
-                                <p v-show="errors.has('weChat')&&!errors.has('QQ')&&!errors.has('email')&&!errors.has('name')" class="errs help is-danger">{{ errors.first('weChat') }}</p>
-                                <p v-show="errors.has('mobilePhone')&&!errors.has('weChat')&&!errors.has('QQ')&&!errors.has('email')&&!errors.has('name')" class="errs help is-danger">{{ errors.first('mobilePhone') }}</p>
-                                <p v-show="errors.has('englishNickName')&&!errors.has('mobilePhone')&&!errors.has('weChat')&&!errors.has('QQ')&&!errors.has('email')&&!errors.has('name')" class="errs help is-danger">{{ errors.first('englishNickName') }}</p>
-                                <p v-show="errors.has('chineseNickName')&&!errors.has('englishNickName')&&!errors.has('mobilePhone')&&!errors.has('weChat')&&!errors.has('QQ')&&!errors.has('email')&&!errors.has('name')" class="errs help is-danger">{{ errors.first('chineseNickName') }}</p>
-                                <p v-show="errors.has('IDCard')&&!errors.has('chineseNickName')&&!errors.has('englishNickName')&&!errors.has('mobilePhone')&&!errors.has('weChat')&&!errors.has('QQ')&&!errors.has('email')&&!errors.has('name')" class="errs help is-danger">{{ errors.first('IDCard') }}</p>
-                                <p v-show="errors.has('promoteSite')&&!errors.has('IDCard')&&!errors.has('chineseNickName')&&!errors.has('englishNickName')&&!errors.has('mobilePhone')&&!errors.has('weChat')&&!errors.has('QQ')&&!errors.has('email')&&!errors.has('name')" class="errs help fds-12 is-danger">{{ errors.first('promoteSite') }}</p>
-                                <p v-show="errors.has('remark')&&!errors.has('promoteSite')&&!errors.has('IDCard')&&!errors.has('chineseNickName')&&!errors.has('englishNickName')&&!errors.has('mobilePhone')&&!errors.has('weChat')&&!errors.has('QQ')&&!errors.has('email')&&!errors.has('name')" class="errs help fds-12 is-danger">{{ errors.first('remark') }}</p>
-                            </div>
-                            <div class="btn">
-                                <mt-button class="btn-green btn-greens lbtn" type="default" @click="findaccount(2)">上一步</mt-button>
-                                <mt-button class="btn-green btn-greens" type="default" @click="changetwo()">下一步</mt-button>
-                            </div>
-                        </span>
-            <span v-show="ty==3">
-                            <div class="divs">
-                                <p v-show="errors.has('bankName')" class="errs help fds-12 is-danger">{{ errors.first('bankName') }}</p>
-                                <p v-show="errors.has('bankAddress') && !errors.has('bankName')" class="errs help fds-12 is-danger">{{ errors.first('bankAddress') }}</p>
-                            </div>
-                            <div class="btn" style="text-align: center;">
-                                <mt-button class="btn-green lbtns" type="default" @click="findaccount(3)">上一步</mt-button>
-                                <mt-button class="btn-green mbtns" type="default" @click="submit">提交</mt-button>
-                                <mt-button class="btn-green rbtns" type="default" @click="gomy">取消</mt-button>
-                            </div>
-                        </span>
-        </div>
-    </div>
+	<div id="agencyappli">
+		<nut-navbar
+			class="pk-title"
+			:rightShow="false"
+			@on-click-back="$router.go(-1)"
+			>代理申请</nut-navbar
+		>
+		<div class="content" v-show="step == 1">
+			<div class="pk-input clearfix">
+				<label class="title must">代理账号</label>
+				<div class="input ">
+					<input
+						name="agencyAccount"
+						class="relative"
+						autocomplete="off"
+						v-model="addData.account"
+						type="text"
+						placeholder="请输入5-12位英文数字组合"
+					/>
+				</div>
+			</div>
+
+			<div class="pk-input clearfix">
+				<label class="title must">登录密码</label>
+				<div class="input ">
+					<input
+						type="password"
+						class="relative"
+						name="password"
+						autocomplete="off"
+						v-model="addData.password"
+						placeholder="请输入6-11位英文(大小写)数字组合"
+					/>
+				</div>
+			</div>
+
+			<div class="pk-input pk-inputpro">
+				<label class="title must">确认密码</label>
+				<div class="input ">
+					<input
+						name="confirmPassword"
+						type="password"
+						class=""
+						autocomplete="off"
+						v-model="addData.rePassword"
+						placeholder="请再次输入登录密码"
+					/>
+				</div>
+			</div>
+
+			<div class="pk-input clearfix makd">
+				<label class="title must">验证码</label>
+
+				<div class="input">
+					<input
+						name="captcha"
+						class="no-bod-bot"
+						autocomplete="off"
+						v-model="addData.code"
+						type="text"
+						placeholder="请输入验证码"
+					/>
+				</div>
+				<div class="input-code-img">
+					<img :src="codeImg" @click="getCode" />
+				</div>
+			</div>
+		</div>
+		<div class="content" v-show="step == 2">
+			<div class="pk-input clearfix">
+				<label class="title must">真实姓名</label>
+				<div class="input ">
+					<input
+						tit="realName"
+						name="name"
+						class="relative"
+						autocomweChatplete="off"
+						v-model="addData.realName"
+						type="text"
+						placeholder="请输入您的真实姓名"
+					/>
+				</div>
+			</div>
+			<div class="pk-input pk-inputpro">
+				<label class="title must">身份证</label>
+				<div class="input  ">
+					<input
+						tit="idCard"
+						name="idCard"
+						class="relative"
+						autocomplete="off"
+						v-model="addData.idCard"
+						type="text"
+						placeholder="请输入您的身份证"
+					/>
+				</div>
+			</div>
+			<div
+				class="pk-input pk-inputpro"
+				v-if="setting.isOpen == 1 && setting.email != 2"
+			>
+				<label class="title" :class="{ must: setting.email == 3 }"
+					>邮箱</label
+				>
+				<div class="input ">
+					<!-- 1=启用 2=禁用 3=启用+必填 -->
+					<input
+						v-if="setting.email == 1"
+						tit="email"
+						type="text"
+						class="relative"
+						name="email"
+						autocomplete="off"
+						v-model="addData.email"
+						placeholder="请输入您的邮箱地址"
+					/>
+					<input
+						v-if="setting.email == 3"
+						tit="email"
+						type="text"
+						class="relative"
+						name="email"
+						autocomplete="off"
+						v-model="addData.email"
+						placeholder="请输入您的邮箱地址"
+					/>
+				</div>
+			</div>
+
+			<div
+				class="pk-input pk-inputpro"
+				v-if="setting.isOpen == 1 && setting.qq != 2"
+			>
+				<label class="title" :class="{ must: setting.qq == 3 }"
+					>qq</label
+				>
+				<div class="input  ">
+					<input
+						v-if="setting.qq == 1"
+						tit="qq"
+						name="qq"
+						class="relative"
+						autocomplete="off"
+						v-model="addData.qq"
+						type="number"
+						placeholder="请输入您的QQ号"
+					/>
+					<input
+						v-if="setting.qq == 3"
+						tit="qq"
+						name="qq"
+						class="relative"
+						autocomplete="off"
+						v-model="addData.qq"
+						type="number"
+						placeholder="请输入您的QQ号"
+					/>
+				</div>
+			</div>
+			<div
+				class="pk-input pk-inputpro"
+				v-if="setting.isOpen == 1 && setting.wechat != 2"
+			>
+				<label class="title" :class="{ must: setting.wechat == 3 }"
+					>微信</label
+				>
+				<div class="input  ">
+					<input
+						v-if="setting.wechat == 1"
+						tit="wechat"
+						name="wechat"
+						class="relative"
+						autocomplete="off"
+						v-model="addData.wechat"
+						type="text"
+						placeholder="请输入您的微信号"
+					/>
+					<input
+						v-if="setting.wechat == 3"
+						tit="wechat"
+						name="wechat"
+						class="relative"
+						autocomplete="off"
+						v-model="addData.wechat"
+						type="text"
+						placeholder="请输入您的微信号"
+					/>
+				</div>
+			</div>
+			<div
+				class="pk-input pk-inputpro"
+				v-if="setting.isOpen == 1 && setting.telephone != 2"
+			>
+				<label class="title" :class="{ must: setting.telephone == 3 }"
+					>手机号</label
+				>
+				<div class="input  ">
+					<input
+						v-if="setting.telephone == 1"
+						tit="telephone"
+						name="telephone"
+						class="relative"
+						autocomplete="off"
+						v-model="addData.telephone"
+						type="text"
+						placeholder="请输入您的手机号"
+					/>
+					<input
+						v-if="setting.telephone == 3"
+						tit="telephone"
+						name="telephone"
+						class="relative"
+						autocomplete="off"
+						v-model="addData.telephone"
+						type="text"
+						placeholder="请输入您的手机号"
+					/>
+				</div>
+			</div>
+			<div
+				class="pk-input pk-inputpro"
+				v-if="setting.isOpen == 1 && setting.englishNickName != 2"
+			>
+				<label
+					class="title"
+					:class="{ must: setting.englishNickName == 3 }"
+					>英文昵称</label
+				>
+				<div class="input ">
+					<input
+						v-if="setting.englishNickName == 1"
+						tit="englishNickName"
+						name="englishNickName"
+						class="relative"
+						autocomplete="off"
+						v-model="addData.englishNickName"
+						type="text"
+						placeholder="请输入英文昵称"
+					/>
+					<input
+						v-if="setting.englishNickName == 3"
+						tit="englishNickName"
+						name="englishNickName"
+						class="relative"
+						autocomplete="off"
+						v-model="addData.englishNickName"
+						type="text"
+						placeholder="请输入英文昵称"
+					/>
+				</div>
+			</div>
+			<div
+				class="pk-input pk-inputpro"
+				v-if="setting.isOpen == 1 && setting.chineseNickName != 2"
+			>
+				<label
+					class="title"
+					:class="{ must: setting.chineseNickName == 3 }"
+					>中文昵称</label
+				>
+				<div class="input  ">
+					<input
+						v-if="setting.chineseNickName == 1"
+						tit="chineseNickName"
+						name="chineseNickName"
+						class="relative"
+						autocomplete="off"
+						v-model="addData.chineseNickName"
+						type="text"
+						placeholder="请输入您的中文昵称"
+					/>
+					<input
+						v-if="setting.chineseNickName == 3"
+						tit="chineseNickName"
+						name="chineseNickName"
+						class="relative"
+						autocomplete="off"
+						v-model="addData.chineseNickName"
+						type="text"
+						placeholder="请输入您的中文昵称"
+					/>
+				</div>
+			</div>
+
+			<div
+				class="pk-input pk-inputpro"
+				v-if="setting.isOpen == 1 && setting.promoteSite != 2"
+			>
+				<label class="title" :class="{ must: setting.promoteSite == 3 }"
+					>推广网址</label
+				>
+				<div class="input  ">
+					<input
+						v-if="setting.promoteSite == 1"
+						tit="promoteSite"
+						name="promoteSite"
+						class="relative"
+						autocomplete="off"
+						v-model="addData.promoteSite"
+						type="text"
+						placeholder="请输入完整网址"
+					/>
+					<input
+						v-if="setting.promoteSite == 3"
+						tit="promoteSite"
+						name="promoteSite"
+						class="relative"
+						autocomplete="off"
+						v-model="addData.promoteSite"
+						type="text"
+						placeholder="请输入完整网址"
+					/>
+				</div>
+			</div>
+			<div
+				class="pk-input pk-inputpro"
+				v-if="setting.isOpen == 1 && setting.otherPromoteWay != 2"
+			>
+				<label
+					class="title"
+					:class="{ must: setting.otherPromoteWay == 3 }"
+					>其它方式</label
+				>
+				<div class="input  ">
+					<input
+						v-if="setting.otherPromoteWay == 1"
+						tit="otherPromoteWay"
+						name="otherPromoteWay"
+						class="relative"
+						autocomplete="off"
+						v-model="addData.otherPromoteWay"
+						type="text"
+						placeholder="其他推广方式,请用文字描述"
+					/>
+					<input
+						v-if="setting.otherPromoteWay == 3"
+						tit="otherPromoteWay"
+						name="otherPromoteWay"
+						class="relative"
+						autocomplete="off"
+						v-model="addData.otherPromoteWay"
+						type="text"
+						placeholder="其他推广方式,请用文字描述"
+					/>
+				</div>
+			</div>
+			<div
+				class="pk-input pk-inputpro"
+				v-if="setting.isOpen == 1 && setting.remark != 2"
+			>
+				<label class="title" :class="{ must: setting.remark == 3 }"
+					>备注</label
+				>
+				<div class="input fs-12 input_pro ">
+					<input
+						v-if="setting.remark == 1"
+						tit="remark"
+						name="remark"
+						class="no-bod-bot"
+						autocomplete="off"
+						v-model="addData.remark"
+						type="text"
+						placeholder="请输入备注信息"
+					/>
+					<input
+						v-if="setting.remark == 3"
+						tit="remark"
+						name="remark"
+						class="no-bod-bot"
+						autocomplete="off"
+						v-model="addData.remark"
+						type="text"
+						placeholder="请输入备注信息"
+					/>
+				</div>
+			</div>
+		</div>
+		<div class="content" v-show="step == 3">
+			<div class="pk-input clearfix">
+				<label class="title must">银行名称</label>
+				<nut-cell
+					class="pk-bankcard"
+					:class="{ 'pk-bankcard-active': bankcardActive }"
+					:showIcon="true"
+					:isLink="true"
+					@click.native="switchPicker('isVisible1')"
+				>
+					<div slot="desc" class="selected-option">
+						<!-- <span class="btn" @click.stop.prevent="modifyYear">修改为指定的年份</span> -->
+						<span class="show-value">{{
+							bankName ? bankName : "请选择"
+						}}</span>
+					</div>
+				</nut-cell>
+				<nut-picker
+					title="请选择银行卡"
+					:is-visible="isVisible1"
+					:default-value-data="defaultValueData1"
+					:list-data="listData1"
+					@close="switchPicker('isVisible1')"
+					@confirm="setYearValue"
+				></nut-picker>
+			</div>
+
+			<div class="pk-input clearfix">
+				<label class="title must">银行账号</label>
+				<div class="input ">
+					<input
+						type="text"
+						class="relative"
+						name="bankNames"
+						autocomplete="off"
+						v-model="addData.bankNum"
+						placeholder="请输入您的银行账号"
+					/>
+				</div>
+			</div>
+
+			<div class="pk-input clearfix">
+				<label class="title must">支行地址</label>
+				<div class="input fs-12 input_pro">
+					<input
+						type="text"
+						name="bankAddress"
+						autocomplete="off"
+						v-model="addData.bankSubPlace"
+						placeholder="请选择支行地址"
+					/>
+					<i class="fs-15 iconfont icon-jt-y tj color-84"></i>
+				</div>
+			</div>
+		</div>
+
+		<div class="else">
+			<span v-show="step == 1">
+				<div class="btn">
+					<button
+						class="btn-green"
+						type="default"
+						@click="changeone()"
+					>
+						下一步
+					</button>
+				</div>
+			</span>
+			<span v-show="step == 2">
+				<div class="btn">
+					<button
+						class="btn-green btn-greens"
+						type="default"
+						@click="clearCode(2)"
+					>
+						上一步
+					</button>
+					<button
+						class="btn-green"
+						type="default"
+						@click="changetwo()"
+					>
+						下一步
+					</button>
+				</div>
+			</span>
+			<span v-show="step == 3">
+				<div class="btn" style="text-align: center;">
+					<button
+						class="btn-green"
+						type="default"
+						@click="clearCode(3)"
+					>
+						上一步
+					</button>
+					<button
+						class="btn-green btn-greens"
+						type="default"
+						@click="submit()"
+						:disabled="hasLoading"
+					>
+						提交
+					</button>
+					<button class="btn-green" type="default" @click="gomy">
+						取消
+					</button>
+				</div>
+			</span>
+		</div>
+	</div>
 </template>
 
 <script>
-    import Header from "../../../components/Header";
     import {
-        Button
-    } from "mint-ui";
-    
-    import {
-        Picker
-    } from "mint-ui";
-    import myaddress from "../../../components/json/provincesCities.json";
-    import {
-        proxyAdd,
-        getBankList,
-        getSitt
-    } from '@/api/Agencyapplication'
-    import {
-        getCaptcha
-    } from '@/api/login'
-    
+        getCaptchaCode,
+        getSetting,
+        setProxySetting
+    } from "@/services/auth";
+    import myaddress from "@/components/json/provincesCities.json";
+    import { memBankList } from '@/services/securityCenter.js';
     export default {
-        components: {
-            Header,
-            Picker,
-            Button
-        },
+        name:'agencyappli',
         data() {
             return {
+                subTime: 0,
+                hasLoading: false,
                 rooter: "/agencyappli",
                 title: "代理账号申请",
                 addData: {
@@ -255,237 +522,391 @@
                     bankNum: "",
                     bankName: "",
                     province: "",
-                    otherpromoteway: "",
-                    city: ""
+                    otherPromoteWay: "",
+                    city: "",
+                    bankSubPlace: ""
                 },
-                dailiData:"",
-                ty: 1,
+                step: 3,
                 codeImg: "",
                 codeId: "",
-                popupVisibles: false,
-                popupVisible: false,
+                //
                 itemHeight: 36,
                 chooseMain: "",
                 chooseMainVal: "",
-                borthplace: "",
+                setting:{},//里面滴值 1=启用 2=禁用 3=启用且必填
+                //
+                listData1: [],
                 bankList: [],
-                myAddressSlots: [{
-                        flex: 1,
-                        defaultIndex: 1,
-                        values: Object.keys(myaddress), //省份数组
-                        className: "slot1",
-                        textAlign: "center"
-                    },
-                    {
-                        divider: true,
-                        content: "-",
-                        className: "slot2"
-                    },
-                    {
-                        flex: 1,
-                        values: [],
-                        className: "slot3",
-                        textAlign: "center"
-                    }
-                    // {
-                    //   divider: true,
-                    //   content: "-",
-                    //   className: "slot4"
-                    // },
-                    // {
-                    //   flex: 1,
-                    //   values: [],
-                    //   className: "slot5",
-                    //   textAlign: "center"
-                    // }
-                ],
-                middlex: "",
-                myAddressProvince: "省",
-                myAddressCity: "市",
-                myAddresscounty: "区/县"
+                bankId:null,
+                defaultValueData1: null,
+                bankcardActive: false,
+                bankName:null,
+                isVisible1: false
+                
+
             };
-        },
-        computed: {
-            mainType() {
-                let dateSlots = [{
-                    flex: 1,
-                    values: this.bankList,
-                    defaultIndex: 0,
-                    className: "mainType",
-                    textAlign: "center"
-                }];
-                return dateSlots;
-            }
-        },
-        created() {
-            this.getBankList();
         },
         mounted() {
             this.getCode();
             this.itemHeight = parseInt(this.HTML_FONT_SIZE * 1.06667);
-            this.getSitt();
+                this.getSetting();
+                this.getBankList();
         },
     
         methods: {
-            //获取银行列表接口
-            getBankList() {
-                var _this = this;
-                getBankList().then(res => {
-                    _this.bankList = res.bankCardDrop;
-                    _this.chooseMain = _this.bankList[0].title;
-                    _this.addData.bankName = _this.bankList[0].title;
-                });
-
+            switchPicker(param) {
+                this[`${param}`] = !this[`${param}`];
             },
-            //判断是否必填
-            getSitt() {
-                getSitt().then(res=>{
-                    let arrts = res;
-                    let inputs = this.$("input[tit!=''][tit!='undefined']");
-                        inputs.map(v => {
-                        var lower = this.$(inputs[v]).attr("tit");
-                        if (lower) {
-                            for (var i in arrts) {
-                                var c = res[arrts[i]];
-                                if (c == 2) {
-                                    // console.log(arrts[i], c);
-                                    if (lower.toLowerCase() == arrts[i]) {
-                                        // console.log(arrts[i],i,this.$(inputs[v]))
-                                        this.$(inputs[v])
-                                            .parent()
-                                            .parent()
-                                            .hide();
-                                    }
-                                } else if (c == 1) {
-                                    // console.log(arrts[i], c);
-                                    if (lower.toLowerCase() == arrts[i]) {
-                                        var label = this.$(inputs[v])
-                                            .parent()
-                                            .siblings("label");
-                                        label.removeClass("muster").addClass("titlesr");
-                                    }
-                                } else if (c == 3) {
-                                    // console.log(arrts[i], c);
-                                    if (lower.toLowerCase() == arrts[i]) {
-                                        var label = this.$(inputs[v])
-                                            .parent()
-                                            .siblings("label");
-                                        label.addClass("muster").removeClass("titlesr");
-                                        this.$(inputs[v]).addClass("requireds");
-                                    }
-                                }
+            setYearValue(chooseData) {
+                this.bankName = chooseData[0];
+                this.bankcardActive = true;
+                console.log(chooseData[0], "chooseData[0]");
+                var data = this.backList;
+                if(data){
+                    data.map(v=>{
+                        if(this.bankName==v.bankName){
+                            this.bankId = v.bankId
+                        }
+                    })
+                    console.log(this.bankId,'this.bankId')
+                }
+            },
+            //获取银行列表接口
+            getBankList(){
+                memBankList().then(res=>{
+                    if(res.success){
+                        let data = res.data;
+                        if(data){
+                            var arr = []
+                            data.map(v=>{
+                                arr.push(v.bankName)
+                            })
+                            this.backList = data;
+                            this.listData1.push(arr)
+                        }
+                        
+                    }else{
+                        this.$toast.fail(res.message, {
+                            cover: true,
+                            duration: 1000
+                        });
+                    }
+                })
+            },
+            //获取第二步需要填写的信息
+            getSetting() {
+                getSetting().then(res => {
+                    if(res.success){
+                        this.setting = res.data.setting;
+                    }else {
+                        this.$toast.fail(res.message, {cover: true,duration: 4000});
+                    }
+                })
+            },
+            //获取验证码
+            getCode() {
+                getCaptchaCode().then((res) => {
+                    if (res.success) {
+                        this.codeImg = "data:image/png;base64," + res.data.code;
+                        this.codeId = res.data.ID;
+                    } else {
+                        this.$toast.fail(res.message, {cover: true,duration: 4000});
+                    }
+                })
+            },
+            //返回上一页
+            clearCode(step) {
+                this.step = step-1;
+                this.getCode();
+            },
+            //第一步
+            changeone() {
+                console.log(this.addData);
+                //代理账号
+                if(!this.addData.account){
+                    this.$toast.text('代理账号不能为空!',{cover:true});
+                    return;
+                }
+
+                if(!/^[A-Za-z0-9]{5,12}$/.test(this.addData.account)){
+                    this.$toast.text('代理账号格式错误!',{cover:true});
+                    return;
+                }
+
+                //登录密码
+                if(!this.addData.password){
+                    this.$toast.text('登录密码不能为空!',{cover:true});
+                    return;
+                }
+
+                if(!/^(?=.*\d)(?=.*[A-Z])(?=.*[a-z])[\da-zA-Z]{6,11}$/.test(this.addData.password)){
+                    this.$toast.text('登录密码格式错误!',{cover:true});
+                    return;
+                }
+
+                //确认密码
+                if(this.addData.password != this.addData.rePassword){
+                    this.$toast.text('两次密码不一致!',{cover:true});
+                    return;
+                }
+
+                //验证码
+                if(!this.addData.code){
+                    this.$toast.text('验证码不能为空!',{cover:true});
+                    return;
+                }
+                this.step = 2;
+                this.getSetting();
+            },
+
+            //第二步
+            changetwo() {
+                let arr = [
+                    {field:'realName',value:3},
+                    {field:'idCard',value:3},
+                    {field:'email',value:3},
+                ];
+                for(let key in this.setting){
+                    arr.push({'field':key,'value':this.setting[key]});
+                }
+                let validateResult = arr.reverse().some((item,index)=>{
+                    this.validateField(item.field,item.value,this.addData[item.field]);
+                })
+                if(validateResult){
+                    this.step = 3;
+                }
+            },
+
+            //第二步 根据后台配置 验证
+            actions(){
+                
+                /**
+                 * filed 字段名
+                 * filedChinese 字段中文翻译
+                 * value 字段值
+                 */
+                //不能为空 处理
+                let noNull = (filed,filedChinese,value) => {
+                    if(!value){
+                        this.$toast.text(`${filedChinese}不能为空!`,{cover:true}) 
+                        return false;
+                    }else {
+                        return true;
+                    }
+                }
+                //格式错误 处理
+                let formatError = (filed,filedChinese,value,regexp) => {
+                    if(value && !regexp.test(value)){
+                        this.$toast.text(`${filedChinese}格式错误!`,{cover:true});
+                        return false;
+                    }else {
+                        return true;
+                    }
+                }
+                //  1=启用 2=禁用 3=启用+必填 
+                return new Map([
+
+                    [
+                        {field:'realName',status:3},
+                        (realName)=>{
+                            if(noNull('realName','真实姓名',realName)){
+                                return formatError('realName','真实姓名',realName,/^.{1,20}$/);
+                            }else {
+                                return false;
                             }
                         }
-                    });
-                })
+                    ],
 
+                    [
+                        {field:'idCard',status:3},
+                        (idCard)=>{
+                            if(noNull('idCard','身份证',idCard)){
+                                return formatError('idCard','身份证',idCard,/(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/);
+                            }else {
+                                return false;
+                            }
+                        }
+                    ],
+
+                    [
+                        {field:'email',status:3},
+                        (email)=>{
+                            if(noNull('email','邮箱',email)){
+                                return formatError('email','邮箱',email,/^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/);
+                            }else {
+                                return false;
+                            }
+                        }
+                    ],
+
+
+                    [
+                        {field:'qq',status:1},
+                        (qq)=>{
+                            return formatError('qq','qq',qq,/^[0-9]{5,20}$/);
+                        }
+                    ],
+                    [
+                        {field:'qq',status:3},
+                        (qq)=>{
+                            if(noNull('qq','qq',qq)){
+                                return formatError('qq','qq',qq,/^[0-9]{5,20}$/);
+                            }else {
+                                return false;
+                            }
+                        }
+                    ],
+                    [
+                        {field:'wechat',status:1},
+                        (wechat)=>{
+                            return  formatError('wechat','微信',wechat,/^[a-zA-Z0-9_-]{5,20}$/);
+                        }
+                    ],
+                    [
+                        {field:'wechat',status:3},
+                        (wechat)=>{
+                            if(noNull('wechat','微信',wechat)){
+                                return  formatError('wechat','微信',wechat,/^[a-zA-Z0-9_-]{5,20}$/);
+                            }else {
+                                return false;
+                            }
+                        }
+                    ],
+
+                    [
+                        {field:'telephone',status:1},
+                        (telephone)=>{
+                            return formatError('telephone','手机号',telephone,/^[0-9]{10,20}$/);
+                        }
+                    ],
+                    [
+                        {field:'telephone',status:3},
+                        (telephone)=>{
+                            if(noNull('telephone','手机号',telephone)){
+                                return formatError('telephone','手机号',telephone,/^[0-9]{10,20}$/);
+                            }else {
+                                return false;
+                            }
+
+                        }
+                    ],
+
+                    //英文昵称
+                    [
+                        {field:'englishNickName',status:1},
+                        (englishNickName)=>{
+                            return formatError('englishNickName','英文昵称',englishNickName,/^[A-Za-z]{1,12}$/);
+                        }
+                    ],
+                    [
+                        {field:'englishNickName',status:3},
+                        (englishNickName)=>{
+
+                            if(noNull('englishNickName','英文昵称',englishNickName)){
+                                return formatError('englishNickName','英文昵称',englishNickName,/^[A-Za-z]{1,12}$/);
+                            }else {
+                                return false;
+                            }
+                        }
+                    ],
+
+                    //中文昵称
+                    [
+                        {field:'chineseNickName',status:1},
+                        (chineseNickName)=>{
+                            return formatError('chineseNickName','中文昵称',chineseNickName,/^[\u4e00-\u9fa5]{1,12}$/);
+                        }
+                    ],
+                    [
+                        {field:'chineseNickName',status:3},
+                        (chineseNickName)=>{
+                            if(noNull('chineseNickName','中文昵称',chineseNickName)){
+                                return formatError('chineseNickName','中文昵称',chineseNickName,/^[\u4e00-\u9fa5]{1,12}$/);
+                            }else {
+                                return false;
+                            }
+                        }
+                    ],
+                    //推广网址
+                    [
+                        {field:'promoteSite',status:1},
+                        (promoteSite)=>{
+                            let reg = /^((https|http|ftp|rtsp|mms):\/\/)(([0-9a-z_!~*'().&=+$%-]+: )?[0-9a-z_!~*'().&=+$%-]+@)?(([0-9]{1,3}.){3}[0-9]{1,3}|([0-9a-z_!~*'()-]+.)*([0-9a-z][0-9a-z-]{0,61})?[0-9a-z].[a-z]{2,6})(:[0-9]{1,4})?((\/?)|(\/[0-9a-z_!~*'().;?:@&=+$,%#-]+)+\/?)$/;
+                            return formatError('promoteSite','推广网址',promoteSite,reg);
+                        }
+                    ],
+                    [
+                        {field:'promoteSite',status:3},
+                        (promoteSite)=>{
+                            let reg = /^((https|http|ftp|rtsp|mms):\/\/)(([0-9a-z_!~*'().&=+$%-]+: )?[0-9a-z_!~*'().&=+$%-]+@)?(([0-9]{1,3}.){3}[0-9]{1,3}|([0-9a-z_!~*'()-]+.)*([0-9a-z][0-9a-z-]{0,61})?[0-9a-z].[a-z]{2,6})(:[0-9]{1,4})?((\/?)|(\/[0-9a-z_!~*'().;?:@&=+$,%#-]+)+\/?)$/;
+                            if(noNull('promoteSite','推广网址',promoteSite)){
+                                return formatError('promoteSite','推广网址',promoteSite,reg);
+                            }else {
+                                return false;
+                            }
+                        }
+                    ],
+
+                    //其它方式
+                    [
+                        {field:'otherPromoteWay',status:1},
+                        (otherPromoteWay)=>{
+                            return formatError('otherPromoteWay','其它方式',otherPromoteWay,/^./);
+                        }
+                    ],
+                    [
+                        {field:'otherPromoteWay',status:3},
+                        (otherPromoteWay)=>{
+                            if(noNull('otherPromoteWay','其它方式',otherPromoteWay)){
+                                return formatError('otherPromoteWay','其它方式',otherPromoteWay,/^./);
+                            }else {
+                                return false;
+                            }
+                        }
+                    ],
+
+                    //备注
+                    [
+                        {field:'remark',status:1},
+                        (remark)=>{
+                            return formatError('remark','备注',remark,/^.{0,20}$/);
+
+                        }
+                    ],
+                    [
+                        {field:'remark',status:3},
+                        (remark)=>{
+                            if(noNull('remark','备注',remark)){
+                                return formatError('remark','备注',remark,/^.{0,20}$/);
+                            }else {
+                                return false;
+                            }
+                        }
+                    ],
+                ])
             },
-    
-            getCode() {
-                getCaptcha().then((res) => {
-                    this.codeImg = "data:image/png;base64," + res.Code;
-                    this.codeId = res.ID;
-                }).catch((res) => {
-                    _this.$toast({
-                        message: res,
-                        duration: 2000
-                    });
+           
+            /**
+             * 字段验证
+             * field  字段名 eg:qq
+             * status 验证状态 1=启用 2=停用 3=启用且必填
+             * value  字段值
+             */
+            validateField(field,status,value){
+                let action =  [...this.actions()].filter(([key,func]) => {
+                    return key.field === field && key.status === status
+                })
+                let bool = false;
+                action.forEach(([key, func]) => {
+                    bool = func.call(this,value);
                 });
+                return bool;
             },
-            changeone() {
-                const rex = ["agencyAccount", "password", "confirmPassword", "captcha"];
-                let _this = this;
-                for (var i = 0; i < rex.length; i++) {
-                    this.$validator.validate(rex[i]).then(result => {});
-                }
-                setTimeout(() => {
-                    if (this.$validator.errors.count() <= 0) {
-                        _this.ty = 2;
-                    }
-                }, 1);
-            },
-            changetwo() {
-                const rex = [
-                    "name",
-                    "email",
-                    "QQ",
-                    "weChat",
-                    "mobilePhone",
-                    "englishNickName",
-                    "chineseNickName",
-                    "IDCard",
-                    "promoteSite",
-                    "remark"
-                ];
-                let _this = this;
-                for (var i = 0; i < rex.length; i++) {
-                    this.$validator.validate(rex[i]).then(result => {});
-                }
-                for (var a = 0; a < this.$(".requireds").length; a++) {
-                    var val = this.$(this.$(".requireds")[a]).val();
-                    if (val == "" || val == "undefined") {
-                        this.$toast("请完整填写必填项！");
-                        return;
-                    }
-                }
-                setTimeout(() => {
-                    if (this.$validator.errors.count() <= 0) {
-                        _this.ty = 3;
-                    }
-                }, 1);
-            },
-            findaccount(ty) {
-                this.ty = ty;
-                if (this.ty != 1) {
-                    this.rooter = "/agencyappli";
-                    if (this.ty == 2) {
-                        this.ty = 1;
-                        this.getCode();
-                    }
-                    if (this.ty == 3) {
-                        this.ty = 2;
-                    }
-                } else {
-                    this.rooter = "/my";
-                }
-            },
-            //选择器
-            onValuesChange(picker, values) {
-                // console.log(values);
-                this.chooseMainVal = values[0];
-            },
-            cancel() {
-                this.popupVisible = false;
-                this.chooseMain = "";
-            },
-            sure() {
-                this.chooseMain = this.chooseMainVal.title;
-                this.addData.bankName = this.chooseMain;
-                this.popupVisible = false;
-            },
-            onMyAddressChange(picker, values) {
-                if (myaddress[values[0]]) {
-                    // console.log(values, "123456");
-                    //这个判断类似于v-if的效果（可以不加，但是vue会报错，很不爽）
-                    picker.setSlotValues(1, Object.keys(myaddress[values[0]])); //  Object.keys()会返回一个数组，当前省的数组
-                    picker.setSlotValues(2, myaddress[values[0]][values[1]]); //  区/县数据就是一个数组
-                    this.myAddressProvince = values[0];
-                    this.myAddressCity = values[1];
-                    this.addData.province = values[0];
-                    this.addData.city = values[1];
-                    this.myAddresscounty = values[2];
-                    this.middlex = this.myAddressProvince + "-" + this.myAddressCity;
-                }
-            },
-            cancels() {
-                this.popupVisibles = false;
-                this.borthplace = "";
-            },
-            sures() {
-                this.popupVisibles = false;
-                this.borthplace = this.middlex;
-                // console.log(this.borthplace, "this.borthplace");
-            },
+            
+           
+
+            
+            
             gomy() {
                 this.$router.push({
                     name: "my"
@@ -493,26 +914,42 @@
             },
             //提交
             submit() {
-                const rex = ["银行名称", "bankName", "bankAddress"];
+                var now = new Date().getTime();
+                if (now - this.subTime <= 2000) {
+                     this.subTime = now;
+                    this.$toast("操作太频繁, 请稍后再试！");
+                    return;
+                }
+                this.subTime = now;
                 let _this = this;
-                for (var i = 0; i < rex.length; i++) {
-                    this.$validator.validate(rex[i]).then(result => {});
+                if(this.bankName==null || this.bankName==''){
+                    this.$toast.text('银行名称必填!',{cover:true});
+                    return;
                 }
-                for (var a = 0; a < this.$(".requireds").length; a++) {
-                    var val = this.$(this.$(".requireds")[a]).val();
-                    if (val == "" || val == "undefined") {
-                        this.$toast("请完整填写必填项！");
-                        return;
-                    }
+                if(!/^[0-9]{8,15}$/.test(this.addData.bankNum)){
+                    this.$toast.text('银行卡账号为8-16数字!',{cover:true});
+                    return;
                 }
+                if(this.addData.bankSubPlace==null || this.addData.bankSubPlace==''){
+                    this.$toast.text('支行地址必填!',{cover:true});
+                    return;
+                }
+                
+                // for (var a = 0; a < this.$(".requireds").length; a++) {
+                //     var val = this.$(this.$(".requireds")[a]).val();
+                //     if (val == "" || val == "undefined") {
+                //         this.$toast("请完整填写必填项！");
+                //         return;
+                //     }
+                // }
                 setTimeout(() => {
-                    if (this.$validator.errors.count() <= 0) {
+                    if (true) {
                         let addData = this.addData;
                         let _this = this;
-                        // console.log(addData, "addData");
+                        console.log(addData, "addData");
                         // console.log(this.codeId, "codeId");
-
-                        proxyAdd(
+                        this.hasLoading = true;
+                        setProxySetting(
                             addData.chineseNickName,
                             addData.englishNickName,
                             addData.telephone,
@@ -527,22 +964,41 @@
                             addData.idCard,
                             addData.realName,
                             addData.code,
-                            addData.bankName,
+                            this.bankName,
                             addData.bankNum,
                             addData.province,
                             addData.city,
+                            this.addData.bankSubPlace,
                             this.codeId,
-                            addData.otherpromoteway
-                        ).then(res=>{
-                            _this.toast("添加成功")
-                            _this.$router.push({
-                                name: "my"
-                            });
+                            addData.otherPromoteWay
+                        ).then(res => {
+                            if(res.success){
+                                this.$toast.success({
+                                    message: '恭喜你成功提交代理申请',
+                                    duration: 2000
+                                });
+                                setTimeout(() => {
+                                    this.$router.push({
+                                        name: "my"
+                                    });
+                                }, 2000)
+                            }else{
+                                this.$toast.fail({
+                                    message: res.message,
+                                    duration: 2000
+                                })
+                                console.log(1111111);
+                                this.hasLoading = false;
+                            }
+    
                         })
-
-
+    
+    
                     } else {
-                        this.$toast("请完整填写必填项！");
+                        this.$toast({
+                            message: '请完整填写必填项！',
+                            duration: 2000
+                        });
                     }
                 }, 1);
             }
@@ -551,127 +1007,114 @@
 </script>
 
 
-<style lang="less" scoped>
-    @import url("./index.less");
-    .ficon {
-        .tj {
-            right: 21% !important;
-        }
-    }
-    
-    .pk-inputpro {
-        .titlesr {
-            padding-left: 0 !important;
-        }
-    }
-    
-    .btn {
-        text-align: center;
-    }
-    
-    .btn .btn-greens {
-        width: 33%;
-    }
-    
-    .lbtn {
-        background-color: #dcdce0 !important;
-        box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.12);
-        margin-right: 10%;
-    }
-    
-    .lbtns,
-    .mbtns,
-    .rbtns {
-        width: 26% !important;
-    }
-    
-    //popup
-    .popup-title {
-        height: 1.06667rem/* 80/75 */
-        ;
-        padding: 0 0.4rem/* 30/75 */
-        ;
-        font-size: 0.4rem/* 30/75 */
-        ;
-        color: @color-323233;
-        text-align: center;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        span {
+<style lang="scss" scoped>
+	#agencyappli {
+        .pk-bankcard{
             flex: 1;
-            height: 1.06667rem/* 80/75 */
-            ;
-            line-height: 1.06667rem/* 80/75 */
-            ;
+            box-shadow: none;
+            border-bottom: none; 
+            background: none;
         }
-        span:first-child {
-            color: @color-323233;
-            text-align: left;
-        }
-        span:last-child {
-            color: @color-green;
-            text-align: right;
-        }
-    }
-    
-    .lbtns {
-        background-color: #dcdce0 !important;
-        box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.12);
-        color: #646466 !important;
-    }
-    
-    .rbtns {
-        background-color: #dcdce0 !important;
-        box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.12);
-        color: #ffffff !important;
-    }
-    
-    .mbtns {
-        margin: 0 5%;
-    }
-    
-    .input_pro inputs {
-        border-bottom: none !important;
-    }
-    
-    .input-code-img {
-        width: 20%;
-        height: 100%;
-        background: #ccc;
-        img {
-            width: 100%;
-            height: 100%;
-        }
-    }
-    
-    .makd {
-        padding-left: .4rem/* 30/75 */
-        ;
-        background: #fff;
-    }
-    
-    .pk-inputpro .input input {
-        border-bottom: none;
-    }
-    
-    .pk-inputpro .inputs:after {
-        content: " ";
-        position: absolute;
-        left: 0;
-        bottom: 0;
-        right: 0;
-        height: 1px;
-        border-bottom: 1px solid @color-c7c7cc;
-        color: @color-c7c7cc;
-        -webkit-transform-origin: 0 100%;
-        transform-origin: 0 100%;
-        -webkit-transform: scaleY(0.5);
-        transform: scaleY(0.5);
-    }
-    
-    .pk-inputpro .input input {
-        padding-left: 40%;
-    }
+		.content {
+			margin-top: $tenrem * 2;
+			padding-left: 0.26667rem;
+			max-width: 100%;
+			font-size: 0.37333rem;
+			overflow: hidden;
+			background: $default-color;
+			.pk-input {
+				// position: relative;
+				height: $fourtrem;
+				line-height: $fourtrem;
+				border-bottom: $onerem solid $border-color;
+				display: flex;
+				justify-content: space-between;
+				.title {
+					// position: absolute;
+				}
+				.input {
+					flex: 1;
+					input {
+						padding: 0 $four;
+						-webkit-box-sizing: border-box;
+						box-sizing: border-box;
+						width: 100%;
+						height: 100%;
+						text-align: right;
+						background: transparent;
+						border: 0;
+					}
+				}
+				.input-code-img {
+					float: right;
+					width: 20%;
+					height: 100%;
+					background: $color-W;
+					img {
+						width: 100%;
+						height: 100%;
+					}
+				}
+			}
+		}
+
+		.else {
+			.btn {
+				display: -webkit-flex;
+				display: flex;
+				button.btn-green {
+					-webkit-box-flex: 1;
+					flex: 1;
+					margin: 0 $four;
+					height: $fourtrem;
+					width: 30%;
+					background-color: $primary-color;
+					-webkit-box-shadow: 0rem 0.02667rem 0.06667rem 0rem
+						rgba($color: $nondefault-color, $alpha: 0.12);
+					box-shadow: 0rem 0.02667rem 0.06667rem 0rem
+						rgba($color: $nondefault-color, $alpha: 0.12);
+					border-radius: 0.13333rem /* 10/75 */;
+					margin-top: 0.4rem /* 30/75 */;
+					font-size: 0.37333rem /* 28/75 */;
+					color: $default-color;
+				}
+				button.btn-greens {
+					border: $onerem solid $primary-color;
+					background-color: $default-color;
+					color: $primary-color;
+				}
+			}
+		}
+	}
+</style>
+<style lang="scss">
+	.nut-button {
+		height: 0.96rem /* 72/75 */;
+		background: $index-banner-bg;
+		font-size: 0.34667rem /* 26/75 */;
+	}
+	.nut-button.circle {
+		border-radius: 0.13333rem /* 10/75 */;
+	}
+	.pk-bankcard-active {
+		.show-value {
+			color: $about-color !important;
+		}
+	}
+	.pk-bankcard {
+		.nut-cell-box {
+			min-height: 1.06667rem /* 80/75 */;
+			.nut-cell-right {
+				.nut-cell-icon {
+					img {
+						margin-left: 0.08rem /* 6/75 */;
+					}
+				}
+			}
+		}
+		.show-value {
+			color: $color-W;
+		}
+	}
 </style>
 

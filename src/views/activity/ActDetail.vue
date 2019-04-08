@@ -1,12 +1,20 @@
 <template>
     <div>
-        <Header :rooter="'-1'" :title="info.title" :hasNoBack="true" :iFontsize="'.58667rem'"></Header>
+        <nut-navbar class="pk-title"
+        @on-click-back="$router.go(-1)">
+            活动详情
+            <a slot="more-icon">
+                <router-link class="header-record" tag="span" :to="{name:'activityRecord'}">
+                    <span>领取记录</span>
+                </router-link>
+            </a>
+        </nut-navbar>
         <div class="act-detail">
             <div class="self-img">
-                <img :src="info.wapImg">
+                <img :src="info.photo">
             </div>
             <div class="self-title">
-                <h2>{{info.title}}</h2>
+                <h2>{{info.name}}</h2>
             </div>
             <div class="selfdetail-content" v-html="info.content"></div>
             <div class="self-btn" @click="receive">
@@ -44,17 +52,12 @@
 </template>
 
 <script>
-    import Header from "../../components/Header"
-    import {
-        activityInfo,
+ import {
+        getActivity,
         receiveActivity
-    } from '@/api/activity'
-    
+    } from "../../services/moneyRecord.js";
     export default {
         name: "actDetail",
-        components: {
-            Header
-        },
         data() {
             return {
                 id: this.$route.query.id,
@@ -67,33 +70,25 @@
         mounted() {
             this.getInfo();
         },
-        watch: {
-            actPop(newVal, oldVal) {
-                // if (newVal) {
-                //     this.ModalHelper.open();
-                // } else {
-                //     this.ModalHelper.close();
-                // }
-            }
-        },
         methods: {
             getInfo() {
-                const _this = this;
-                activityInfo(this.id).then(res => {
-                    this.info = res;
-                    // console.log(res);
-                    setTimeout(() => {
-                        // cosnt 
-                        // _this.$('.selfdetail-content img').css({
-                        //     'max-width': "100%"
-                        // });
-                    }, 1);
-                }).catch(err => {
-                    this.$toast({
-                        message: err,
-                        duration: 2000
-                    });
-                });
+                let data = {
+                    activityId: 0
+                }
+                getActivity(data).then(res => {
+                    if (res.success) {
+                        res.data.list.map(v => {
+                            if(this.id==v.id){
+                                this.info = v;
+                            }
+                        })
+                    } else {
+                        this.$toast.fail(res.message, {
+                            cover: true,
+                            duration: 1000
+                        });
+                    }
+                })
             },
             receive() {
                 if (this.info.status == 2) {
@@ -103,24 +98,30 @@
                     });
                     return;
                 }
-                receiveActivity(this.id).then(resData => {
-                    if (resData.rewardMoney <= 0 && resData.againMoney != 0 && resData.againBet != 0) {
-                        //未满足
-                        this.stusta = 3;
-                    } else if (resData.rewardMoney > 0 && resData.againMoney != 0 && resData.againBet != 0) {
-                        //满足1个梯度
-                        this.stusta = 2;
-                    } else if (resData.rewardMoney > 0 && resData.againMoney == 0 && resData.againBet == 0) {
-                        this.stusta = 1;
+                let data = {
+                    id: Number(this.id)
+                }
+                receiveActivity(data).then(res => {
+                    let resData = res.data;
+                    if (res.success) {
+                        if (resData.rewardMoney <= 0 && resData.againMoney != 0 && resData.againBet != 0) {
+                            //未满足
+                            this.stusta = 3;
+                        } else if (resData.rewardMoney > 0 && resData.againMoney != 0 && resData.againBet != 0) {
+                            //满足1个梯度
+                            this.stusta = 2;
+                        } else if (resData.rewardMoney > 0 && resData.againMoney == 0 && resData.againBet == 0) {
+                            this.stusta = 1;
+                        }
+                        this.resData = resData;
+                        this.actPop = true;
+                    } else {
+                        this.$toast.fail(res.message, {
+                            cover: true,
+                            duration: 1000
+                        });
                     }
-                    this.resData = resData;
-                    this.actPop = true;
-                }).catch(err => {
-                    this.$toast({
-                        message: err,
-                        duration: 2000
-                    });
-                });
+                })
             },
             close() {
                 this.actPop = false;
@@ -129,8 +130,7 @@
     }
 </script>
 
-<style lang="less" scoped>
-    @import url('../../components/less/common.less');
+<style lang="scss" scoped>
     img {
         max-width: 100%;
     }
@@ -138,9 +138,7 @@
     .act-detail {
         z-index: 1;
         position: relative;
-        padding-top: 1.22667rem;
         padding-bottom: 0.5333rem;
-        
         .self-img {
             width: 100%;
             height: 4rem;
@@ -151,17 +149,22 @@
         }
         .self-title {
             padding-top: .53333rem /* 40/75 */;
-            background: #fff;
+            background: $default-color;
             h2 {
                 padding-left: 0.4rem;
                 font-size:.48rem /* 36/75 */;
-                color: @color-252232;
+                color: $text-color;
             }
         }
         .selfdetail-content {
-            background: #fff;
+            background: $default-color;
             padding: .4rem /* 30/75 */ 0.4rem .53333rem /* 40/75 */ 0.4rem;
             overflow: hidden;
+            /deep/img{
+                width: auto !important;
+                max-width: 100% !important;
+
+            }
         }
         .self-btn {
             font-size: .37333rem /* 28/75 */;
@@ -170,18 +173,18 @@
             margin-right: 0.4rem;
             width: 9.2rem;
             height: 1.067rem;
-            background-color: @color-green;
-            color:#fff;
+            background-color: $text-color;
+            color:$default-color;
             border-radius: 0.133rem;
             text-align: center;
             line-height: 1.067rem;
-            box-shadow:0px 2px 5px 0px rgba(0,216,151,0.3);
+            box-shadow:0px 2px 5px 0px rgba($color: $nondefault-color, $alpha: 0.12);
         }
     }
     
     .actPop {
         .actpopBox {
-            z-index: 1000;
+            z-index: 99;
             position: fixed;
             top: 50%;
             left: 50%;
@@ -191,11 +194,11 @@
             margin: 0 auto;
             padding-bottom: 0.8rem;
             border-radius: 0.267rem;
-            color: #fff;
-            background: @color-ECB341;
-            background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, @color-ECB341), color-stop(100%, @color-F97526));
-            background: -webkit-linear-gradient(top, @color-ECB341 0%, @color-F97526 100%);
-            background: linear-gradient(to bottom, @color-ECB341 0%, @color-F97526 100%);
+            color: $default-color;
+            background: $color-q;
+            background: -webkit-gradient( linear, left top, left bottom, color-stop(0%,$color-q), color-stop(100%, $color-o));
+            background: -webkit-linear-gradient( top,$color-q 0%, $color-o 100%);
+            background: linear-gradient( to bottom,$color-q 0%, $color-o 100%);
             .btnpopContent {
                 text-align: center;
                 .giftPic {
@@ -229,8 +232,8 @@
                     width: 3.12rem;
                     height: 0.8rem;
                     line-height: 0.8rem;
-                    background-color: @color-ff3b30;
-                    box-shadow: 0 0.027rem 0.067rem 0 rgba(0, 0, 0, 0.12);
+                    background-color: $color-i;
+                    box-shadow: 0 0.027rem 0.067rem 0 rgba($color: $nondefault-color, $alpha: 0.12);
                     border-radius: 0.133rem;
                 }
             }
@@ -241,7 +244,7 @@
                     font-weight: bold;
                     i {
                         vertical-align: middle;
-                        color: @color-red;
+                        color: $color-a;
                     }
                     span {
                         position: relative;
@@ -260,13 +263,13 @@
             }
         }
         .box-mask {
-            z-index: 999;
+            z-index: 98;
             position: fixed;
             left: 0;
             right: 0;
             top: 0;
             bottom: 0;
-            background-color: rgba(0, 0, 0, 0.4);
+            background-color: rgba($color: $nondefault-color, $alpha: 0.4);
         }
     }
     
@@ -277,6 +280,5 @@
         left: 0;
         right: 0;
         bottom: 0;
-        
     }
 </style>

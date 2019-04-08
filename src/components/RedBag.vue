@@ -10,10 +10,8 @@
                 <div v-show="deposit" class="deposit">
                     <div class="title">
                         <!-- 2018.04.44 12:45<br>
-                        至2018.04.44 12:45<br> -->
-                        {{info.inStartTime | filterDate('YYYY.MM.DD HH:mm')}}<br>
-                        至{{info.inEndTime | filterDate('YYYY.MM.DD HH:mm')}}<br> 
-                        期间还需存款{{info.inSum}}元即可领取红包
+                                    至2018.04.44 12:45<br> -->
+                        <!-- {{info.inStartTime | filterDate('YYYY.MM.DD HH:mm')}}<br> 至{{info.inEndTime | filterDate('YYYY.MM.DD HH:mm')}}<br> 期间还需存款{{info.inSum}}元即可领取红包 -->
                     </div>
                     <router-link tag="div" :to="{name:'deposit'}" class="goDeposit">去存款</router-link>
                     <div class="text">
@@ -22,24 +20,54 @@
                         <p>{{info.startTime | filterDate('YYYY.MM.DD HH:mm')}}-{{info.endTime | filterDate('YYYY.MM.DD HH:mm')}}</p>
                     </div>
                 </div>
-
+    
                 <!-- 存款成功 -->
                 <div v-show="success" class="success">
                     <div class="title">恭喜!</div>
                     <div class="money">{{info.money}}元</div>
                     <div class="text">红包领取成功！</div>
                 </div>
-
+    
                 <!-- 投注不足 -->
                 <div v-show="consume" class="consume">
                     <div class="title">
                         <!-- 2018.04.44 12:45<br>
-                        至2018.04.44 12:45<br> -->
-                        {{info.auditStartTime | filterDate('YYYY.MM.DD HH:mm')}}<br>
-                        至{{info.auditEndTime | filterDate('YYYY.MM.DD HH:mm')}}<br> 
-                        期间还需投注{{info.betSum}}元即可领取红包
+                                    至2018.04.44 12:45<br> -->
+                        {{info.auditStartTime | filterDate('YYYY.MM.DD HH:mm')}}<br> 至{{info.auditEndTime | filterDate('YYYY.MM.DD HH:mm')}}<br> 期间还需投注{{info.betSum}}元即可领取红包
                     </div>
                     <div @click="close" class="goDeposit">去游戏</div>
+                    <div class="text">
+                        红包领取时间
+                        <!-- <p>2018.04.44 12:45-2018.04.44 12:45</p> -->
+                        <p>{{info.startTime | filterDate('YYYY.MM.DD HH:mm')}}-{{info.endTime | filterDate('YYYY.MM.DD HH:mm')}}</p>
+                    </div>
+                </div>
+    
+                <!-- 未开始 -->
+                <div v-show="unbegin" class="unbegin">
+                    <div class="title">
+                        红包领取时间
+                        <p>{{info.startTime | filterDate('YYYY.MM.DD HH:mm')}}-{{info.endTime | filterDate('YYYY.MM.DD HH:mm')}}</p>
+                    </div>
+                    <div class="countdown">
+                        活动倒计时
+                        <div class="time-item clearfix">
+                            <div class="strong" id="day_show">{{timeinfo.days}}天</div>
+                            <div class="strong" id="hour_show">{{timeinfo.hours}}时</div>
+                            <div class="strong" id="minute_show">{{timeinfo.minutes}}分</div>
+                            <div class="strong" id="second_show">{{timeinfo.seconds}}秒</div>
+                        </div>
+                    </div>
+                </div>
+    
+                <!-- 额外存款不足 -->
+                <div v-show="widthelsedraw" class="widthelsedraws">
+                    <div class="title">
+                        <!-- 2018.04.44 12:45<br>
+                                    至2018.04.44 12:45<br> -->
+                        {{info.auditStartTime | filterDate('YYYY.MM.DD HH:mm')}}<br> 至{{info.auditEndTime | filterDate('YYYY.MM.DD HH:mm')}}<br> 期间还需存款{{info.inSum}}元即可领取红包
+                    </div>
+                    <div @click="close();goDeposits()" class="goDeposit">去存款</div>
                     <div class="text">
                         红包领取时间
                         <!-- <p>2018.04.44 12:45-2018.04.44 12:45</p> -->
@@ -54,9 +82,9 @@
 
 <script>
     import {
-        indexInfo,
-        getredBag
-    } from '@/api/index'
+        getRedStyle,
+        openRed
+    } from "../services/index.js"
     
     export default {
         name: "RedBag",
@@ -85,11 +113,27 @@
                 deposit: false,
                 success: false,
                 consume: false,
+                unbegin: false,
+                widthelsedraw: false,
                 info: {},
                 checkbg: '',
                 canClick: true,
-                isLogin: sessionStorage.getItem('session')
+                isLogin: sessionStorage.getItem('token'),
+                timeinfo: [],
+                redInfo: {}
             }
+        },
+        mounted() {
+            getRedStyle().then(res => {
+                if (res.success) {
+                    this.redInfo = res.data;
+                } else {
+                    this.$toast.fail(res.message, {
+                        cover: true,
+                        duration: 1500
+                    });
+                }
+            });
         },
         methods: {
             // 实现移动端拖拽
@@ -152,16 +196,65 @@
                 this.flags = false;
             },
             clickBag() {
+                console.log(this.redInfo)
                 if (this.isLogin) {
-                    indexInfo().then(res => {
-                        let id = res.red.id;
-                        this.getredbag(id)
-                    }).catch(err => {
-                        this.$toast({
-                            message: err,
-                            duration: 2000
-                        });
-                    })
+                    let data = {
+                        setId: this.redInfo.id
+                    }
+                    openRed(data).then(res => {
+                        if (res.success) {
+                            // this.redInfo = res.data;
+                            console.log(res.data);
+                            // if (res.returnType === 1) { //成功
+                            //     this.success = true
+                            //     this.deposit = false
+                            //     this.consume = false
+                            //     this.unbegin = false
+                            //     this.widthelsedraw
+                            //     this.checkbg = 'successbg'
+                            // } else if (res.returnType === 2) { //存款不足
+                            //     this.deposit = true
+                            //     this.success = false
+                            //     this.consume = false
+                            //     this.unbegin = false
+                            //     this.widthelsedraw = false
+                            //     this.checkbg = 'depositbg'
+                            // } else if (res.returnType === 3) { //投注不足
+                            //     this.consume = true
+                            //     this.success = false
+                            //     this.deposit = false
+                            //     this.unbegin = false
+                            //     this.widthelsedraw = false
+                            //     this.checkbg = 'consumebg'
+                            // } else if (res.returnType === 4) { //未开始
+                            //     this.unbegin = true
+                            //     this.success = false
+                            //     this.deposit = false
+                            //     this.consume = false
+                            //     this.widthelsedraw = false
+                            //     this.checkbg = 'successbg'
+                            //     this.countdown(res.startTime)
+                            // } else if (res.returnType === 5) { //错误返回 额外存款不足
+                            //     this.widthelsedraw = true
+                            //     this.success = false
+                            //     this.deposit = false
+                            //     this.consume = false
+                            //     this.unbegin = false
+                            //     this.checkbg = 'widthelsedraw'
+                            // }
+                            // this.getShow = true
+                            // console.log(res, 'resssss')
+    
+    
+    
+    
+                        } else {
+                            this.$toast.fail(res.message, {
+                                cover: true,
+                                duration: 1500
+                            });
+                        }
+                    });
                 } else {
                     this.$router.push({
                         name: 'login'
@@ -169,19 +262,10 @@
                 }
             },
             getredbag(id) {
+                console.log(123456)
                 getredBag(id).then(res => {
                     this.info = res
-                    if (res.returnType === 1) {//成功
-                        this.success = true
-                        this.checkbg = 'successbg'
-                    } else if (res.returnType === 2) {//存款不足
-                        this.deposit = true
-                        this.checkbg = 'depositbg'
-                    } else if (res.returnType === 3) {//投注不足
-                        this.consume = true
-                        this.checkbg = 'consumebg'
-                    }
-                    this.getShow = true
+    
                 }).catch(err => {
                     console.log(err)
                     this.$toast({
@@ -189,6 +273,41 @@
                         duration: 2000
                     });
                 })
+            },
+            goDeposits() {
+                this.$router.push({
+                    path: "/deposits"
+                })
+            },
+            //倒计时
+            downtime(intDiff) {
+                let day = 0,
+                    hour = 0,
+                    minute = 0,
+                    second = 0; //时间默认值  
+                setInterval(() => {
+                    if (intDiff > 0) {
+                        day = Math.floor(intDiff / (60 * 60 * 24));
+                        hour = Math.floor(intDiff / (60 * 60)) - (day * 24);
+                        minute = Math.floor(intDiff / 60) - (day * 24 * 60) - (hour * 60);
+                        second = Math.floor(intDiff) - (day * 24 * 60 * 60) - (hour * 60 * 60) - (minute * 60);
+                    }
+                    if (minute <= 9) minute = '0' + minute;
+                    if (second <= 9) second = '0' + second;
+                    this.timeinfo = {
+                        days: day,
+                        hours: hour,
+                        minutes: minute,
+                        seconds: second
+                    }
+                    intDiff--;
+                }, 1000);
+            },
+            countdown(time) {
+                let endDate = new Date().getTime();
+                let nTime = time - parseInt(endDate / 1000);
+                let intDiff = parseInt(nTime);
+                this.downtime(intDiff);
             },
             close() {
                 this.getShow = false
@@ -198,8 +317,9 @@
     }
 </script>
 
-<style lang="less" scoped>
-    @import url("../components/less/common.less");
+<style lang="scss" scoped>
+    // @import url("../components/less/common.less");
+    $color-default :#fff;
     .redbagBtn {
         width: 2.0667rem;
         height: 2.36rem;
@@ -221,7 +341,7 @@
         .popbg {
             width: 100%;
             height: 100%;
-            background: #000;
+            background: $color-default;
             opacity: 0.7;
         }
         .popbox {
@@ -234,10 +354,12 @@
             transform: translate(-50%, -50%);
             margin: auto;
             text-align: center;
-            color: @color-ffd987;
+            color: $color-default;
             .deposit,
             .success,
-            .consume {
+            .consume,
+            .unbegin,
+            .widthelsedraws {
                 margin: 0 auto;
                 margin-top: 5.2rem;
                 width: 5.6rem;
@@ -257,33 +379,65 @@
                     font-size: 0.48rem;
                 }
             }
+            .unbegin {
+                margin-top: 6rem
+            }
             .deposit,
-            .consume {
+            .consume,
+            .unbegin,
+            .widthelsedraws {
                 .title {
-                    font-size:.32rem /* 24/75 */;
-                    line-height: .48rem /* 36/75 */;
+                    font-size: .34rem/* 24/75 */
+                    ;
+                    line-height: .48rem/* 36/75 */
+                    ;
                     display: -webkit-box;
                     overflow: hidden;
                     -webkit-box-orient: vertical;
                     -webkit-line-clamp: 3;
                 }
                 .goDeposit {
-                    margin: .26667rem /* 20/75 */ auto;
+                    margin: .26667rem/* 20/75 */
+                    auto;
                     width: 2.933rem;
                     height: 0.8rem;
                     line-height: 0.8rem;
                     font-size: 0.4rem;
                     font-weight: bold;
-                    background-color: @color-ffd987;
-                    box-shadow: 0rem 0.027rem 0.067rem 0rem rgba(0, 0, 0, 0.2);
+                    background-color: $color-default;
+                    box-shadow: 0rem 0.027rem 0.067rem 0rem $color-default;
+                    ;
                     border-radius: 0.133rem;
-                    color: @color-ff3e2e;
+                    color: $color-default;
                 }
                 .text {
-                    font-size:.32rem /* 24/75 */;
+                    font-size: .32rem/* 24/75 */
+                    ;
                     line-height: 0.4rem;
-                    p{
-                        font-size:.26667rem /* 20/75 */;
+                    p {
+                        font-size: .26667rem/* 20/75 */
+                        ;
+                    }
+                }
+                .countdown {
+                    margin-top: 0.3rem;
+                    .time-item {
+                        margin: 0.3rem auto 0;
+                        width: 4.3rem;
+                        .strong {
+                            float: left;
+                            margin-right: 0.1rem;
+                            width: 1rem;
+                            line-height: 0.5rem;
+                            font-size: 0.38rem;
+                            border-radius: 0.2rem;
+                            box-shadow: 1px 1px 3px $color-default;
+                            background: $color-default;
+                            color: $color-default;
+                            &:last-child {
+                                margin-right: 0;
+                            }
+                        }
                     }
                 }
             }
@@ -294,7 +448,7 @@
             width: 100%;
             text-align: center;
             font-size: 1.06667rem;
-            color: #fff
+            color: $color-default;
         }
     }
     
@@ -310,6 +464,11 @@
     
     .consumebg {
         background: url("../assets/img/image_redbag_xfbz.png") center no-repeat;
+        background-size: 100%
+    }
+    
+    .widthelsedraw {
+        background: url("../assets/img/image_redbag_ewcubz.png") center no-repeat;
         background-size: 100%
     }
 </style>

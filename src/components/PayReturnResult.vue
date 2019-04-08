@@ -16,7 +16,7 @@ export default {
     methods:{
         okPay(){
             this.$router.replace({name:'depositRecord',query:{fromType:this.fromType}})
-            console.log("去交易记录页面")
+            console.log("去交易记录页面-路由要修改")
         },
         continuePay(){
             this.$router.go(-2);
@@ -24,11 +24,11 @@ export default {
     }
 }
 </script>
-<style lang="less" scoped>
-@import url('../components/less/common.less');
+<style lang="scss" scoped>
 .pay-return-result{
     .return-result-box{
         margin-top: .53333rem /* 40/75 */;
+        margin-bottom: 1rem;
         padding: 0 .4rem /* 30/75 */;
         display: flex;
         flex-direction: column;
@@ -36,11 +36,11 @@ export default {
         align-items: center;
         i{
             font-size: 2.4rem /* 180/75 */;
-            color: @color-green;
+            color: $primary-color;
         }
         h2{
             font-size: .48rem /* 36/75 */;
-            color: @color-green;
+            color: $primary-color;
             margin-top: .26667rem /* 20/75 */;
             margin-bottom: .4rem /* 30/75 */;
         }
@@ -51,27 +51,27 @@ export default {
             text-align: center;
             border-radius: .13333rem /* 10/75 */;
             border:none;
-            color: #fff;
-            background: @color-green;
+            color: $default-color;
+            background: $primary-color;
             font-size: .37333rem /* 28/75 */;
             margin-bottom: .4rem /* 30/75 */;
-            box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.12);
+            box-shadow: 0px 2px 5px 0px $color-rgab-black;
             &:active{
-                background: @color-00cc8f;
+                background: $primary-color;
             }
         }
         button.continue{
-            border:1px solid @color-green;
-            background: #fff;
-            color: @color-green;
+            border:1px solid $primary-color;
+            background: $default-color;
+            color: $primary-color;
         }
         p{
             width: 100%;
             text-align: right;
-            color: @color-969699;
+            color: $color-M;
             font-size: .32rem /* 24/75 */;
             a{
-                color:@color-8976cc;
+                color:$color-w;
                 text-decoration: underline;
             }
         }

@@ -3,14 +3,25 @@
         <div class="mint-loadmore-content" :class="{ 'is-dropped': topDropped || bottomDropped}" :style="{ 'transform': 'translate3d(0, ' + translate + 'px, 0)' }">
             <slot name="top">
                 <div class="mint-loadmore-top" v-if="topMethod">
-                    <mt-spinner v-if="topStatus === 'loading'" class="mint-loadmore-spinner" :size="size" type="fading-circle"></mt-spinner>
+                    <!-- v-if="topStatus === 'loading'" -->
+                    <div class="ball-beat">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
+
                     <span class="mint-loadmore-text">{{ topText }}</span>
                 </div>
             </slot>
             <slot></slot>
             <slot name="bottom">
                 <div class="mint-loadmore-bottom"  v-if="bottomMethod">
-                    <mt-spinner v-if="bottomStatus === 'loading'" class="mint-loadmore-spinner" :size="size" type="fading-circle"></mt-spinner>
+                <!-- v-if="bottomStatus === 'loading'" -->
+                    <div class="ball-beat">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
                     <span class="mint-loadmore-text">{{ bottomText }}</span>
                 </div>
             </slot>
@@ -40,15 +51,15 @@
             },
             topPullText: {
                 type: String,
-                default: '下拉刷新'
+                default: ''
             },
             topDropText: {
                 type: String,
-                default: '释放刷新'
+                default: ''
             },
             topLoadingText: {
                 type: String,
-                default: '刷新中...'
+                default: ''
             },
             topDistance: {
                 type: Number,
@@ -59,15 +70,15 @@
             },
             bottomPullText: {
                 type: String,
-                default: '上拉加载'
+                default: ''
             },
             bottomDropText: {
                 type: String,
-                default: '释放加载'
+                default: ''
             },
             bottomLoadingText: {
                 type: String,
-                default: '疯狂加载中...'
+                default: ''
             },
             bottomDistance: {
                 type: Number,
@@ -245,7 +256,7 @@
                 // 下拉刷新,条件(1.外部传入了刷新的回调函数 2.滑动方向是向下的 3.当前滚动节点的scrollTop为0 4.当前topStatus不是loading)
                 if (typeof this.topMethod === 'function' && this.direction === 'down' &&
                     this.getScrollTop(this.scrollEventTarget) === 0 && this.topStatus !== 'loading' && !this.topAllLoaded) {
-                    event.preventDefault();
+                    // event.preventDefault();
                     event.stopPropagation();
                     //计算translate(将要平移的距离), 如果当前移动的距离大于设置的最大距离,那么此次这次移动就不起作用了
                     if (this.maxDistance > 0) {
@@ -265,7 +276,7 @@
                 }
                 if (typeof this.bottomMethod === 'function' && this.direction === 'up' &&
                     this.bottomReached && this.bottomStatus !== 'loading' && !this.bottomAllLoaded) {
-                    event.preventDefault();
+                    // event.preventDefault();
                     event.stopPropagation();
                     // 判断的逻辑思路同上
                     if (this.maxDistance > 0) {
@@ -325,8 +336,46 @@
     }
 </script>
 
-<style lang="less" scoped>
-    @import url('../components/less/common.less');
+<style lang="scss" scoped>
+
+@-webkit-keyframes ball-beat {
+  50% {
+    opacity: 0.2;
+    -webkit-transform: scale(0.75);
+            transform: scale(0.75); }
+
+  100% {
+    opacity: 1;
+    -webkit-transform: scale(1);
+            transform: scale(1); } }
+
+@keyframes ball-beat {
+  50% {
+    opacity: 0.2;
+    -webkit-transform: scale(0.75);
+            transform: scale(0.75); }
+
+  100% {
+    opacity: 1;
+    -webkit-transform: scale(1);
+            transform: scale(1); } }
+
+.ball-beat > div {
+  background-color: $primary-color;
+  width: 0.266666rem;
+  height: 0.266666rem;
+  border-radius: 100%;
+  margin: 0.02666rem;
+  -webkit-animation-fill-mode: both;
+          animation-fill-mode: both;
+  display: inline-block;
+  -webkit-animation: ball-beat 0.7s 0s infinite linear;
+          animation: ball-beat 0.7s 0s infinite linear; }
+  .ball-beat > div:nth-child(2n-1) {
+    -webkit-animation-delay: 0.35s !important;
+            animation-delay: 0.35s !important; 
+}
+   
     .mint-spinner-fading-circle {
         position: relative
     }
@@ -486,8 +535,6 @@
         overflow: hidden
     }
     
-    .mint-loadmore-content {}
-    
     .mint-loadmore-content.is-dropped {
         -webkit-transition: .2s;
         transition: .2s
@@ -504,6 +551,9 @@
         margin-top: -1.6rem /* 120/75 */;
         height: 1.6rem /* 120/75 */;
         line-height: 1.6rem /* 120/75 */;
+        display: flex;
+        justify-content: center;
+        align-items: center;
         span {
             display: inline-block;
             vertical-align: middle;
@@ -521,6 +571,9 @@
         margin-bottom: -1.6rem /* 120/75 */;
         height: 1.6rem /* 120/75 */;
         line-height: 1.6rem /* 120/75 */;
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
     
     .mint-loadmore-spinner {
@@ -532,9 +585,8 @@
     .mint-loadmore-text {
         vertical-align: middle;
         font-size: .32rem/* 24/75 */;
-        color: @color-green;
+        color: $primary-color;
     }
-
 
 
 .mint-loadmore-bottom{

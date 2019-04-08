@@ -1,0 +1,1100 @@
+html {
+    height: 100%;
+    background: $default-bg-color!important;
+    body {
+        height: 100%;
+
+        &.dialog-open {
+            width: 100%;
+        }
+
+        #app {
+            height: 100%;
+            padding-top: 1.17rem;
+            box-sizing: border-box;
+            background: $default-bg-color;
+        }
+    }
+}
+
+a {
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: none;
+}
+
+// 边框1px
+.pk-1px,
+.pk-1px-t,
+.pk-1px-b,
+.pk-1px-tb,
+.pk-1px-l,
+.pk-1px-r {
+    position: relative;
+}
+
+.pk-1px-t:before {
+    content: " ";
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    height: 1px;
+    border-top: 1px solid $border-color;
+    color: $border-color;
+    -webkit-transform-origin: 0 0;
+    transform-origin: 0 0;
+    -webkit-transform: scaleY(0.5);
+    transform: scaleY(0.5);
+}
+
+.pk-1px-b:after {
+    content: " ";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    height: 1px;
+    border-bottom: 1px solid $border-color;
+    color: $border-color;
+    -webkit-transform-origin: 0 100%;
+    transform-origin: 0 100%;
+    -webkit-transform: scaleY(0.5);
+    transform: scaleY(0.5);
+}
+
+.pk-1px-l:before {
+    content: " ";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 1px;
+    bottom: 0;
+    border-left: 1px solid $border-color;
+    color: $border-color;
+    -webkit-transform-origin: 0 0;
+    transform-origin: 0 0;
+    -webkit-transform: scaleX(0.5);
+    transform: scaleX(0.5);
+}
+
+.pk-1px-r:after {
+    content: " ";
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 1px;
+    bottom: 0;
+    border-right: 1px solid $border-color;
+    color: $border-color;
+    -webkit-transform-origin: 100% 0;
+    transform-origin: 100% 0;
+    -webkit-transform: scaleX(0.5);
+    transform: scaleX(0.5);
+}
+
+.pk-1px-tb:before {
+    content: " ";
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    height: 1px;
+    border-top: 1px solid $border-color;
+    color: $border-color;
+    -webkit-transform-origin: 0 0;
+    transform-origin: 0 0;
+    -webkit-transform: scaleY(0.5);
+    transform: scaleY(0.5);
+}
+
+.pk-1px-tb:after {
+    content: " ";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    height: 1px;
+    border-bottom: 1px solid $border-color;
+    color: $border-color;
+    -webkit-transform-origin: 0 100%;
+    transform-origin: 0 100%;
+    -webkit-transform: scaleY(0.5);
+    transform: scaleY(0.5);
+}
+
+//分页
+.page-loadmore-wrapper {
+    overflow: scroll;
+}
+.nodata {
+    text-align: center;
+    height: 1.33333rem/* 100/75 */
+    ;
+    line-height: 1.33333rem/* 100/75 */
+    ;
+    font-size: .32rem/* 24/75 */
+    ;
+    position: relative;
+    color: $primary-color;
+    &::after {
+        content: "";
+        width: 1.4rem/* 105/75 */
+        ;
+        height: 1px;
+        display: block;
+        background: $primary-color;
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        left: 62%;
+    }
+    &::before {
+        content: "";
+        width: 1.4rem/* 105/75 */
+        ;
+        height: 1px;
+        display: block;
+        background: $primary-color;
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        right: 62%;
+    }
+}
+
+//文案弹框，查看返水详情，查看返佣比例，弹框样式
+.copy-writer-details-mask {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: $nondefault-color;
+    opacity: .4;
+    z-index: 2;
+}
+
+.copy-writer-details-box {
+    position: fixed;
+    z-index: 3;
+    top: 50%;
+    transform: translateY(-50%);
+    padding: 0 .4rem
+        /* 30/75 */
+    ;
+    width: 92%;
+    opacity: 1;
+
+    .details-title {
+        border-radius: .13333rem
+            /* 10/75 */
+            .13333rem
+            /* 10/75 */
+            0 0;
+        background: $default-color;
+        padding-left: .4rem
+            /* 30/75 */
+        ;
+        height: 1.06667rem
+            /* 80/75 */
+        ;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        span {
+            color: $primary-color;
+            font-size: .42667rem
+                /* 32/75 */
+            ;
+            height: 1.06667rem
+                /* 80/75 */
+            ;
+            line-height: 1.06667rem
+                /* 80/75 */
+            ;
+            display: block;
+
+            i {
+                color: $primary-color;
+                font-size: .42667rem
+                    /* 32/75 */
+                ;
+            }
+
+            &:last-child {
+                width: 1.06667rem
+                    /* 80/75 */
+                ;
+                text-align: center;
+            }
+        }
+    }
+
+    .details-content {
+        background: $default-color;
+        border-radius: 0 0 .13333rem
+            /* 10/75 */
+            .13333rem
+            /* 10/75 */
+        ;
+        padding: .4rem
+            /* 30/75 */
+        ;
+
+        .sub-title {
+            font-size: .37333rem
+                /* 28/75 */
+            ;
+            color: $nondefault-color;
+        }
+
+        p {
+            margin-top: .4rem
+                /* 30/75 */
+            ;
+            line-height: .48rem
+                /* 36/75 */
+            ;
+            color: $color-J;
+            word-break: break-all;
+            max-height: 4rem;
+            overflow: auto;
+        }
+
+        dl {
+            dt {
+                display: flex;
+                justify-content: space-between;
+                padding: .33333rem
+                    /* 25/75 */
+                    0;
+
+                span {
+                    font-size: .42667rem
+                        /* 32/75 */
+                    ;
+                    color: $color-C;
+                    flex: 1;
+                    text-align: center;
+
+                    &:first-child {
+                        text-align: left;
+                    }
+
+                    &:last-child {
+                        text-align: right;
+                    }
+                }
+            }
+
+            .scorll-list {
+                max-height: 6rem
+                    /* 450/75 */
+                ;
+                ;
+                overflow: auto;
+
+                dd {
+                    display: flex;
+                    justify-content: space-between;
+                    padding: .33333rem
+                        /* 25/75 */
+                        0;
+
+                    span {
+                        font-size: .37333rem
+                            /* 28/75 */
+                        ;
+                        color: $color-C;
+                        flex: 1;
+                        text-align: center;
+
+                        &:first-child {
+                            text-align: left;
+                        }
+
+                        &:last-child {
+                            text-align: right;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+/**常用数值**/
+$twentyrem: 0.26667rem;
+$tenrem: 0.13334rem;
+$onerem: 0.026667rem;
+$seventrem: 0.93334rem;
+$four: 0.4rem;
+$fourtrem: 1.0667rem;
+$font12: 0.32rem;
+
+/*清除浮动*/
+.clearfix {
+    zoom: 1;
+}
+
+.clearfix::after,
+.clearfix::before {
+    content: "";
+    display: block;
+    clear: both;
+    visibility: hidden;
+    height: 0;
+}
+
+/*超出显示...*/
+.text-dots {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+/*必填*/
+.must::before {
+    content: "*";
+    color: $color-a;
+}
+
+/*加载中样式覆盖*/
+.nut-toast.nut-loading.nut-toast-base {
+    .nut-toast-icon {
+        width: 1.07rem !important;
+        height: 1.07rem !important;
+    }
+
+    .nut-toast-icon-wrapper {
+        height: 0.80rem !important;
+        ;
+    }
+
+    .nut-toast-inner {
+        padding: 0.67rem !important;
+    }
+}
+
+/*成功提示*/
+.nut-toast.nut-toast-has-icon {
+    .nut-toast-inner {
+        padding: 1.87rem 0.67rem 0.40rem !important;
+    }
+
+    .nut-toast-icon-wrapper {
+        height: 1.33rem !important;
+
+        .nut-toast-icon {
+            width: 0.80rem;
+            height: 0.80rem;
+        }
+    }
+}
+
+.nut-toast-text {
+    font-size: 0.37rem !important;
+}
+
+.isShowChooseBank {
+    .nut-actionsheet-menu {
+        height: 7rem;
+        overflow: auto;
+    }
+}
+/*底线*/
+.noMoredata {
+    text-align: center;
+    height: 1.33333rem/* 100/75 */
+    ;
+    line-height: 1.33333rem/* 100/75 */
+    ;
+    font-size: .32rem/* 24/75 */
+    ;
+    position: relative;
+    color: $nondefault-color;
+    &::after {
+        content: "";
+        width: 1.4rem/* 105/75 */
+        ;
+        height: 1px;
+        display: block;
+        background: $nondefault-color;
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        left: 62%;
+    }
+    &::before {
+        content: "";
+        width: 1.4rem/* 105/75 */
+        ;
+        height: 1px;
+        display: block;
+        background: $nondefault-color;
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        right: 62%;
+    }
+}
+/*确认框*/
+.my-dialog {
+    .nut-dialog-body {
+        padding: 0.80rem 0.53rem 0.53rem;
+    }
+
+    .nut-dialog-title {
+        font-size: 0.43rem;
+    }
+
+    .nut-dialog-content {
+        font-size: 0.35rem;
+    }
+
+    .nut-dialog-footer {
+        height: 1.33rem;
+        line-height: 1.33rem;
+
+        button {
+            font-size: 0.37rem;
+
+            &.nut-dialog-ok {
+                background: $primary-color;
+            }
+        }
+    }
+}
+
+//自定义弹框
+.dialogbox {
+    z-index: 99;
+    position: fixed;
+
+    .dialog-mask {
+        background-color: rgba($color: $nondefault-color, $alpha: 0.4);
+    }
+
+    .deviceBody {
+        display: -webkit-box;
+        display: -webkit-flex;
+        display: flex;
+        -webkit-box-align: center;
+        -webkit-align-items: center;
+        align-items: center;
+        -webkit-box-pack: center;
+        -webkit-justify-content: center;
+        justify-content: center;
+
+        .dialogs {
+            width: 9.2rem;
+            background-color: $default-color;
+            border-radius: 0.267rem;
+            overflow: hidden;
+
+            .title {
+                position: relative;
+                padding: 0 $four;
+                height: $fourtrem;
+                line-height: $fourtrem;
+                font-size: 0.427rem;
+                font-weight: bold;
+                color: $text-color;
+
+                .closebox {
+                    position: absolute;
+                    top: 0;
+                    right: 0.2rem;
+                }
+            }
+        }
+    }
+
+    .positionFixed {
+        position: fixed;
+        left: 0;
+        top: 0;
+        right: 0;
+        bottom: 0;
+    }
+}
+
+//额度转换弹框
+.my-dialog-transfer {
+    .nut-dialog {
+        border-radius: 0.20rem;
+
+        .nut-dialog-body {
+            background: $default-bg-color;
+            padding: 0;
+
+            .nut-dialog-title {
+                font-size: 0.43rem;
+                text-align: left;
+                line-height: 0.88rem;
+                padding: 0.13rem 0.27rem;
+            }
+
+            .nut-dialog-content {
+                border-top: 1px solid $border-color;
+                background: $default-color;
+                padding-bottom: 0;
+
+                .title {
+                    height: 1.07rem;
+                    line-height: 1.07rem;
+
+                    span {
+                        font-size: 0.37rem;
+                        display: inline-block;
+                        margin-right: 0.27rem;
+                        color: $text-color;
+
+                        &:nth-child(2) {
+                            color: $primary-color;
+
+                        }
+                    }
+                }
+
+                .money {
+                    height: 1.4rem;
+                    line-height: 0.80rem;
+                    display: flex;
+                    margin-bottom: 0.27rem;
+
+                    .label {
+                        font-size: 0.37rem;
+                        display: inline-block;
+                        color: $text-color;
+                        text-align: right;
+                        flex: 1;
+                    }
+
+                    .money-input {
+                        flex: 2;
+
+                        .num {
+                            position: relative;
+                            width: 80%;
+                            height: 0.80rem;
+
+                            input {
+                                width: 94%;
+                                border: 1px solid $border-color;
+                                float: left;
+                                font-size: 0.37rem;
+                                height: 0.80rem;
+                                padding: 0 .4rem 0 .2rem;
+                                border-radius: 0.13rem;
+                            }
+
+                            .in-money-chinese {
+                                text-align: left;
+                                color: $text-color;
+                                font-size: 0.32rem;
+                            }
+
+                            span {
+                                font-size: 0.37rem;
+                                position: absolute;
+                                right: -.3rem;
+                                top: 0;
+                            }
+                        }
+
+                    }
+                }
+
+                .fast-money {
+                    padding-top: 0.27rem;
+                    border: 1px solid $border-color;
+
+                    .active {
+                        .fast-money-item {
+                            background: $primary-color;
+                            color: $default-color;
+                        }
+                    }
+
+                    .fast-money-item {
+                        height: 0.80rem;
+                        line-height: 0.80rem;
+                        text-align: center;
+                        font-size: 0.37rem;
+                        color: $primary-color;
+                        border: 1px solid $primary-color;
+                        border-radius: 0.13rem;
+                        margin-bottom: 0.27rem;
+                    }
+                }
+
+                .btns {
+                    display: flex;
+                    height: 1.33rem;
+                    line-height: 1.33rem;
+
+                    .cancel {
+                        flex: 1;
+                        font-size: 0.37rem;
+                        border-radius: 0 0 0 5px;
+                        background: $default-color;
+                    }
+
+                    .sure {
+                        flex: 1;
+                        font-size: 0.37rem;
+                        background: $primary-color;
+                        color: $default-color;
+                    }
+                }
+            }
+
+        }
+
+        .nut-dialog-footer {
+            height: 1.33rem;
+            line-height: 1.33rem;
+
+            button {
+                font-size: 0.37rem;
+
+                &.nut-dialog-ok {
+                    background: $primary-color;
+                }
+            }
+        }
+    }
+
+}
+
+//存款 标题
+.sub-title {
+    font-size: 0.37rem;
+    color: $text-color;
+    padding: 0.27rem 0.64rem;
+    position: relative;
+
+    &:before {
+        content: '';
+        width: 0.08rem;
+        height: 0.45rem;
+        background: $primary-color;
+        position: absolute;
+        left: 0.29rem;
+        top: 0.29rem;
+    }
+}
+
+/*网银存款 和 支付宝存款*/
+.pk-deposit-top {
+    background: $default-color;
+
+    .card-info {
+        width: 80%;
+        margin: 0.4rem auto;
+        background: $default-bg-color;
+        border-radius: 0.13rem;
+        overflow: hidden;
+
+        .card-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.13rem 0.37rem;
+
+            img {
+                width: 3.33rem;
+                height: 0.80rem;
+            }
+
+            span {
+                font-size: 0.32rem;
+                color: $text-color;
+            }
+        }
+
+        ul {
+            margin: 0 0.37rem 0.32rem;
+            padding-top: 0.13rem;
+            border-radius: 0.13rem;
+            background: $default-color;
+
+            li {
+
+                padding: 0.16rem;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                font-size: 0.37rem;
+                color: $text-color;
+
+                span {
+                    display: inline-block;
+                    width: 80%;
+                }
+
+                .copy {
+                    color: $primary-color;
+                    width: 0.93rem;
+                    height: 0.59rem;
+                    line-height: 0.59rem;
+                    text-align: center;
+                    background: #c4defa;
+                    border-radius: 0.05rem;
+                    font-size: 0.37rem;
+                    outline: none;
+                }
+            }
+        }
+    }
+
+    .wechat-code {
+        text-align: center;
+        border-top: 1px solid $border-color;
+        padding: 0.4rem;
+
+        .cod-img-wrap {
+            border: 1px solid $border-color;
+            border-radius: 0.05rem;
+            padding: 0.2rem;
+            margin: 0 auto 0.27rem;
+            width: 34%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            img {
+                width: 3.09rem;
+                height: 3.09rem;
+                display: block;
+            }
+        }
+
+        p {
+            margin-top: 0.27rem;
+            color: $tip-color;
+            font-size: 0.37rem;
+            text-align: left;
+        }
+
+        .cod-btn-wrap {
+            button {
+                display: inline-block;
+                width: 2.93rem;
+                height: 0.67rem;
+                line-height: 0.67rem;
+                padding: 0;
+                font-size: 0.32rem;
+                color: $default-color;
+                background: $nondefault-color;
+                border-radius: 0.13rem;
+            }
+        }
+    }
+
+    .money-input {
+        border-top: 1px solid $border-color;
+        display: flex;
+        height: 1.33rem;
+        font-size: 0.37rem;
+
+        .label {
+            width: 2.67rem;
+            line-height: 1.31rem;
+            padding-left: 0.27rem;
+            color: $text-color;
+            font-size: 0.37rem;
+        }
+
+        .input-num {
+            flex: 1;
+            border: 0;
+            margin: 0;
+            height: 1.31rem;
+            line-height: 1.31rem;
+            padding: 0 0.4rem 0 0.27rem;
+            position: relative;
+
+            input {
+                width: 100%;
+                border: none;
+                outline: none;
+                font-size: 0.37rem;
+                color: $text-color;
+                text-align: right;
+            }
+
+            .input {
+                text-align: right;
+            }
+
+            .money-chinese {
+                position: absolute;
+                bottom: 0;
+                right: 0.8rem;
+                line-height: 1;
+                font-size: 0.27rem;
+
+                &.withdraw {
+                    right: 0.4rem;
+                }
+            }
+        }
+    }
+}
+
+.pk-deposit-bottom {
+    .btn-warp {
+        padding: 0.53rem 0.37rem;
+
+        .btn {
+            height: 1.07rem;
+            line-height: 1.07rem;
+            padding: 0;
+            text-align: center;
+            font-size: 0.37rem;
+            color: $default-color;
+            background: $primary-color;
+            border: none;
+            border-radius: 0.13rem;
+            display: block;
+            width: 100%;
+        }
+
+    }
+
+    .tip {
+        padding: 0 0.53rem 1.07rem;
+        font-size: 0.32rem;
+        color: $tip-color;
+
+        p {
+            color: $tip-color;
+            font-size: 0.37rem;
+        }
+    }
+
+}
+
+//标题
+.nut-navbar.pk-title {
+    height: 1.17rem;
+    line-height: 1.17rem;
+    font-size: 0.45rem;
+    background-color: $title-color;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 99;
+    color: $default-color;
+
+    /deep/ .nav-left {
+        font-size: 0.45rem;
+
+        .back {
+            margin-left: 0.21rem;
+
+            .back-icon {
+                width: 0.53rem;
+                height: 0.53rem;
+            }
+        }
+    }
+}
+
+//--------placeholder
+/* 使用webkit内核的浏览器 */
+::-webkit-input-placeholder {
+    color: $placeholder-color;
+}
+
+/* Firefox版本4-18 */
+:-moz-placeholder {
+    color: $placeholder-color;
+}
+
+/* Firefox版本19+ */
+::-moz-placeholder {
+    color: $placeholder-color;
+}
+
+/* IE浏览器 */
+:-ms-input-placeholder {
+    color: $placeholder-color;
+}
+
+/* 头部返回icon大小 */
+/deep/ .nut-navbar .nav-left .back .back-icon {
+    width: 0.5333rem;
+    height: 0.5333rem;
+
+}
+
+/*无数据*/
+.noData {
+    margin: 3rem auto;
+    width: 3rem;
+
+    img {
+        width: 100%;
+    }
+}
+
+/*3列数据*/
+.threeBox {
+
+    .threetit,
+    .threeList {
+        .nut-col:nth-child(2n) {
+            text-align: center
+        }
+
+        .nut-col:last-child {
+            text-align: right
+        }
+    }
+
+    .threetit {
+        line-height: 1.06667rem;
+        font-weight: bold;
+        border-bottom: $onerem solid $border-color;
+    }
+
+    .threeList {
+        padding: $font12 0;
+        font-size: 0.373rem;
+
+        span {
+            font-size: 0.32rem;
+            white-space: nowrap;
+        }
+    }
+}
+
+// 底部导航
+/deep/ .nut-tabbar {
+    height: 1.44rem;
+    background: $nondefault-color;
+    z-index: 88;
+
+    .icon-box .icon {
+        margin-bottom: 0.1333rem;
+        width: 0.64rem;
+        height: 0.64rem;
+    }
+
+    .tabbar-nav-word {
+        font-size: 0.3467rem;
+    }
+
+    color: $placeholder-color;
+}
+
+/*
+.nut-actionsheet {
+  .nut-picker-control {
+    height: 1.07rem;
+
+    /*取消 确定
+    .nut-picker-cancel-btn,
+    .nut-picker-confirm-btn {
+      width: 1.60rem;
+      line-height: 3;
+      color: $primary-color;
+      font-size: 0.37rem;
+    }
+*/
+/*标题
+.nut-picker-title{
+  font-size: 0.37rem;
+  line-height: 3;
+}
+
+}
+
+.nut-picker-panel{
+height: 6.72rem;
+.nut-picker-list{
+  height: 6.72rem;
+  .nut-picker-roller{
+    height: 0.96rem;
+    top: 2.88rem;
+    .nut-picker-roller-item{
+      height: 0.96rem;
+      line-height: 0.96rem;
+      font-size:0.37rem;
+    }
+  }
+  .nut-picker-item{
+    font-size: 0.40rem;
+    line-height: 0.96rem;
+  }
+
+  .nut-picker-indicator{
+    top: 2.88rem;
+    height: 0.91rem;
+  }
+  .nut-picker-content{
+    top: 2.88rem;
+    height: 0.91rem;
+  }
+}
+}
+}*/
+// 骨架屏
+/deep/.vue-skeleton-square-wrap {
+    div {
+        background: #f0f0f0 !important;
+        height: 100% !important;
+    }
+}
+
+/deep/.vue-skeleton-circle {
+    background: #f0f0f0 !important;
+}
+
+.skeleton {
+    position: relative;
+}
+
+/deep/.nut-swiper {
+    height: 3.7333rem;
+    font-size: 0;
+
+    img {
+        width: 100%;
+        height: 100%;
+    }
+}
+
+.no-data {
+    height: 3.73rem;
+    padding-top: 0.8rem;
+    text-align: center;
+
+    .no-data-box {
+        i {
+            margin: 0 auto;
+            font-size: 1.6rem;
+            /* 120/75 */
+            color: $color-p;
+            width: auto;
+            height: auto;
+        }
+
+        p {
+            padding: 0.25rem 0 0.8rem;
+            font-size: .32rem;
+            /* 24/75 */
+            color: $color-p;
+        }
+    }
+
+}

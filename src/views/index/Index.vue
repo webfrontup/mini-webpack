@@ -1,564 +1,643 @@
 <template>
-    <div class="body">
-        <side :isRight="true" :drawerWidth="w">
-            <div slot="position">
-                <div class="header">
-                    <div class="logo"><img :src="logoimg" alt=""></div>
-                    <div class="headbox">
-                        <div v-show="isLogin" class="userName">{{userInfo.account}}</div>
-                        <div v-show="!isLogin" class="botton">
-                            <!--<div class="btns">试玩</div>-->
-                            <router-link tag="div" :to="{name:'login'}" class="btns loginbtn">登录</router-link>
-                        </div>
-                    </div>
-                </div>
-                <Footer></Footer>
-                <!--redbag-->
-                <Redbag v-show="bagSwitch"></Redbag>                
+    <div class="pk-index">
+        <header class="index-header">
+            <div class="logo-menu">
+                <i class="iconfont icon-sy_menu" @click="showMenu = true"></i>
+                <img src="../../assets/img/app_logo_532.png" alt="">
             </div>
-            <div slot="drawer">
-                <div class="sideBox">
-                    <div class="sideHead pk-1px-b">
-                        <div v-show="!isLogin" class="unlisted">
-                            <router-link tag="div" :to="{name:'login'}" class="portrait iconfont icon-sidebar_head"></router-link>
-                            <span>点击头像登录</span>
-                            <router-link tag="div" :to="{name:'register'}" class="sidebtn">用户注册</router-link>
-                            <!--<div class="sidebtn">点击试玩</div>-->
-                        </div>
-                        <div v-show="isLogin" class="loginInfo">
-                            <div class="portrait iconfont icon-sidebar_head"></div>
-                            <div class="sideaccount">{{userInfo.account}}</div>
-                            <div class="sidebalance">{{userInfo.balance}}</div>
-                        </div>
-                    </div>
-                    <ul class="sideNav pk-1px-b">
-                        <router-link tag="li" :to="{name:'activity'}" class="iconfont icon-sidebar_huodong">活动中心</router-link>
-                        <router-link tag="li" :to="{name:'purse'}" class="iconfont icon-sidebar_wallet">我的钱包</router-link>
-                        <router-link tag="li" :to="{name:'my'}" class="iconfont icon-sidebar_mine">个人中心</router-link>
-                        <router-link tag="li" :to="{name:'lottery'}" class="iconfont icon-sidebar_order">投注记录</router-link>
-                        <router-link tag="li" :to="{name:'msgcenter'}" class="iconfont icon-sidebar_message">
-                            通知消息
-                            <div class="numb" v-show="count>0&&count<100">
-                                {{count}}
-                            </div>
-                            <div class="numb" v-show="count>99">
-                                99+
-                            </div>
-                        </router-link>
-                    </ul>
-                    <ul class="sideNav pk-1px-b">
-                        <router-link tag="li" :to="{name:'spread'}" class="iconfont icon-sidebar_share">分享返佣</router-link>
-                        <router-link tag="li" :to="{name:'contactus'}" class="iconfont icon-sidebar_kefu">联系客服</router-link>
-                        <router-link tag="li" :to="{name:'settings'}" class="iconfont icon-sidebar_setting">系统设置</router-link>
-                    </ul>
-                    <ul class="sideNav sideBottom">
-                        <div class="switch">
-                            首页广告
-                            <mt-switch class="switchBtn" v-model="bannerSwitch" @change="floatBanner"></mt-switch>
-                        </div>
-                        <div class="switch">
-                            浮动红包
-                            <mt-switch class="switchBtn" :disabled="disabledBag" v-model="bagSwitch" @change="floatBag"></mt-switch>
-                        </div>
-                    </ul>
+            <div class="userinfo">
+                <div class="un-login" v-if="!isLogin">
+                    <button class="userinfo-login-btn"><router-link :to="{ name: 'login'}">登录</router-link></button>
+                    <button class="userinfo-register-btn"><router-link :to="{ name: 'register'}">注册</router-link></button>
+                </div>
+                <div class="login" v-if="isLogin" @click="showChangeMoney = true">
+                    <p>{{userinfo.account}}</p>
+                    <p><img src="../../assets/img/icon/icon_account@2x.png" alt="">￥{{userinfo.balance}}</p>
+                    <i class="iconfont icon-bank-normal more"></i>
                 </div>
             </div>
-            <div slot="content">
-
-
-                <div class="page-loadmore">
-                <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
-                    <pk-loadmore 
-                    :top-method="loadTop" 
-                    @top-status-change="handleTopChange" 
-                    ref="loadmore" 
-                    :stop-translate="stopTranslate"
-                    >
-                <div class="indexBody">
-                    <div class="banner" v-show="bannerSwitch">
-                        <swiper :options="swiperOption" ref="mySwiper">
-                            <swiper-slide v-for="(item, index) in swiperSlides" :key="index">
-                                <img :src="item.imgUrl" alt="">
-                            </swiper-slide>
-                             <div class="swiper-pagination" style="bottom:0.26666rem;" slot="pagination"></div>
-                        </swiper>
-                        <span class="close" @click="closeadv('banner')">关闭</span>
-                    </div>
-                    <div @click="closeadv('notice')" v-show="noticeData.length>0" class="notive">
-                        <div class="icon iconfont icon-sy-tzgg"></div>
-                        <marquee direction="left" align="bottom" height="25" width="100%" onmouseout="this.start()" onmouseover="this.stop()" scrollamount="4" scrolldelay="1">
-                            <div class="noticeText" v-for="(noticeDatas,index) in noticeData" :key="index">{{noticeDatas.content}}</div>
-                        </marquee>
-                    </div>
-                    <div class="recommend" @touchmove="show">
-                        <div class="hottabs">
-                            <mt-navbar v-model="selected">
-                                <mt-tab-item @click.native="changeTab(2)" id="1">热门推荐</mt-tab-item>
-                                <mt-tab-item v-show="haveHis" @click.native="changeTab(1)" id="2">最近玩过</mt-tab-item>
-                            </mt-navbar>
-                        </div>
-                        <!-- tab-container -->
-                        <mt-tab-container v-model="selected">
-                            <mt-tab-container-item class="hotGame" id="1">
-                                <ul>
-                                    <li v-for="(gamelists,index) in hotGame" :key="index">
-                                        <div @click="gamepop(gamelists.platformId,gamelists.platformName,gamelists.productName)" class="gameRegion">
-                                            <div class="game-pic"><img v-lazy="cdnUrl+gamelists.iconUrl" /></div>
-                                            <div class="game-text">
-                                                {{gamelists.productName}}
-                                            </div>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </mt-tab-container-item>
-                            <mt-tab-container-item class="history" id="2">
-                                <ul>
-                                    <li v-for="(gamelists,index2) in playedList" :key="index2">
-                                        <div @click="gamepop(gamelists.platformId,gamelists.platformName,gamelists.productName)" class="gameRegion">
-                                            <div class="game-pic"><img v-lazy="cdnUrl+gamelists.iconUrl" /></div>
-                                            <div class="game-text">
-                                                {{gamelists.productName}}
-                                            </div>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </mt-tab-container-item>
-                        </mt-tab-container>
-                    </div>
-                    <IndexGameList v-if="gameinfo.length>0" :gameinfo="gameinfo" :cdnUrl='cdnUrl'></IndexGameList>
-                    <!--<div class="copyright">-->
-                    <!--<div class="copytext">copyright © 2010-2018 E-Tong Technology co,itd</div>-->
-                    <!--<a class="checkpc">欢迎使用</a>-->
-                    <!--</div>-->
-                </div>
-
-                </pk-loadmore>
-                </div>
-            </div>
-
-
-            </div>
-        </side>
-        <Gamepop :allmoney="allmoney" :state="toast_control" :platformId="platformid" :platformName="platformname" :gameName="productname" :balances="balances" @returnState="returnState"></Gamepop>
-        <!--双按钮弹窗 >>> notice-->
-        <div v-show="noticePop" class="twoBtnPop">
-            <div class="btnpopBox">
-                <div v-show="index === noticeIndex" v-for="(notice,index) in noticeData" :key="index" class="btnpopContent">
-                    <div class="tit">{{notice.title}}</div>
-                    <div class="content">
-                        {{notice.content}}
-                        <div class="time">{{notice.createTime | filterTimeType('YYYYMMDD')}}</div>
+        </header>
     
-                    </div>
-                    <div @click="nextNotice(noticeIndex)" class="halfBtn next" v-if="modalNext">下一条</div>
-                    <div @click="closeadv('notice')" class="halfBtn next" v-if="!modalNext">关闭</div>
+        <div class="skeleton vue-skeleton-loading" v-show="showLoading">
+            <div class="skeleton-bac-animation"></div>
+            <div class="skeleton-bac-content">
+                <row style="width:100%">
+                    <skeleton-square style="width:100%;height:3.7333rem"></skeleton-square>
+                </row>
+                <row padding="0.2rem 0 0 0 " style="width:100%">
+                    <skeleton-square style="width:100%;height:0.5333rem"></skeleton-square>
+                </row>
+                <row padding="0.2rem  0 0 0 ">
+                    <skeleton-square width="1.3333rem" style="height:1.3333rem" margin="0 0 0 0.2853rem"></skeleton-square>
+                    <skeleton-square width="1.3333rem" style="height:1.3333rem" margin="0 0 0 0.2853rem"></skeleton-square>
+                    <skeleton-square width="1.3333rem" style="height:1.3333rem" margin="0 0 0 0.2853rem"></skeleton-square>
+                    <skeleton-square width="1.3333rem" style="height:1.3333rem" margin="0 0 0 0.2853rem"></skeleton-square>
+                    <skeleton-square width="1.3333rem" style="height:1.3333rem" margin="0 0 0 0.2853rem"></skeleton-square>
+                    <skeleton-square width="1.3333rem" style="height:1.3333rem" margin="0 0 0 0.2853rem"></skeleton-square>
+                </row>
+                <row padding="0.2rem  0 0 0 ">
+                    <skeleton-square width="2.1667rem" style="height:0.8rem" margin="0 0 0 0.2667rem"></skeleton-square>
+                    <skeleton-square width="2.1667rem" style="height:0.8rem" margin="0 0 0 0.2667rem"></skeleton-square>
+                    <skeleton-square width="2.1667rem" style="height:0.8rem" margin="0 0 0 0.2667rem"></skeleton-square>
+                    <skeleton-square width="2.1667rem" style="height:0.8rem" margin="0 0 0 0.2667rem"></skeleton-square>
+                </row>
+                <row padding="0.2rem  0 0 0 ">
+                    <skeleton-square width="2.9777rem" style="height:2.9777rem" margin="0 0 0 0.2667rem"></skeleton-square>
+                    <skeleton-square width="2.9777rem" style="height:2.9777rem" margin="0 0 0 0.2667rem"></skeleton-square>
+                    <skeleton-square width="2.9777rem" style="height:2.9777rem" margin="0 0 0 0.2667rem"></skeleton-square>
+                </row>
+                <row padding="0.2rem  0 0.2rem 0 ">
+                    <skeleton-square width="2.9777rem" style="height:2.9777rem" margin="0 0 0 0.2667rem"></skeleton-square>
+                    <skeleton-square width="2.9777rem" style="height:2.9777rem" margin="0 0 0 0.2667rem"></skeleton-square>
+                    <skeleton-square width="2.9777rem" style="height:2.9777rem" margin="0 0 0 0.2667rem"></skeleton-square>
+                </row>
+            </div>
+    
+        </div>
+        <!-- <nut-scroller :is-un-more="isUnMore" :is-loading="isLoading" :type="'vertical'" @pulldown="loadMoreVert">-->
+        <!-- <div class=" nut-hor-list-item" slot="list"> -->
+        <div class="index-cent" v-show="!showLoading">
+            <div class="domain">
+                主页域名：<span>{{domain}}</span>
+            </div>
+            <div class="banner">
+                <div v-if="showBanner && bannerImg.length > 0 ">
+                    <swiper>
+                        <swiper-slide v-for="(item,index) in bannerImg" :key="index">
+                            <img :src="item.imgUrl" />
+                        </swiper-slide>
+                    </swiper>
                 </div>
-                <div @click="closeadv('notice')" class="halfBtn close">取消</div>
+                <div class="banner-download" v-if="hideDownload">
+                    <i class="iconfont icon-input-close" @click="hideDownload = false"></i>
+                    <span>更多精彩游戏，请下载手机app!</span>
+                    <button>立即下载</button>
+                </div>
+            </div>
+            <div class="noticebar" v-if="announcement.length > 0">
+                <div class="noticebar-label">
+                    <button>公告</button>
+                </div>
+                <marquee direction="left" align="bottom" height="25" width="100%" onmouseout="this.start()" onmouseover="this.stop()" scrollamount="4" scrolldelay="1">
+                    <div class="noticeText" v-for="(noticeDatas,index) in announcement" :key="index">
+                        {{noticeDatas.content}}
+                    </div>
+                </marquee>
+            </div>
+            <div class="all-game" v-if="gameList.length > 0">
+                <!-- swiper nav -->
+                <swiper :options="swiperOptionThumbs" class="gallery-thumbs" ref="swiperThumbs">
+                    <swiper-slide :class="'slide-'+type.apiType" v-for="(type, index) in gameList" :key="index">
+                        <div v-if="type.apiType ==5 ">
+                            <img src="../../assets/img/icon/tiyu@2x.png" alt="">
+                            <p>体育</p>
+                        </div>
+                        <div v-if="type.apiType ==2">
+                            <img src="../../assets/img/icon/dianzi@2x.png" alt="">
+                            <p>电子</p>
+                        </div>
+                        <div v-if="type.apiType ==3">
+                            <img src="../../assets/img/icon/zhenren@2x.png" alt="">
+                            <p>真人</p>
+                        </div>
+                        <div v-if="type.apiType ==1">
+                            <img src="../../assets/img/icon/caipiao@2x.png" alt="">
+                            <p>彩票</p>
+                        </div>
+                        <div v-if="type.apiType ==4">
+                            <img src="../../assets/img/icon/qipai@2x.png" alt="">
+                            <p>棋牌</p>
+                        </div>
+                        <div v-if="type.apiType ==6">
+                            <img src="../../assets/img/icon/buyu@2x.png" alt="">
+                            <p>捕鱼</p>
+                        </div>
+    
+                    </swiper-slide>
+                </swiper>
+                <!-- swiper data -->
+                <div>
+                    <swiper :options="swiperOptionTop" class="gallery-top" ref="swiperTop" @slideChange="pageChange()">
+                        <swiper-slide class="game-type-list" v-for="(type, index) in gameList" :key="index" :class="'slide-'+type.apiType">
+                            <div class="game-item" v-for="(game,idx) in type.siteApis" :key="idx" @click="toList(type,game)" v-if="type.apiType == 3 || type.apiType == 5 || type.apiType == 2 || type.apiType == 6">
+                                <img src="../../assets/img/paly.png" alt="" class="play-icon" v-if="game.swHref &&  game.whStatus == 1 && type.apiType != 6 && !isLogin">
+                                <img v-lazy="gameImgUrl+'/'+game.apiPlatform+'/'+game.apiPlatform+'.png'" alt="">
+                                <p>{{game.name}}</p>
+                                <div class="wh-mask" v-if=" game.whStatus == 2">游戏维护中...</div>
+                            </div>
+                            <div v-if="type.apiType == 1  || type.apiType == 4">
+                                <div class="game-type-nav">
+                                    <swiper :options="swiperOptionv">
+                                        <swiper-slide v-for="(game,idx) in type.siteApis" :key="idx" class="game-type-nav-item" :class="{'game-type-active':gameTypeActive == idx}">
+                                            <div @click="selectGameType(idx,game)">
+                                                <img v-lazy="gameImgUrl+'/'+game.apiPlatform+'/'+game.apiPlatform+'.png'" alt="">
+                                                <span>{{game.name}}</span>
+                                            </div>
+                                        </swiper-slide>
+                                    </swiper>
+                                </div>
+    
+                                <div v-for="(gameChild,idx) in gameTypeActiveList.gameList" :key="idx" class="game-item" @click="toPlay(gameTypeActiveList)">
+                                    <!-- <span>{{gameChild}}</span> -->
+                                    <img src="../../assets/img/paly.png" alt="" class="play-icon" v-if="gameTypeActiveList.swHref &&  gameTypeActiveList.whStatus == 1 && !isLogin">
+                                    <img v-lazy="gameImgUrl+'/'+gameTypeActiveList.apiPlatform+'/'+gameChild.fcType+'.png'" alt="" v-if="gameTypeActiveList.apiTypeId == 1">
+                                    <img v-lazy="gameImgUrl+'/'+gameTypeActiveList.apiPlatform+'q/'+gameChild.image" alt="" v-if="gameTypeActiveList.apiTypeId == 4">
+                                    <p>{{gameChild.aspiName}}</p>
+                                    <div class="wh-mask" v-if=" gameTypeActiveList.whStatus == 2">游戏维护中...</div>
+                                </div>
+    
+                            </div>
+                        </swiper-slide>
+                    </swiper>
+                </div>
+            </div>
+        </div>
+        <!--  </div> -->
+        <!-- </nut-scroller> -->
+    
+        <!-- 左侧菜单 -->
+        <div class="left-menu" :class="{'show-menu':showMenu}">
+            <div class="menu-mask" @click="showMenu = false"></div>
+            <div class="menu-info">
+                <i class="iconfont icon-sykszz-close menu-close" @click="showMenu = false"></i>
+                <div class="user-info">
+                    <div class="un-login" v-if="!isLogin">
+                        <p>欢迎光临，请先登录</p>
+                        <router-link :to="{ name: 'login'}" tag="button">用户登录</router-link>
+                    </div>
+                    <div class="login" v-if="isLogin">
+                        <i class="iconfont icon-tab-mine"></i>
+                        <p>{{userinfo.username}}</p>
+                        <router-link :to="{ name: 'my'}" tag="button">个人中心</router-link>
+                    </div>
+                </div>
+                <div class="menu-list">
+                    <ul>
+                        <router-link class="active" :to="{ name: 'index'}" tag="li"><i class="iconfont icon-nav-home"></i>首页</router-link>
+                        <router-link :to="{ name: 'activity'}" tag="li"><i class="iconfont icon-nav-home"></i>活动中心</router-link>
+                        <router-link :to="{ name: 'betRecord'}" tag="li"><i class="iconfont icon-nav-home"></i>投注记录</router-link>
+                        <router-link :to="{ name: 'msgCenter'}" tag="li"><i class="iconfont icon-fanshui-yiwen"></i>通知消息</router-link>
+                        <router-link :to="{ name: 'spread'}" tag="li"><i class="iconfont icon-sanfang-wx"></i>分享返佣</router-link>
+                        <router-link :to="{ name: 'my'}" tag="li"><i class="iconfont icon-sanfang-wx"></i>联系客服</router-link>
+                        <li>
+                            首页广告
+                            <nut-switch :active.sync="showBanner">
+                            </nut-switch>
+                        </li>
+                        <li>
+                            浮动红包
+                            <nut-switch :active.sync="shwoRed">
+                            </nut-switch>
+                        </li>
+    
+                    </ul>
+                    <button @click="logout" v-if="isLogin">退出登录</button>
+    
+                </div>
+            </div>
+        </div>
+        <!-- 快捷额度转换 -->
+        <div class="change-money" :class="{'show-changeMoney':showChangeMoney}">
+            <div class="changeMoney-mask" @click="showChangeMoney = false"></div>
+            <div class="change-money-box">
+                <ul>
+                    <li>
+                        <label>总资产</label>
+                        <p>{{userinfo.totalBalance}}￥</p>
+                    </li>
+                    <li>
+                        <label>钱包</label>
+                        <p>{{userinfo.balance}}￥</p>
+                    </li>
+    
+                </ul>
+                <div class="game-list">
+                    <ul>
+                        <li v-for="game in userinfo.apis" :key="game.apiId">
+                            <label>{{game.apiName}}</label>
+                            <p>{{game.balance}}￥</p>
+                        </li>
+                    </ul>
+                    <div class="btn-group">
+                        <button @click="recoveryFunc">一键回收</button>
+                        <router-link :to="{ name: 'deposit'}" tag="button">存款</router-link>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--通知消息 登录-->
+        <div v-if="isLoginPopNotice" class="twoBtnPop">
+            <div class="btnpopBox">
+                <div class="btnpopContent">
+                    <div class="tit">{{loginPopNotice.title}}</div>
+                    <img v-if="loginPopNotice.wapImg" :src="loginPopNotice.wapImg" class="noticePic">
+                    <div class="content">
+                        {{loginPopNotice.content}}
+                        <div class="time">{{loginPopNotice.createTime | filterTimeType('YYYYMMDD')}}</div>
+                    </div>
+                    <div @click="getPopMsgFunc()" class="halfBtn next" v-if="loginPopNotice.count && loginPopNotice.count > 0">下一条</div>
+                    <div @click="isLoginPopNotice=false" class="halfBtn close" v-if="!loginPopNotice.count">关闭</div>
+                </div>
+                <div @click="isLoginPopNotice=false" class="halfBtn cancel" v-if="loginPopNotice.count && loginPopNotice.count > 0">取消</div>
             </div>
             <div class="box-mask"></div>
         </div>
+        <!-- 红包 -->
+        <Redbag v-show="shwoRed"></Redbag>
+        <!-- 弹窗公告 未登录-->
+        <div v-if="fullwindow">
+            <ball-notice :popNotice="popNotice"></ball-notice>
+        </div>
+        <!--全屏动画 登录或未登录-->
+        <animation v-if="fullScreen" :fullScreen="fullScreen" :cdnUrl='gameImgUrl' v-on:close="closeAnimation"></animation>
+        <!-- 快捷额度转换 -->
+        <Gamepop :allmoney="userinfo.totalBalance" :state="toast_control" :platformId="platformId"  :gameName="productName"  :balances="balance" @returnState="returnState">
+        </Gamepop>
+        <!-- 底部导航 -->
+        <nut-tabbar @tab-switch="tabSwitch3" :tabbarList="tabList3" :bottom="true"></nut-tabbar>
     </div>
 </template>
 
 <script>
-    import 'swiper/dist/css/swiper.css'
-    import Gamepop from "./Gamepop"
-    import Side from "../../components/Side"
-    import Footer from "../../components/IndexFooter";
-    import func from '@/api/purse'
+    import "swiper/dist/css/swiper.css";
     import Redbag from "../../components/RedBag";
-    import IndexGameList from './IndexGameList'
-    import pkLoadmore from '@/components/Loadmore'
-    
+    import BallNotice from "../../components/BallNotice";
+    import Animation from "../../components/FullAnimation";
+    import ScrollNotice from "../../components/ScrollNotice";
+    import Gamepop from "../../components//Gamepop";
     import {
-        indexInfo,
-        ratios,
-        gameInto,
-        getGamed
-        
-    } from '@/api/index'
-    import notice from "@/api/my";
-    
+        getInfo,
+        logout
+    } from "../../services/auth.js";
     import {
-        swiper,
-        swiperSlide
-    } from 'vue-awesome-swiper'
+        getCarouse,
+        getAnnouncement,
+        getGameList,
+        getImgUrl,
+        getAnimation,
+        recovery,
+        getPopMsg
+    } from "../../services/index.js";
     export default {
-        name: 'index',
         components: {
-            swiper,
-            swiperSlide,
-            IndexGameList,
-            Gamepop,
-            Side,
-            Footer,
             Redbag,
-            pkLoadmore
+            BallNotice,
+            Animation,
+            ScrollNotice,
+            Gamepop
         },
         data() {
             return {
-                w: 4.8 * this.HTML_FONT_SIZE,
-                cdnUrl: '',
-                toast_control: false,
-                userInfo: [],
-                login: true,
-                selected: '1', //控制第一个tab切换
-                tab: 2,
-                swiperOption: {
-                    notNextTick: true,
-                    initialSlide:1,
-                    autoplay: 3000,
-                    loop:true,
-                    autoplayDisableOnInteraction:false,
-                    pagination:'.swiper-pagination',
-                },
-                indexData: [],
-                logoimg: '',
-                swiperSlides: [], //轮播列表
-                noticeData: [], //公告列表
-                noticePop: false,
-                noticeIndex: 0,
-                hotGame: [],
-                playedList: [], //玩过的游戏列表
-                haveHis: false,
-                isLogin:sessionStorage.getItem('session'),
-                menuList: [{
-                        icon: "icon-tab_cunkuan",
-                        name: "存款",
-                        link: "deposit"
+                shwoRed: true,
+                showBanner: true,
+                isUnMore: false,
+                isLoading: false,
+                fullwindow: false,
+                isLoginPopNotice: false,
+                tabList3: [{
+                        tabTitle: "主页",
+                        curr: true,
+                        icon: "http://img13.360buyimg.com/uba/jfs/t1/29316/38/1115/3203/5c0f3d61E35d0c7da/9e557f2cb5c9dab6.jpg",
+                        activeIcon: "http://img20.360buyimg.com/uba/jfs/t1/9996/36/8646/4833/5c0f3d61E7c1b7e0f/c98ad61124172e93.jpg"
                     },
                     {
-                        icon: "icon-tab_qukuan",
-                        name: "提现",
-                        link: "withdraw"
+                        tabTitle: "存款",
+                        curr: false,
+                        icon: "http://img12.360buyimg.com/uba/jfs/t1/25443/23/1062/4600/5c0f3d61E2e9f1360/c9b3421fe18614e2.jpg",
+                        activeIcon: "http://img20.360buyimg.com/uba/jfs/t1/19241/12/1048/8309/5c0f3d61E17ed5a56/c3af0964cade47f8.jpg"
                     },
                     {
-                        icon: "icon-tab_eduzh",
-                        name: "额度转换",
-                        link: "transfer"
+                        tabTitle: "优惠",
+                        curr: false,
+                        icon: "http://img13.360buyimg.com/uba/jfs/t1/10361/35/4713/4643/5c0f3d62E437a3c94/273fd0fb90798f03.jpg",
+                        activeIcon: "http://img14.360buyimg.com/uba/jfs/t1/26604/35/1073/7896/5c0f3d61Eb9f5f184/5f01c938abe4216d.jpg"
                     },
                     {
-                        icon: "icon-tab_huodong",
-                        name: "活动",
-                        link: "activity"
+                        tabTitle: "客服",
+                        curr: false,
+                        icon: "http://img11.360buyimg.com/uba/jfs/t1/14848/18/1066/3723/5c0f41bdE9f2a38fe/e6ed6768717297fb.jpg",
+                        activeIcon: "http://img30.360buyimg.com/uba/jfs/t1/17538/16/1070/6214/5c0f41bdE4bc9a1db/74cf978e5015454b.jpg"
                     },
                     {
-                        icon: "icon-tab_kefu",
-                        name: "客服",
-                        link: "contactus"
+                        tabTitle: "我的",
+                        curr: false,
+                        icon: "http://img20.360buyimg.com/uba/jfs/t1/20004/20/1045/3620/5c0f3d61Eaaec1670/9e59db63983b7b9f.jpg",
+                        activeIcon: "http://img14.360buyimg.com/uba/jfs/t1/23967/14/1072/6714/5c0f3d61E0ad8991e/8f741953f6e38f15.jpg"
                     }
                 ],
-                count: "", //消息条数
-                bannerSwitch: true,
-                bagSwitch: false,
-                disabledBag: false,
+                showLoading: false,
+                domain: location.host,
+                bannerImg: [],
+                popNotice: [],
+                announcement: [],
+                gameList: [],
+                hideDownload: true,
+                fullScreen: [],
+                //------info
+                isLogin: sessionStorage.getItem("token"),
+                showMenu: false,
+                showChangeMoney: false,
+                userinfo: {},
+                money:{},
+                swiperOptionTop: {
+                    spaceBetween: 0,
+                    loop: true,
+                    loopedSlides: 6, //looped slides should be the same
+                    autoHeight: true //enable auto height
+                },
+                swiperOptionThumbs: {
+                    spaceBetween: 0,
+                    slidesPerView: 6,
+                    touchRatio: 0.2,
+                    loop: true,
+                    loopedSlides: 6, //looped slides should be the same
+                    slideToClickedSlide: true
+                },
+                swiperOptionv: {
+                    slidesPerView: 4,
+                    freeMode: true
+                },
+                gameImgUrl: "",
+                gameTypeActive: 0,
+                gameTypeActiveList: {},
+                loginPopNotice: {},
                 //---额度转换
-                platformid: 0,
-                platformname: '',
-                productname: '',
-                balances: 0,
-                allmoney: 0,
-                //------接口修改
-                indexAllData: "",
-                gameinfo: [],
-                modalNext: false,
-
-                stopTranslate: parseInt(this.HTML_FONT_SIZE * 3),
-                topStatus: '',
-                wrapperHeight: 0,
-
-
-            }
-        },
-        computed: {
-            Swiper() {
-                return this.$refs.mySwiper.swiper
-            }
+                platformId: "",
+                productName: "",
+                gameType: 0,
+                balance: 0,
+                toast_control: false
+            };
         },
         mounted() {
-            // if(localStorage.getItem('indexData')){
-            //     this.dealWithData(JSON.parse(localStorage.getItem('indexData')));
-            // }else {
-            //     this.infoData();
-            // }
-            this.infoData();
-            this.hasmsgNum();
-            this.historyGame();
-            this.$nextTick(()=>{
-                this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;
-            })
+            this.shwoRed = sessionStorage.getItem("shwoRed") ?
+                sessionStorage.getItem("shwoRed") == 1 || false :
+                true;
+            this.showBanner = sessionStorage.getItem("showBanner") ?
+                sessionStorage.getItem("showBanner") == 1 || false :
+                true;
+    
+            this.showLoading = false;
+            if (this.isLogin) {
+                this.getInfoFunc();
+                this.getPopMsgFunc();
+            }
+            this.getCarouseFunc();
+            this.getAnnouncementFunc();
+            this.getGameListFunc();
+            this.getImgUrlFunc();
+            this.getAnimationFunc();
+        },
+        watch: {
+            shwoRed: function() {
+                let status = this.shwoRed ? 1 : 2;
+                sessionStorage.setItem("shwoRed", status);
+            },
+            showBanner: function() {
+                let status = this.showBanner ? 1 : 2;
+                sessionStorage.setItem("showBanner", status);
+            }
         },
         methods: {
-            show(event) {
-                // 阻止冒泡
-                event.stopPropagation();
-                // 阻止默认事件
-                // event.preventDefault();
+            getInfoFunc() {
+                getInfo().then(res => {
+                    if (res.success) {
+                        this.userinfo = res.data.user;
+                        this.money = res.data.switch;
+                        localStorage.setItem("name", this.userinfo.account);
+                    } else {
+                        this.$toast.fail(res.message, {
+                            cover: true,
+                            duration: 1500
+                        });
+                    }
+                });
             },
-            closeadv(item) {
-                if (item == 'banner') {
-                    this.bannerSwitch = false;
-                    sessionStorage.setItem('banner',0);//点击轮播图关闭
+            getCarouseFunc() {
+                getCarouse().then(res => {
+                    if (res.success) {
+                        this.bannerImg = res.data.banner;
+                        this.popNotice = res.data.phoneDialog;
+                    } else {
+                        this.$toast.fail(res.message, {
+                            cover: true,
+                            duration: 1500
+                        });
+                    }
+                });
+            },
+            getAnnouncementFunc() {
+                getAnnouncement(-1).then(res => {
+                    if (res.success) {
+                        this.announcement = res.data.announcement;
+                        console.log(213123123);
+                    } else {
+                        this.$toast.fail(res.message, {
+                            cover: true,
+                            duration: 1500
+                        });
+                    }
+                });
+            },
+            getGameListFunc() {
+                this.showLoading = true;
+                getGameList().then(res => {
+                    if (res.success) {
+                        this.showLoading = false;
+                        this.gameList = res.data;
+                        setTimeout(() => {
+                            const swiperTop = this.$refs.swiperTop.swiper;
+                            const swiperThumbs = this.$refs.swiperThumbs.swiper;
+                            swiperTop.controller.control = swiperThumbs;
+                            swiperThumbs.controller.control = swiperTop;
+                        }, 100);
+                    } else {
+                        this.$toast.fail(res.message, {
+                            cover: true,
+                            duration: 1500
+                        });
+                    }
+                });
+            },
+            getImgUrlFunc() {
+                getImgUrl().then(res => {
+                    if (res.success) {
+                        this.gameImgUrl = res.data;
+                    } else {
+                        this.$toast.fail(res.message, {
+                            cover: true,
+                            duration: 1500
+                        });
+                    }
+                });
+            },
+            getAnimationFunc() {
+                getAnimation().then(res => {
+                    if (res.success) {
+                        this.fullScreen = res.data;
+                    } else {
+                        this.$toast.fail(res.message, {
+                            cover: true,
+                            duration: 1500
+                        });
+                    }
+                });
+            },
+            getPopMsgFunc() {
+                getPopMsg().then(res => {
+                    if (res.success) {
+                        if (res.data) {
+                            this.isLoginPopNotice = true;
+                            this.loginPopNotice = res.data;
+                        }
+                    } else {
+                        this.$toast.fail(res.message, {
+                            cover: true,
+                            duration: 1500
+                        });
+                    }
+                });
+            },
+            selectGameType(index, game) {
+                console.log(1111);
+                this.gameTypeActive = index;
+                setTimeout(() => {
+                    this.gameTypeActiveList = game;
+                }, 10);
+                console.log(game);
+            },
+            pageChange() {
+                const idx = this.$refs.swiperTop.swiper.realIndex;
+                if (
+                    this.gameList[idx].apiType == 1 ||
+                    this.gameList[idx].apiType == 4 ||
+                    this.gameList[idx].apiType == 6
+                ) {
+                    this.gameTypeActive = 0;
+                    this.gameTypeActiveList = "";
+                    setTimeout(() => {
+                        this.gameTypeActiveList = this.gameList[idx].siteApis[0];
+                        console.log(this.gameTypeActiveList);
+                    }, 10);
                 }
-                if (item == 'notice') {
-                    this.noticePop = !this.noticePop
-                    if (this.noticePop) {
-                        if (this.noticeData.length > 1) {
-                            this.modalNext = true;
+            },
+            toList(type, game) {
+                console.log(type);
+                if (type.apiType == 6) {
+                    sessionStorage.setItem("dzClass", JSON.stringify(type));
+                    this.$router.push({
+                        name: "gameList",
+                        query: {
+                            gameClassId: game.apiId
+                        }
+                    });
+                } else {
+                    if (!this.isLogin && game.swHref && game.whStatus == 1) {
+                        if (game.swHref.indexOf("://") != -1) {
+                            window.open(
+                                game.swHref,
+                                "_blank",
+                                "toolbar=yes, width=1300, height=900"
+                            );
+                        } else {
+                            window.open(
+                                "http://" + game.swHref,
+                                "_blank",
+                                "toolbar=yes, width=1300, height=900"
+                            );
+                        }
+                    } else {
+                        if (this.isLogin) {
+                            this.userinfo.apis.map(gameApi => {
+                                if (game.apiPlatformId == gameApi.apiId) {
+                                    this.balance = gameApi.balance;
+                                    this.platformId = game.apiPlatform;
+                                    this.productName = game.name;
+                                    if (game.isChange == 1) {
+                                        this.toast_control = true;
+                                    }
+                                }
+                            });
+                        } else {
+                            this.$router.push({
+                                name: "login"
+                            });
                         }
                     }
-                    this.noticeIndex = 0
                 }
             },
-            nextNotice(index) {
-                if (this.noticeData.length - 2 == index) {
-                    this.modalNext = false;
-                }
-                this.noticeIndex = index + 1;
-            },
-            //tab切换
-            changeTab(type) {
-                this.tab = type;
-            },
-            infoData() { //logo-轮播
-                indexInfo().then(res => {
-                    this.dealWithData(res);
-                    localStorage.setItem('nodeTitle',res.title);
-                    document.title = res.title;
-                    // localStorage.setItem("indexData",JSON.stringify(res));
-                }).catch(err => {
-                    this.$toast({
-                        message: err,
-                        duration: 2000
-                    });
-                })
-                
-
-                
-            },
-            dealWithData(res){
-                console.log('===',res)
-                this.cdnUrl = res.cdn + "/";
-                this.gameinfo = res.gameInfo;
-                console.log(this.gameinfo)
-                this.indexAllData = res;
-                this.swiperSlides = this.indexAllData.flash;
-
-                
-
-                // console.log(this.Swiper)
-                // console.log(this.swiperSlides.length)
-                if(this.swiperSlides.length<=1){
-                    this.Swiper.stopAutoplay();
-                    this.Swiper.disableTouchControl();
-                }
-                this.logoimg = this.indexAllData.logoUrl;
-                this.noticeData = this.indexAllData.notice;
-                if (this.noticeData.length > 1) {
-                    this.modalNext = true;
-                }
-                this.hotGame = this.indexAllData.hotGame;
-                // console.log(this.indexAllData)
-                if(!this.indexAllData.red){
-                    this.disabledBag = true;
-                    this.bagSwitch = false;
-                }else {
-                    this.disabledBag = false;
-                    this.bagSwitch = true
-                }
-                if(sessionStorage.getItem('bag') == 0){
-                    this.bagSwitch = false;
-                    sessionStorage.setItem('bag',0);
-                }else {
-                    sessionStorage.setItem('bag',this.bagSwitch?1:0);
-                }
-
-                if(sessionStorage.getItem('banner') == 0){
-                    this.bannerSwitch = false;
-                    sessionStorage.setItem('banner',0);//点击轮播图关闭
-                }else {
-                    this.bannerSwitch = true;
-                    sessionStorage.setItem('banner',1);
-                    this.Swiper.startAutoplay();
-                }
-            },
-            historyGame() {
-                if (this.isLogin) {
-                    getGamed().then(res => {
-                        console.log(res,'玩过的游戏')
-                        if (res.game.length === 0) {
-                            this.haveHis = false
-                        } else {
-                            this.haveHis = true;
-                            this.playedList = res.game;
-                        }
-                    }).catch(err => {
-                        this.$toast({
-                            message: err,
-                            duration: 2000
+            toPlay(game) {
+                if (game.swHref && game.whStatus == 1) {
+                    if (game.swHref.indexOf("://") != -1) {
+                        window.open(
+                            game.swHref,
+                            "_blank",
+                            "toolbar=yes, width=1300, height=900"
+                        );
+                    } else {
+                        window.open(
+                            "http://" + game.swHref,
+                            "_blank",
+                            "toolbar=yes, width=1300, height=900"
+                        );
+                    }
+                } else {
+                    if (this.isLogin) {} else {
+                        this.$router.push({
+                            name: "login"
                         });
-                    })
+                    }
                 }
             },
+            returnScrollNoticeStatus(status) {
+                // this.announcement = status;
+            },
+            closeAnimation() {
+                console.log(111);
+                if (!this.isLogin) {
+                    this.fullwindow = true;
+                }
+            },
+            tabSwitch3: function(value, index) {
+                console.log(index);
+            },
+            logout() {
+                logout().then(res => {
+                    if (res.success) {
+                        sessionStorage.setItem("token", "");
+                        this.$router.push("/login");
+                    } else {
+                        this.$toast.fail(res.message, {
+                            cover: true,
+                            duration: 1500
+                        });
+                    }
+                });
+            },
+            recoveryFunc() {
+                recovery().then(res => {
+                    if (res.success) {
+                        this.$toast.success("正在回收所有api资金，请稍后...", {
+                            cover: true,
+                            duration: 1500
+                        });
+                        this.getInfoFunc();
+                    } else {
+                        this.$toast.fail(res.message, {
+                            cover: true,
+                            duration: 1500
+                        });
+                    }
+                });
+            },
+            //---
             returnState(state) {
                 this.toast_control = state;
             },
-            //获取消息未读数和个人资料
-            hasmsgNum() {
-                if (this.isLogin) {
-                    notice.getMemberCenter().then((res) => {
-                        this.count = res.unread.count;
-                        this.userInfo = res.info
-                    }).catch(err => {
-                        this.$toast({
-                            message: err,
-                            duration: 2000
-                        });
-                    });
-                }
-            },
-            gamepop(a, b, c) {
-                if (this.isLogin) {
-                    this.ratio(a, b);
-                    this.platformid = a;
-                    this.platformname = b;
-                    this.productname = c;
-                } else {
-                    this.$router.push("/login");
-                }
-            },
-            getSelectData() {
-                if (this.isLogin) {
-                    func.getWalletInfo().then(res => {
-                        let list = res.walletCenterResp;
-                        this.allmoney = list.balance;
-                        for (var i in list.gameBalance) {
-                            if (list.gameBalance[i].id === this.platformid) {
-                                this.balances = list.gameBalance[i].balance
-                            }
-                        }
-                    }).catch(err => {
-                        this.$toast({
-                            message: err,
-                            duration: 2000
-                        });
-                    })
-                }
-            },
-            ratio(id, name) {
-                ratios(id, name).then((res) => {
-                    if (res.remark == '') {
-                        this.getSelectData();
-                        this.toast_control = true
-                    } else {
-                        this.intoGame()
-                    }
-                }).catch((err) => {
-                    this.transErr(err)
-                });
-            },
-            intoGame() {
-                gameInto(this.platformname, this.platformid).then((res) => {
-                    window.open(res.loginUrl, '_blank', 'toolbar=yes, width=1300, height=900')
-                }).catch((err) => {
-                    this.$toast({
-                        message: err,
-                        duration: 2000
-                    });
-                });
-            },
-            //快捷转入失败
-            transErr(err) {
-                this.$messagebox({
-                    title: ' ',
-                    message: err,
-                    showCancelButton: true,
-                    confirmButtonText: "继续",
-                    cancelButtonText: "否"
-                }).then(action => {
-                    if (action == 'confirm') {
-                        this.intoGame()
-                    } else {
-                        this.getSelectData();
-                        this.toast_control = true
-                    }
-                })
-            },
-            floatBag(){//红包显示隐藏
-                sessionStorage.setItem('bag',this.bagSwitch?1:0);
-            },
-            floatBanner(){
-                if(this.bannerSwitch){//点击侧边栏首页广告 switch 重新开始banner自动播放
-                    this.Swiper.startAutoplay();
-                }
-                sessionStorage.setItem('banner',this.bannerSwitch?1:0);//点击轮播图关闭
-            },
-            //下拉刷新
-            handleTopChange(status) {
-                this.topStatus = status;
-            },
-            loadTop() {
-                setTimeout(() => {
-                    this.infoData();
-                    this.$refs.loadmore.onTopLoaded();
-                }, 1500);
-            },
         }
-    
-    }
+    };
 </script>
 
-<style lang="less" scoped>
-    @import url("./index.less");
-    .body {
-        .header {
-            z-index: 9;
-            position: fixed;
-            top: 0;
-            width: 100%;
-            height: 1.22667rem;
-            background-image: -webkit-gradient(linear, left top, left bottom, from(#252232), to(#252232)), -webkit-gradient(linear, left top, left bottom, from(#333333), to(#595959)), -webkit-gradient(linear, left top, left bottom, from(#f6f7fd), to(#f6f7fd));
-            background-image: linear-gradient(#252232, #252232), linear-gradient(180deg, #333333 0%, #595959 100%), linear-gradient(#f6f7fd, #f6f7fd);
-            .logo {
-                position: absolute;
-                top: 50%;
-                left: 0.4rem;
-                transform: translateY(-50%);
-                height: 0.72rem;
-                img {
-                    height: 100%;
-                }
-            }
-            .headbox {
-                position: absolute;
-                right: 1.22667rem;
-                height: 1.22667rem;
-                .userName {
-                    line-height: 1.22667rem;
-                    font-size: 0.373rem;
-                    color: @color-green;
-                }
-                .botton {
-                    padding-top: 0.293335rem;
-                    font-size: 0.373rem;
-                    .btns {
-                        display: inline-block;
-                        margin-right: 0.2rem;
-                        width: 1.28rem;
-                        height: 0.64rem;
-                        text-align: center;
-                        line-height: 0.64rem;
-                        border: 1px solid @color-green;
-                        color: @color-green;
-                        border-radius: 0.133rem;
-                    }
-                    .loginbtn {
-                        color: @color-252232;
-                        background-color: @color-green;
-                    }
-                }
-            }
-        }
-    }
+<style lang="scss" scoped>
+    @import "./index.scss";
 </style>
-

@@ -1,209 +1,338 @@
 <template>
-    <div class="register" ref="register">
-        <Header :reHeadMid="false" :isShowHome="false">
-            <div slot="head_mid" class="auth-logo">
-                <img src="../../assets/img/icon_top_logo.png" alt="">
+    <div class="pk-auth">
+        <nut-navbar class="pk-title" :rightShow="false">
+            <a slot="back-icon" @click="goBack">返回</a>注册
+        </nut-navbar>
+        <div class="noticebar" v-if="announcement.length > 0">
+            <div class="noticebar-label">
+                <button>公告</button>
             </div>
-        </Header>
-        <div class="hasbox"></div>
-        <div class="announcement fs-12" v-if="announcement">
-            <i class="iconfont icon-laba icon-style fs-12"></i>
-            <div class="announcement-cent">
-                <marquee direction="left" align="bottom" height="100%" width="100%" scrollamount="3" scrolldelay="1" v-html="announcement"></marquee>
-            </div>
-        </div>
-        <div class="register-cent">
-            <h3 class="fs-24">用户注册</h3>
-            <h5>
-                <p>一键注册，尊享好礼！</p>
-                <p>体验精美游戏，赢取终极大奖！</p>
-            </h5>
-            <div class="register-from">
-                <form>
-                    <div class="pk-input">
-                        <label class="title must fs-14">账号</label>
-                        <div class="input fs-12">
-                            <input name="account" autocomplete="off" v-model="name" v-validate="'required|alpha_num|max:20|min:6'" :class="{'input': true, 'is-danger': errors.has('account') }" type="text" placeholder="6-20位字母和数字组合">
-                            <i v-show="errors.has('account')" class="fs-16 iconfont icon-czsb icon-style  error-icon"></i>
-                            <span v-show="errors.has('account')" class="help fds-12 is-danger">{{ errors.first('account') }}</span>
-                        </div>
-                    </div>
-                    <div class="pk-input">
-                        <label class="title must fs-14">密码</label>
-                        <div class="input fs-12">
-                            <input type="password" name="password" autocomplete="off" v-model="password" v-validate="'required|pwd'" :class="{'input': true, 'is-danger': errors.has('password') }" placeholder="6-20位字母和数字组合">
-                            <i v-show="errors.has('password')" class="fs-16 iconfont icon-czsb icon-style  error-icon"></i>
-                            <span v-show="errors.has('password')" class="help fds-12 is-danger">{{ errors.first('password') }}</span>
-                        </div>
-                    </div>
-                    <div class="pk-input">
-                        <label class="title must fs-14">确认密码</label>
-                        <div class="input fs-12">
-                            <input name="confirmPassword" type="password" autocomplete="off" v-model="repassword" v-validate="{'required': 'true', 'is': password}" :class="{'input': true, 'is-danger': errors.has('confirmPassword') }" placeholder="请再次输入您的登录密码">
-                            <i v-show="errors.has('confirmPassword')" class="fs-16 iconfont icon-czsb icon-style  error-icon"></i>
-                            <span v-show="errors.has('confirmPassword')" class="help fds-12 is-danger">{{ errors.first('confirmPassword') }}</span>
-                        </div>
-                    </div>
-                    <div class="pk-input">
-                        <label class="title must fs-14">介绍人</label>
-                        <div class="input fs-12">
-                            <input name="introducer" autocomplete="off" v-model="spreadId" v-validate="'required|alpha_num'" :class="{'input': true, 'is-danger': errors.has('introducer') }" type="text" placeholder="请输入您的介绍人">
-                            <i v-show="errors.has('introducer')" class="fs-16 iconfont icon-czsb icon-style  error-icon"></i>
-                            <span v-show="errors.has('introducer')" class="help fds-12 is-danger">{{ errors.first('introducer') }}</span>
-                        </div>
-                    </div>
-                    <div class="pk-input pk-input-code">
-                        <label class="title must fs-14">验证码</label>
-                        <div class="input fs-12 input-code">
-                            <input name="captcha" autocomplete="off" v-model="code" v-validate="'required|numeric'" :class="{'input': true, 'is-danger': errors.has('captcha') }" type="text" placeholder="请输入验证码">
-                            <i v-show="errors.has('captcha')" class="fs-16 iconfont icon-czsb icon-style  error-icon"></i>
-                            <span v-show="errors.has('captcha')" class="help fds-12 is-danger">{{ errors.first('captcha') }}</span>
-                        </div>
-                        <div class="input-code-img">
-                            <img :src="codeImg" @click="getCode">
-                        </div>
-                    </div>
-                    <div class="register-protocol">
-                        <div @click="readAgree=!readAgree">
-                            <div class="fl">
-                                <div class="ju">
-                                    <img v-show="!readAgree" src="./icon_will.png" alt="" class="imgs">
-                                    <img v-show="readAgree" src="./icon_ok.png" alt="" class="imgs">
-                                </div>
-                            </div>
-                            <p>
-                                <span class="fs-14">已阅读并同意</span>
-                                <a @click="showReadAgree($event)" class="fs-14">《注册协议》</a>
-                            </p>
-                        </div>
-                    </div>
-                    <div class="pk-btn fs-14" @click="toSub">
-                        立即注册
-                    </div>
-                </form>
-                <p class="has-account fs-14" @click="toLogin">
-                    已有账号，直接登录
-                </p>
-            </div>
-        </div>
-        <div class="read-agree-modal" v-if="readAgreeBox">
-            <div class="modal-mask" @click="readAgreeBox=false"></div>
-            <div class="modal-body">
-                <div class="modal-cent">
-                    <h5 class="fs-16">{{readAgreeData.title}}</h5>
-                    <div v-html="readAgreeData.content" class="fs-14 modal-cent-box"></div>
+            <marquee direction="left" align="bottom" height="27" width="100%" onmouseout="this.start()" onmouseover="this.stop()" scrollamount="4" scrolldelay="1">
+                <div class="noticeText" v-for="(noticeDatas,index) in announcement" :key="index">
+                    {{noticeDatas.content}}
                 </div>
-                <div class="pk-btn fs-14" @click="readAgreeBox=false;readAgree=true">
-                    确认
-                </div>
+            </marquee>
+        </div>
+        <div class="pk-register">
+            <ul>
+                <li class="pk-register-item">
+                    <label><span class="must">介绍人</span></label>
+                    <div class="item-input">
+                        <input type="text" readonly v-model="promoCode">
+                    </div>
+                </li>
+                <li class="pk-register-item">
+                    <label><span class="must">账号</span></label>
+                    <div class="item-input">
+                        <input type="text" placeholder="5-12位字母和数字组合" v-model="account" @focus="showAccountIcon = true" @blur="hideClear()">
+                        <i class="iconfont icon-login-error" v-if="showAccountIcon" @click="clearVal"></i>
+                    </div>
+                </li>
+                <li class="pk-register-item">
+                    <label><span class="must">密码</span></label>
+                    <div class="item-input">
+                        <input :type="showPassword?'password':'text'" placeholder="6-20位字母和数字组合" v-model="password">
+                        <i class="iconfont" :class="showPassword ? 'icon-list-more':'icon-nav-back'" @click="showPassword = !showPassword"></i>
+                    </div>
+                </li>
+                <li class="pk-register-item">
+                    <label><span class="must">确认密码</span></label>
+                    <div class="item-input">
+                        <input placeholder="再次输入您的登录密码" :type="showPasswordComf?'password':'text'" v-model="passwordComf">
+                        <i class="iconfont" :class="showPasswordComf ? 'icon-list-more':'icon-nav-back'" @click="showPasswordComf = !showPasswordComf"></i>
+                    </div>
+                </li>
+                <li class="pk-register-item item-code" v-if="setting.isCode == 1 && setting.captchaType == 1">
+                    <label><span class="must">验证码</span></label>
+                    <div class="item-input">
+                        <input type="text" placeholder="请输入验证码" v-model="code" @focus="showCodeClearIcon = true" @blur="hideClearCodeIcon">
+                        <i class="iconfont icon-login-error" v-if="showCodeClearIcon" @click="clearCodeVal"></i>
+                    </div>
+                    <div class="item-code-img">
+                        <img :src="'data:image/png;base64,'+codeInfo.code" alt="" class="login-code-img" @click="getCaptchaImg" v-if="codeInfo.code">
+                    </div>
+                </li>
+                <li class="pk-register-item register-agreement">
+                    <label><nut-checkbox v-model="agree">同意</nut-checkbox></label>
+                    <div class="item-input">
+                        <div @click="toAgreement">用户注册协议</div>
+                    </div>
+                </li>
+            </ul>
+            <div class="pk-register-btn" :class="{'btn-light':agree}" @click="toRegister">
+                立即注册
+            </div>
+            <div class="pk-toLogin">
+                <span>已有账号</span>
+                <span @click="toLogin">前往登录</span>
             </div>
         </div>
+        <!-- 验证码 start -->
+        <Mpanel v-if="mpanelShow" @close="mpanelShow = false" @success="onMpanelSuccess" :type="2"></Mpanel>
+        <!-- 验证码 end -->
+        <nut-tabbar @tab-switch="tabSwitch3" :tabbarList="tabList3" :bottom="true"></nut-tabbar>
     </div>
 </template>
 
 <script>
-    import Header from "../../components/Header";
-    
     import {
-        getNotice,
-        getCaptcha,
-        getReadAgree,
+        getCaptchaCode,
+        getRegisterSet,
+        getAgent,
         register
-    } from '@/api/login'
-    
+    } from "../../services/auth.js";
+    import {
+        getAnnouncement
+    } from "../../services/index.js";
+    import Mpanel from "../../components/Mpanel.vue"; //验证
     export default {
         components: {
-            Header
+            Mpanel
         },
         data() {
             return {
-                announcement: "",
-                name: "",
+                showAccountIcon: false,
+                showCodeClearIcon: false,
+                announcement:[],
+                promoCode: "aaa",
+                account: "",
                 password: "",
-                repassword: "",
-                spreadId:'',//介绍人(代理推广a+id,会员推广m+id)
+                passwordComf: "",
+                showPasswordComf: true,
+                showPassword: true,
                 code: "",
-                codeImg: "",
-                codeId: "",
-                showPositionValue: false,
-                readAgree: false,
-                readAgreeBox: false,
-                readAgreeData: {}
+                codeInfo: {},
+                agree: false,
+                RegExp: {
+                    account: /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{5,12}$/,
+                    pwd: /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,20}$/
+                },
+                tabList3: [{
+                        tabTitle: "主页",
+                        curr: true,
+                        icon: "http://img13.360buyimg.com/uba/jfs/t1/29316/38/1115/3203/5c0f3d61E35d0c7da/9e557f2cb5c9dab6.jpg",
+                        activeIcon: "http://img20.360buyimg.com/uba/jfs/t1/9996/36/8646/4833/5c0f3d61E7c1b7e0f/c98ad61124172e93.jpg"
+                    },
+                    {
+                        tabTitle: "存款",
+                        curr: false,
+                        icon: "http://img12.360buyimg.com/uba/jfs/t1/25443/23/1062/4600/5c0f3d61E2e9f1360/c9b3421fe18614e2.jpg",
+                        activeIcon: "http://img20.360buyimg.com/uba/jfs/t1/19241/12/1048/8309/5c0f3d61E17ed5a56/c3af0964cade47f8.jpg"
+                    },
+                    {
+                        tabTitle: "优惠",
+                        curr: false,
+                        icon: "http://img13.360buyimg.com/uba/jfs/t1/10361/35/4713/4643/5c0f3d62E437a3c94/273fd0fb90798f03.jpg",
+                        activeIcon: "http://img14.360buyimg.com/uba/jfs/t1/26604/35/1073/7896/5c0f3d61Eb9f5f184/5f01c938abe4216d.jpg"
+                    },
+                    {
+                        tabTitle: "客服",
+                        curr: false,
+                        icon: "http://img11.360buyimg.com/uba/jfs/t1/14848/18/1066/3723/5c0f41bdE9f2a38fe/e6ed6768717297fb.jpg",
+                        activeIcon: "http://img30.360buyimg.com/uba/jfs/t1/17538/16/1070/6214/5c0f41bdE4bc9a1db/74cf978e5015454b.jpg"
+                    },
+                    {
+                        tabTitle: "我的",
+                        curr: false,
+                        icon: "http://img20.360buyimg.com/uba/jfs/t1/20004/20/1045/3620/5c0f3d61Eaaec1670/9e59db63983b7b9f.jpg",
+                        activeIcon: "http://img14.360buyimg.com/uba/jfs/t1/23967/14/1072/6714/5c0f3d61E0ad8991e/8f741953f6e38f15.jpg"
+                    }
+                ],
+                setting: {},
+                mpanelShow: false
             };
         },
         mounted() {
-            this.$refs.register.style.height = window.innerHeight + "px";
-            this.getNotice();
-            this.getCode();
-            this.getReadAgree();
+            this.getRegisterSetFunc();
+            this.getAgentFunc();
+            this.getAnnouncementFunc();
         },
         methods: {
-            getNotice() {
-                getNotice(-2, -1, 0).then(res => {
-                    res.noticeList.map(v => {
-                        this.announcement += v.content + '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'
-                    });
-                    this.announcement = this.announcement.substring(0, this.announcement.length - 1);
-                }).catch(err => {});
-            },
-            getCode() {
-                getCaptcha().then((res) => {
-                    this.codeImg = "data:image/png;base64," + res.Code;
-                    this.codeId = res.ID;
-                }).catch((res) => {
-                    this.$toast({
-                        message: res,
-                        duration: 2000
-                    });
-                });
-            },
-            getReadAgree() {
-                getReadAgree().then(res => {
-                    this.readAgreeData = res;
-                }).catch(err => {});
-            },
-            toLogin() {
-                this.$router.push("login");
-            },
-            toSub() {
-                let _this = this;
-                this.$validator.validateAll().then(result => {
-                    if (result) {
-                        let spreadIdStrat = ['a','m']
-                        if(!spreadIdStrat.includes(this.spreadId.substr(0, 1))){
-                            this.$toast({
-                                message: '介绍人必须以a或m开头',
-                                duration: 3000
-                            });
-                            return ;
-                        }
-                        register(this.name, this.password, this.repassword, this.spreadId, this.code, this.codeId, this.readAgree).then(res => {
-                            sessionStorage.setItem("session", res.sessionId);
-                            _this.$router.push('/');
-                        }).catch(err => {
-                            _this.getCode();
-                            _this.code = "";
-                            setTimeout(() => {
-                                _this.$validator.errors.clear();
-                            }, 0);
-                            _this.$toast({
-                                message: err,
-                                duration: 1000
-                            });
+            getAnnouncementFunc() {
+                getAnnouncement(-2).then(res => {
+                    if (res.success) {
+                        this.announcement = res.data.announcement;
+                        console.log(213123123);
+                    } else {
+                        this.$toast.fail(res.message, {
+                            cover: true,
+                            duration: 1500
                         });
                     }
-                    this.showPositionValue = true;
                 });
             },
-            showReadAgree(event) {
-                event.stopPropagation();
-                this.readAgreeBox = true;
+            getAgentFunc() {
+                getAgent().then(res => {
+                    if (res.success) {
+                        this.promoCode = res.data;
+                    } else {
+                        this.$toast.fail(res.message, {
+                            cover: true,
+                            duration: 1000
+                        });
+                    }
+                });
+            },
+            getCaptchaImg() {
+                this.code = "";
+                getCaptchaCode().then(res => {
+                    if (res.success) {
+                        this.codeInfo = res.data;
+                    } else {
+                        this.$toast.fail(res.message, {
+                            cover: true,
+                            duration: 1000
+                        });
+                    }
+                });
+            },
+            getRegisterSetFunc() {
+                getRegisterSet().then(res => {
+                    if (res.success) {
+                        console.log(res.data);
+                        this.setting = res.data;
+                        if (this.setting.isCode == 1 && this.setting.captchaType == 1) {
+                            this.getCaptchaImg();
+                        }
+                    } else {
+                        this.$toast.fail(res.message, {
+                            cover: true,
+                            duration: 1500
+                        });
+                    }
+                });
+            },
+    
+            goBack() {
+                this.$router.push({
+                    name: "index"
+                });
+            },
+    
+            hideClear() {
+                setTimeout(() => {
+                    this.showAccountIcon = false;
+                }, 1);
+            },
+            clearVal() {
+                this.account = "";
+            },
+            hideClearCodeIcon() {
+                setTimeout(() => {
+                    this.showCodeClearIcon = false;
+                }, 1);
+            },
+            clearCodeVal() {
+                this.code = "";
+            },
+            toAgreement() {
+                this.$router.push({
+                    name: "registerAgreement"
+                });
+            },
+            toLogin() {
+                this.$router.push({
+                    name: "login"
+                });
+            },
+            toRegister() {
+                if (!this.agree) {
+                    return;
+                }
+                if (!this.account) {
+                    this.$toast.fail("请输入账号！", {
+                        cover: true,
+                        duration: 1000
+                    });
+                    return;
+                } else if (!this.RegExp.account.test(this.account)) {
+                    this.$toast.fail("账号必须由5-12位字母和数字组合", {
+                        cover: true,
+                        duration: 1500
+                    });
+                    return;
+                } else if (!this.password) {
+                    this.$toast.fail("请输入密码！", {
+                        cover: true,
+                        duration: 1000
+                    });
+                    return;
+                } else if (!this.RegExp.pwd.test(this.password)) {
+                    this.$toast.fail("密码必须由6-20位字母和数字组合", {
+                        cover: true,
+                        duration: 1500
+                    });
+                    return;
+                } else if (!this.passwordComf) {
+                    this.$toast.fail("请再次输入密码！", {
+                        cover: true,
+                        duration: 1000
+                    });
+                    return;
+                } else if (this.passwordComf != this.password) {
+                    this.$toast.fail("两次密码输入不一致！", {
+                        cover: true,
+                        duration: 1000
+                    });
+                    return;
+                }
+                if (
+                    this.setting.isCode == 1 &&
+                    this.setting.captchaType == 1 &&
+                    !this.code
+                ) {
+                    this.$toast.fail("请输入验证码！", {
+                        cover: true,
+                        duration: 1500
+                    });
+                    return;
+                }
+                if (this.setting.isCode === 1 && this.setting.captchaType === 2) {
+                    this.mpanelShow = true;
+                } else {
+                    this.loginAjax();
+                }
+            },
+            // 验证通过
+            onMpanelSuccess(back, id) {
+                this.code = back + "";
+                this.codeInfo.id = id;
+                this.mpanelShow = false;
+                this.loginAjax();
+            },
+            loginAjax() {
+                let data = {
+                    account: this.account,
+                    password: this.password,
+                    confirmPassword: this.passwordComf,
+                    spreadId: this.promoCode,
+                    code: this.code,
+                    codeId: this.codeInfo.id,
+                    readAgree: this.agree
+                }
+                register(data).then(res => {
+                    if (res.success) {
+                        sessionStorage.setItem('token', '234567890-=');
+                        this.$router.push({
+                            name: "index"
+                        });
+                    } else {
+                        this.$toast.fail(res.message, {
+                            cover: true,
+                            duration: 1000
+                        });
+                    }
+                })
+    
+            },
+            tabSwitch3: function(value, index) {
+                console.log(index);
             }
         }
     };
 </script>
 
-<style lang="less" scoped>
-    @import url("../../components/less/common.less");
-    @import url("./auth.less");
+<style lang="scss" scoped>
+    @import "./auth.scss";
 </style>
+
