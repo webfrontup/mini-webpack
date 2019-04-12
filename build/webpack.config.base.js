@@ -76,13 +76,14 @@ module.exports = {
 			{
 				test: /\.js$/,
 				use: {
-					loader: "babel-loader",
+                    loader: "babel-loader",
 					options: {
 						//预设
 						presets: ["@babel/preset-env"],
 						//插件
 						plugins: ["@babel/plugin-syntax-dynamic-import"]
-					}
+                    },
+                    exclude: /node_modules/
 				}
 			},
 			// {
