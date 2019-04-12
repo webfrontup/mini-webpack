@@ -393,8 +393,6 @@
 			.submit-btn {
 				margin-top: 0.4rem /* 30/75 */
 			;
-				//   display: flex;
-				//   justify-content: space-around;
 				button {
 					height: 1.06667rem /* 80/75 */
 				;
@@ -473,8 +471,6 @@
 		.submit-btn {
 			margin-top: 0.4rem /* 30/75 */
 		;
-			// display: flex;
-			// justify-content: space-around;
 			button {
 				height: 1.06667rem /* 80/75 */
 			;

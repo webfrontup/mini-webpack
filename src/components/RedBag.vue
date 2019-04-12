@@ -318,7 +318,7 @@
 </script>
 
 <style lang="scss" scoped>
-    // @import url("../components/less/common.less");
+    
     $color-default :#fff;
     .redbagBtn {
         width: 2.0667rem;

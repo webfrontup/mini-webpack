@@ -148,7 +148,6 @@ export default {
 		.tab-content {
 			padding-top: 1.17rem;
 			.top-content {
-				// background: $default-color;
 				width: 100%;
 				ul ,.makeblue{
                     margin-top: .26667rem /* 20/75 */;

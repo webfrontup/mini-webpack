@@ -1023,15 +1023,11 @@
 			overflow: hidden;
 			background: $default-color;
 			.pk-input {
-				// position: relative;
 				height: $fourtrem;
 				line-height: $fourtrem;
 				border-bottom: $onerem solid $border-color;
 				display: flex;
 				justify-content: space-between;
-				.title {
-					// position: absolute;
-				}
 				.input {
 					flex: 1;
 					input {

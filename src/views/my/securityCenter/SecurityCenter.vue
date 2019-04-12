@@ -38,7 +38,6 @@
                     from{transform: rotate(0deg);}
                     to{transform: rotate(-360deg);}
                 }
-                // margin-top: 1.86667rem /* 140/75 */;
                 img {
                     width: 5.33333rem /* 400/75 */;
                     &.bg_icon{

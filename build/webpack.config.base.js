@@ -75,16 +75,18 @@ module.exports = {
 			},
 			{
 				test: /\.js$/,
+                // exclude: path.resolve(__dirname, '/node_modules'),
+                exclude: /node_modules/,
 				use: {
-                    loader: "babel-loader",
+                    loader: "babel-loader", 
 					options: {
 						//预设
 						presets: ["@babel/preset-env"],
 						//插件
 						plugins: ["@babel/plugin-syntax-dynamic-import"]
                     },
-                    exclude: /node_modules/
-				}
+                },
+                
 			},
 			// {
 			// 	test: /\.(sa|sc)ss$/,

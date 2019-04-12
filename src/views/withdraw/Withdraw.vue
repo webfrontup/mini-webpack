@@ -334,7 +334,7 @@
 						font-weight: 200;
 					}
 					h3 {
-						// margin: .4rem /* 30/75 */ 0 .26667rem /* 20/75 */ 0;
+						
 						font-weight: 200;
 					}
 				}
@@ -419,7 +419,6 @@
 				background: $primary-color;
 			}
 			&:disabled {
-				// background: $color-y;
 				box-shadow: none;
 				color: $color-P;
 			}

@@ -178,7 +178,6 @@
             left: 50%;
             -webkit-transform: translate(-50%, -50%);
             transform: translate(-50%, -50%);
-            // overflow: hidden;
             width: 9.2rem;
             margin: 0 auto;
             border-radius: 0.267rem;
@@ -245,7 +244,7 @@
                 ;
                 text-align: center;
                 color: $color-J;
-                // border-top: 1px solid $color-P;
+                
             }
             .close-mask {
                 text-align: center;

@@ -3,6 +3,9 @@
 const webpack = require("webpack");
 const merge = require("webpack-merge");
 const baseConfig = require("./webpack.config.base");
+const ExtractTextPlugin = require("extract-text-webpack-plugin");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const path = require("path");
 
 const HOST = "localhost";
 const PORT = 8080;
@@ -46,10 +49,35 @@ module.exports = merge(baseConfig, {
 							importLoaders: 2
 						}
 					},
-					"sass-loader",
-					"postcss-loader"
+					"postcss-loader",
+					{
+						loader: "sass-loader",
+						options: {
+							data: `@import "@nutui/nutui/dist/styles/index.scss";@import "@/components/scss/skin.scss";@import "@/components/scss/common.scss"; `
+						}
+					}
 				]
 			},
+			// {
+			// 	test: /\.(sa|c)ss$/,
+			// 	use: [
+            //         {
+            //             loader: "style-loader"
+            //         },
+			// 		{
+			// 			loader: "css-loader"
+			// 		},
+			// 		{
+			// 			loader: "postcss-loader"
+			// 		},
+			// 		{
+			// 			loader: "sass-loader",
+			// 			options: {
+			// 				excludePaths: [path.resolve(__dirname, "./node_modules")]
+			// 			}
+			// 		}
+			// 	]
+			// },
 			{
 				test: /\.less$/,
 				use: [
@@ -63,5 +91,7 @@ module.exports = merge(baseConfig, {
 		]
 	},
 
-	plugins: [new webpack.HotModuleReplacementPlugin()]
+	plugins: [
+		new webpack.HotModuleReplacementPlugin()
+	]
 });

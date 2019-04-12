@@ -18,8 +18,6 @@
 		.pk-bankcard {
 			height: 100%;
 			width: 100%;
-			// padding: 0 0.26667rem;
-			// padding-right: 0.5rem;
 			text-decoration: none;
 			padding-left: 0;
 			background-color: $default-color !important;

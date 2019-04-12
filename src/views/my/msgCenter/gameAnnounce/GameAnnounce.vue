@@ -329,7 +329,7 @@ export default {
 			}
 		}
 		.mine-form {
-			// height:
+			
 			position: relative;
 			width: 100%;
 			.pk-datafilter {
@@ -354,7 +354,6 @@ export default {
 						background: url("../../../../assets/img/ico-cal.png")
 							no-repeat center;
 						background-size: 0.24rem /* 18/75 */ auto;
-						// position: absolute;
 						z-index: 1;
 						top: 0.16rem /* 12/75 */;
 						left: 0.13333rem /* 10/75 */;
@@ -394,13 +393,6 @@ export default {
 					background: #efefef;
 					/deep/ .nut-cell {
 						width: 2.3rem;
-						//  .nut-cell-box{
-						//      .nut-cell-right{
-						//          .nut-cell-desc{
-
-						//          }
-						//      }
-						//  }
 						padding-left: 0;
 						padding-right: 0;
 						.nut-cell-icon {

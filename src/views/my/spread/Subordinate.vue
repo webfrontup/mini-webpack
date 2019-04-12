@@ -150,7 +150,6 @@ export default {
 				margin-top: 0.26667rem /* 20/75 */;
 				width: 100%;
 				height: auto;
-				// padding: .30667rem /* 23/75 */ .4rem /* 30/75 */;
 				ul {
 					width: auto;
 					font-size: 0.32rem /* 24/75 */;

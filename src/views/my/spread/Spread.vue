@@ -159,7 +159,6 @@ export default {
 				linear-gradient(#f2f4fa, #f2f4fa);
 			background-blend-mode: normal, normal;
 			height: 2.66667rem /* 200/75 */;
-			// padding:  .4rem /* 30/75 */ 0;
 			position: relative;
 			.spreadbox {
 				position: absolute;

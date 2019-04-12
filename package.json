@@ -10,6 +10,7 @@
     "devs": "npm run build:dll && npm run dev"
   },
   "dependencies": {
+    "core-js": "^2.6.5",
     "@nutui/nutui": "^2.0.9",
     "axios": "^0.18.0",
     "babel-polyfill": "^6.26.0",

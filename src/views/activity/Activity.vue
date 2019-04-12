@@ -316,7 +316,7 @@
                 .button {
                     background: $text-color;
                     color: $default-color;
-                    // flex: 1;
+                    
                     width: 1.86667rem/* 140/75 */
                     ;
                     text-align: center;

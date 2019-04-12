@@ -268,10 +268,10 @@
         }
         .isConditions {
             background: $default-color;
-            // margin-top: 0.26667rem /* 20/75 */;
-            // padding: 0 0.4rem /* 30/75 */;
+            
+            
             p {
-                //   padding: 0.33333rem /* 25/75 */ 0;
+                
                 font-size: 0.32rem/* 24/75 */
                 ;
                 line-height: 1.5;

@@ -295,11 +295,8 @@ export default {
 				flex: 0 0 50%;
 				box-sizing: border-box;
 				padding: .2rem /* 15/75 */ /* 10/75 */ 0;
-				// border-top: 1px solid $center-background;
+				
 			}
-			// .total_asset:nth-child(1),.total_asset:nth-child(2){
-			// 	border-top: none;
-			// }
 		}
 
 		.fake {
