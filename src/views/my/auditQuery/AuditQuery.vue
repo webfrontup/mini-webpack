@@ -1,6 +1,11 @@
 <template>
     <div class="auditQuery">
-        <nut-navbar class="pk-title" @on-click-back="$router.go(-1)" :rightShow="false">即时稽核查询</nut-navbar>
+        <nut-navbar class="pk-title" @on-click-back="$router.go(-1)" :rightShow="false">
+            <a class="spans" slot="back-icon">
+				<img class="imgsbank" src="../../../assets/img/my-icon/fanhui.png"/>
+			</a>
+            即时稽核查询
+        </nut-navbar>
         <div class="content">
             <div class="audit-details">
                 <ul>
@@ -268,10 +273,10 @@
         }
         .isConditions {
             background: $default-color;
-            
-            
+            // margin-top: 0.26667rem /* 20/75 */;
+            // padding: 0 0.4rem /* 30/75 */;
             p {
-                
+                //   padding: 0.33333rem /* 25/75 */ 0;
                 font-size: 0.32rem/* 24/75 */
                 ;
                 line-height: 1.5;

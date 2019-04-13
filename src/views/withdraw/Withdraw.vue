@@ -1,6 +1,11 @@
 <template>
 	<div class="withdraw">
-        <nut-navbar class="pk-title" @on-click-back="$router.go(-1)" :rightShow="false">取款</nut-navbar>
+        <nut-navbar class="pk-title" @on-click-back="$router.go(-1)" :rightShow="false">
+			<a class="spans" slot="back-icon">
+				<img class="imgsbank" src="../../assets/img/my-icon/fanhui.png"/>
+			</a>
+			取款
+		</nut-navbar>
 
 		<div class="content">
 			<div class="widthdraw-top">
@@ -52,7 +57,7 @@
 					<router-link tag="a" :to="{name:'contactus'}">联系客服</router-link>
 				</h2>
 				<h2 v-show="!infoData.hasP">您还未设置取款密码请
-					<router-link tag="a" :to="{name:'password'}">点击设置</router-link>
+					<router-link tag="a" :to="{name:'securitypwd'}">点击设置</router-link>
 				</h2>
 
 				<button @click="handleWithdraw">取款</button>
@@ -334,7 +339,7 @@
 						font-weight: 200;
 					}
 					h3 {
-						
+						// margin: .4rem /* 30/75 */ 0 .26667rem /* 20/75 */ 0;
 						font-weight: 200;
 					}
 				}
@@ -419,6 +424,7 @@
 				background: $primary-color;
 			}
 			&:disabled {
+				// background: $color-y;
 				box-shadow: none;
 				color: $color-P;
 			}

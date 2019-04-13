@@ -1,6 +1,6 @@
 html {
     height: 100%;
-    background: $default-bg-color;
+    background: $default-bg-color!important;
     body {
         height: 100%;
 
@@ -894,19 +894,27 @@ $font12: 0.32rem;
     width: 100%;
     z-index: 99;
     color: $default-color;
-
     /deep/ .nav-left {
         font-size: 0.45rem;
-
         .back {
-            margin-left: 0.21rem;
-
             .back-icon {
                 width: 0.53rem;
                 height: 0.53rem;
             }
+            .spans {
+                position: relative;
+                display: block;
+                img {
+                    width: .32rem /* 24/75 */; 
+                    position: absolute;
+                    top: 0.24rem
+                        /* 18/75 */
+                    ;
+                }
+            }
         }
     }
+    
 }
 
 //--------placeholder

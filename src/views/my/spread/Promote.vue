@@ -1,69 +1,3 @@
-<style lang="scss" scoped>
- @import "../../../components/scss/pk-pwd.scss";
-	.promote {
-		background-color: $prompt-bg;
-		
-        .spansright {
-			.imgsbank {
-				position: absolute;
-				width: 0.58667rem /* 44/75 */;
-                top: .24rem /* 18/75 */;
-                right: .2rem /* 15/75 */;
-			}
-		}
-		.imgs {
-			height: 3.33333rem /* 250/75 */;
-			img {
-				width: 100%;
-				height: 100%;
-			}
-		}
-		.instruct {
-			background: #fff;
-			padding: 0.2rem /* 15/75 */;
-			h2 {
-				color: #252232;
-				font-size: 0.48rem /* 36/75 */;
-				padding-left: 0.53333rem; /* 40/75 */
-				position: relative;
-				i {
-					position: absolute;
-					top: 0;
-					width: .10667rem /* 8/75 */;
-					height: .48rem /* 36/75 */;
-					left: .26667rem /* 20/75 */;
-					top: .09333rem /* 7/75 */;
-					background-image: linear-gradient(#3a74d2, #3a74d2),
-						linear-gradient(#00d897, #00d897);
-					background-blend-mode: normal, normal;
-				}
-			}
-			p {
-				color: #2b2b2b;
-				font-size: 0.32rem /* 24/75 */;
-				line-height: 1.3em;
-			}
-			.list-ul {
-				h3 {
-					font-size: 0.37333rem /* 28/75 */;
-					color: #3a74d2;
-					margin-bottom: 0.2rem /* 15/75 */;
-					&:last-child {
-						margin-bottom: 0;
-					}
-				}
-				.ps {
-					color: #2b2b2b;
-					font-size: 0.32rem /* 24/75 */;
-					margin-bottom: 0.30667rem /* 23/75 */;
-					&:last-child {
-						margin-bottom: 0;
-					}
-				}
-			}
-		}
-	}
-</style>
 <template>
 	<div class="promote">
 		<nut-navbar class="info-header" @on-click-back="$router.go(-1)">
@@ -134,3 +68,69 @@ export default {
 	}
 };
 </script>
+<style lang="scss" scoped>
+ @import "../../../components/scss/pk-pwd.scss";
+	.promote {
+		background-color: $prompt-bg;
+		
+        .spansright {
+			.imgsbank {
+				position: absolute;
+				width: 0.58667rem /* 44/75 */;
+                top: .24rem /* 18/75 */;
+                right: .2rem /* 15/75 */;
+			}
+		}
+		.imgs {
+			height: 3.33333rem /* 250/75 */;
+			img {
+				width: 100%;
+				height: 100%;
+			}
+		}
+		.instruct {
+			background: #fff;
+			padding: 0.2rem /* 15/75 */;
+			h2 {
+				color: #252232;
+				font-size: 0.48rem /* 36/75 */;
+				padding-left: 0.53333rem; /* 40/75 */
+				position: relative;
+				i {
+					position: absolute;
+					top: 0;
+					width: .10667rem /* 8/75 */;
+					height: .48rem /* 36/75 */;
+					left: .26667rem /* 20/75 */;
+					top: .09333rem /* 7/75 */;
+					background-image: linear-gradient(#3a74d2, #3a74d2),
+						linear-gradient(#00d897, #00d897);
+					background-blend-mode: normal, normal;
+				}
+			}
+			p {
+				color: #2b2b2b;
+				font-size: 0.32rem /* 24/75 */;
+				line-height: 1.3em;
+			}
+			.list-ul {
+				h3 {
+					font-size: 0.37333rem /* 28/75 */;
+					color: #3a74d2;
+					margin-bottom: 0.2rem /* 15/75 */;
+					&:last-child {
+						margin-bottom: 0;
+					}
+				}
+				.ps {
+					color: #2b2b2b;
+					font-size: 0.32rem /* 24/75 */;
+					margin-bottom: 0.30667rem /* 23/75 */;
+					&:last-child {
+						margin-bottom: 0;
+					}
+				}
+			}
+		}
+	}
+</style>

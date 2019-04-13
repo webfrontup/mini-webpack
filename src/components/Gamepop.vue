@@ -31,23 +31,39 @@
 </template>
 
 <script>
+    import {
+        openGame
+    } from "@/services/index.js";
+    import func from '@/services/deposit';
     export default {
         props: {
             state: {
                 type: Boolean,
                 default: false,
             },
-            allmoney: {
+            allmoneyPop: {
                 type: Number,
                 default: 0,
             },
             platformId: {
-                type: String,
+                type: Number,
                 default: 0,
+            },
+            platformName: {
+                type: String,
+                default: '',
             },
             gameName: {
                 type: String,
                 default: '',
+            },
+            gameId: {
+                type: Number,
+                default: 0
+            },
+            isDW: {
+                type: Boolean,
+                default: false
             },
             balances: {
                 type: Number,
@@ -63,11 +79,15 @@
                 } else {
                     this.ModalHelper.close();
                 }
+            },
+            allmoneyPop() {
+                this.allmoney = this.allmoneyPop;
             }
         },
         data() {
             return {
                 money: null,
+                allmoney: 0
             }
         },
         methods: {
@@ -77,17 +97,18 @@
                 this.money = ''
             },
             validateTrans() { //验证
-                if (!this.APP_CONFIG.RegExp.number.test(this.money)) {
-                    this.$toast({
-                        message: '转入金额为正整数',
-                        duration: 2000
+                const Reg = /^[1-9]\d*$/; //非0正整数
+                if (!Reg.test(this.money)) {
+                    this.$toast.fail("转入金额为正整数", {
+                        cover: true,
+                        duration: 1500
                     });
                     return false;
                 }
                 if (this.money > this.allmoney || this.money < 1) {
-                    this.$toast({
-                        message: `转入金额不得高于${this.allmoney}元`,
-                        duration: 2000
+                    this.$toast.fail(`转入金额不得高于${this.allmoney}元`, {
+                        cover: true,
+                        duration: 1500
                     });
                     return false;
                 }
@@ -97,33 +118,49 @@
                 if (!this.validateTrans()) return;
                 let postData = {
                     doType: 2,
-                    money: this.money * 1,
-                    platformId: this.platformId,
+                    transferAmount: this.money * 1,
+                    transferIntoId: this.platformId,
+                    transferInto: this.platformName
                 };
                 console.log('确认转账提交数据', postData)
-                func.postTransfer(postData).then((res) => {
-                    this.$toast({
-                        message: '转入成功',
-                        duration: 2000
-                    });
-                    this.closepop();
-                }).catch(err => {
-                    this.$toast({
-                        message: err,
-                        duration: 2000
-                    });
-                });
+                func.transfersMoney(postData).then((res) => {
+                    if (res.success) {
+                        this.$toast.success("转入成功!", {
+                            cover: true,
+                            duration: 800
+                        });
+                        this.allmoney -= this.money * 1;
+                        this.money = "";
+                    } else {
+                        this.$toast.fail(res.message, {
+                            cover: true,
+                            duration: 4000
+                        });
+                    }
+                })
+    
             },
             intoGame() {
                 console.log('进游戏数据', this.platformId);
-                // gameInto(this.platformId).then((res) => {
-                //     window.open(res.loginUrl, '_blank', 'toolbar=yes, width=1300, height=900')
-                // }).catch((err) => {
-                //     this.$toast({
-                //         message: err,
-                //         duration: 2000
-                //     });
-                // });
+                let data = {
+                    platform: this.platformName,
+                    gameId: this.gameId + '',
+                    isDW: this.isDW
+                }
+                console.log(data);
+                openGame(data).then(res => {
+                    if (res.success) {
+                        if (res.data) {
+                            console.log(res.data);
+                            window.open(res.data, '_blank', 'toolbar=yes, width=1300, height=900')
+                        }
+                    } else {
+                        this.$toast.fail(res.message, {
+                            cover: true,
+                            duration: 1500
+                        });
+                    }
+                });
             },
         }
     }

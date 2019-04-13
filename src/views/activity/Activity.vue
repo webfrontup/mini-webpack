@@ -1,7 +1,9 @@
 <template>
     <div id="activity">
-        <nut-navbar class="pk-title"
-        @on-click-back="$router.go(-1)">
+        <nut-navbar class="pk-title" @on-click-back="$router.go(-1)">
+            <a class="spans" slot="back-icon">
+				<img class="imgsbank" src="../../assets/img/my-icon/fanhui.png"/>
+			</a>
             活动中心
             <a slot="more-icon">
                 <router-link class="header-record" tag="span" :to="{name:'activityRecord'}">
@@ -316,7 +318,7 @@
                 .button {
                     background: $text-color;
                     color: $default-color;
-                    
+                    // flex: 1;
                     width: 1.86667rem/* 140/75 */
                     ;
                     text-align: center;

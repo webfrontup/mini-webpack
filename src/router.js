@@ -209,9 +209,49 @@ export default new Router({
 					name: "gameAnnounce",
 					component: () =>
 						import(/* webpackChunkName: "deposits" */ "./views/my/msgCenter/gameAnnounce/GameAnnounce.vue")
+				},
+				{
+					path: "questionnaireList",
+					name: "questionnaireList",
+					component: () =>
+						import(/* webpackChunkName: "deposits" */ "./views/my/msgCenter/questionnaire/QuestionnaireList.vue")
+                }
+               
+			]
+        },
+        /* 消息中心 */
+		{
+			path: "/inbox",
+			name: "inbox",
+			component: () =>
+				import(/* webpackChunkName: "my" */ "./views/my/inbox/Inbox.vue"),
+			children: [
+				{
+					path: "systemBox",
+					name: "systemBox",
+					component: () =>
+						import(/* webpackChunkName: "deposits" */ "./views/my/inbox/SystemBox.vue")
+				},
+				{
+					path: "myBox",
+					name: "myBox",
+					component: () =>
+						import(/* webpackChunkName: "deposits" */ "./views/my/inbox/MyBox.vue")
 				}
 			]
-		},
+        },
+        {
+            path: "/inbox/boxDetail",
+            name: "boxDetail",
+            component: () =>
+                import(/* webpackChunkName: "deposits" */ "./views/my/inbox/BoxDetail.vue")
+        },
+        {
+            path: "/questionnaire",
+            name: "questionnaire",
+            component: () =>
+                import(/* webpackChunkName: "deposits" */ "./views/my/msgCenter/questionnaire/Questionnaire.vue")
+        },
 		{
 			path: "/msgCenter/msgDetail",
 			name: "msgDetail",
@@ -377,6 +417,12 @@ export default new Router({
 			meta: { auth: true },
 			component: () =>
 				import(/* webpackChunkName: "activity" */ "./views/my/agencyApplication/Agencyapplication.vue")
+        },
+        {
+			path: "/download",
+			name: "download",
+			component: () =>
+				import(/* webpackChunkName: "download" */ "./views/auth/Download.vue")
 		}
 	]
 });

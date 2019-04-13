@@ -1,6 +1,6 @@
 .info-header {
 	height: 1.17333rem /* 88/75 */;
-	
+	// padding: 0 0.4rem /* 30/75 */;
 	padding-left: 0;
 	line-height: 1.17333rem /* 88/75 */;
 	font-size: 0.48rem;
@@ -12,15 +12,10 @@
 	z-index: 100;
 	.spans {
 		font-size: 0.48rem;
-	}
-}
-.info-header {
-	.spans {
 		position: relative;
 		img {
 			position: absolute;
-			// left: 0.4rem /* 30/75 */;
-			top: 0.24rem /* 18/75 */ /* 15/75 */;
+			top: 0.24rem;
 		}
 	}
 }
@@ -219,15 +214,27 @@
 }
 .notice-list {
 	margin: 0;
-	margin: 0.26667rem /* 20/75 */;
+    padding: 0.26667rem /* 20/75 */;
+    box-sizing: border-box;
 	.noticeGamePartial {
 		li {
-			margin-bottom: 0.26667rem /* 20/75 */;
+            margin-bottom: 0.26667rem /* 20/75 */;
+            &.mint-cell-value{
+                .i{
+                    p{
+                        padding-right: 1.0667rem;
+                        box-sizing: border-box;
+                    }
+                }
+            }
 			.i {
 				border: 1px solid #e2e2e2;
 				background-color: #fff;
 				padding: 0.26667rem /* 20/75 */;
-				position: relative;
+                position: relative;
+                .title{
+                    position: absolute;
+                }
 				.ct {
 					p {
 						text-align: left;

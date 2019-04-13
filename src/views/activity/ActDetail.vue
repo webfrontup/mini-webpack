@@ -1,7 +1,9 @@
 <template>
     <div>
-        <nut-navbar class="pk-title"
-        @on-click-back="$router.go(-1)">
+        <nut-navbar class="pk-title" @on-click-back="$router.go(-1)">
+            <a class="spans" slot="back-icon">
+				<img class="imgsbank" src="../../assets/img/my-icon/fanhui.png"/>
+			</a>
             活动详情
             <a slot="more-icon">
                 <router-link class="header-record" tag="span" :to="{name:'activityRecord'}">

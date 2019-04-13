@@ -10,11 +10,11 @@
     "devs": "npm run build:dll && npm run dev"
   },
   "dependencies": {
-    "core-js": "^2.6.5",
     "@nutui/nutui": "^2.0.9",
     "axios": "^0.18.0",
     "babel-polyfill": "^6.26.0",
     "babel-runtime": "^6.26.0",
+    "core-js": "^2.6.5",
     "fastclick": "^1.0.6",
     "google-protobuf": "^3.6.1",
     "jquery": "^3.3.1",
@@ -29,6 +29,7 @@
     "vue-i18n": "^8.10.0",
     "vue-qriously": "^1.1.1",
     "vue-router": "^3.0.1",
+    "vue-star-rating": "^1.6.1",
     "vue-swipe-actions": "^2.0.0-beta.6",
     "vue-touch": "^1.1.0",
     "vuex": "^3.0.1"

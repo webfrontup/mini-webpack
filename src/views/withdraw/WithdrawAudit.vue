@@ -1,6 +1,11 @@
 <template>
 	<div class="widthdraw-audit">
-		<nut-navbar class="pk-title" @on-click-back="$router.go(-1)" :rightShow="false">取款</nut-navbar>
+		<nut-navbar class="pk-title" @on-click-back="$router.go(-1)" :rightShow="false">
+			<a class="spans" slot="back-icon">
+				<img class="imgsbank" src="../../assets/img/my-icon/fanhui.png"/>
+			</a>
+			取款
+		</nut-navbar>
 
 		<div class="content" v-if="queryData">
 			<div class="audit-details">
@@ -393,6 +398,8 @@
 			.submit-btn {
 				margin-top: 0.4rem /* 30/75 */
 			;
+				//   display: flex;
+				//   justify-content: space-around;
 				button {
 					height: 1.06667rem /* 80/75 */
 				;
@@ -471,6 +478,8 @@
 		.submit-btn {
 			margin-top: 0.4rem /* 30/75 */
 		;
+			// display: flex;
+			// justify-content: space-around;
 			button {
 				height: 1.06667rem /* 80/75 */
 			;

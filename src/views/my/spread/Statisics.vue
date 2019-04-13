@@ -1,7 +1,12 @@
 
 <template>
 	<div class="statisics">
-        <nut-navbar class="pk-title" @on-click-back="$router.go(-1)" :rightShow="false">推广统计</nut-navbar>
+        <nut-navbar class="pk-title" @on-click-back="$router.go(-1)" :rightShow="false">
+			<a class="spans" slot="back-icon">
+				<img class="imgsbank" src="../../../assets/img/my-icon/fanhui.png"/>
+			</a>
+			推广统计
+		</nut-navbar>
         
 		<div class="tab">
 			<nut-tab @tab-switch="tabSwitch" :contentShow="false">
@@ -148,6 +153,7 @@ export default {
 		.tab-content {
 			padding-top: 1.17rem;
 			.top-content {
+				// background: $default-color;
 				width: 100%;
 				ul ,.makeblue{
                     margin-top: .26667rem /* 20/75 */;

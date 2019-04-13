@@ -1,146 +1,9 @@
-<style lang="scss" scoped>
-	@import "../../../components/scss/pk-pwd.scss";
-	.height100b {
-		height: 100%;
-	}
-	.width100b {
-		width: 100%;
-	}
-	.pk-borth {
-		height: 100%;
-		width: 100%;
-		font-size: 0.4rem /* 30/75 */;
-		line-height: 1.22667rem /* 92/75 */;
-		padding: 0 0.26667rem;
-		padding-right: 0.5rem;
-		text-decoration: none;
-		background-color: $forminput-color !important;
-		span,
-		label {
-			font-size: 0.4rem /* 30/75 */;
-		}
-        /deep/ .nut-cell-box{
-            .nut-cell-left{
-                min-width: 1.86667rem /* 140/75 */;
-            }
-        }
-	}
-	.pk-borth-active,
-	.pk-place-active {
-		.show-value {
-			color: #141414 !important;
-		}
-	}
-	.bot {
-		height: 1.22667rem /* 92/75 */;
-		line-height: 1.22667rem /* 92/75 */;
-		text-align: center;
-		font-size: 0.4rem /* 30/75 */;
-	}
-
-	.about {
-		background-color: $forminput-color;
-		.pk-form-content {
-			background-color: $forminput-color;
-			.pk-input {
-				position: relative;
-				display: flex;
-				padding: 0 0.26667rem /* 20/75 */;
-				height: 1.22667rem /* 92/75 */;
-				justify-content: space-between;
-				font-size: 0.4rem /* 30/75 */;
-				color: $about-color;
-				align-items: center;
-				.icon-img {
-					width: 1rem;
-					height: 1rem;
-				}
-				&::after {
-					content: " ";
-					position: absolute;
-					left: 0;
-					bottom: 0;
-					right: 0;
-					height: 0.01333rem /* 1/75 */;
-					border-bottom: 0.01333rem /* 1/75 */ solid $inputbotline-color;
-					-webkit-transform-origin: 0 100%;
-					transform-origin: 0 100%;
-					-webkit-transform: scaleY(0.5);
-					transform: scaleY(0.5);
-				}
-				.pk-foricon {
-					height: 100%;
-					padding-right: 0.53333rem /* 40/75 */;
-				}
-				.el-input {
-					width: 100%;
-					position: relative;
-					input {
-						width: 100%;
-						height: 1.22667rem /* 92/75 */;
-						border: none;
-						text-align: right;
-						background-color: $forminput-color;
-					}
-					i {
-						position: absolute;
-						right: -0.5rem /* 30/75 */;
-						width: 0.37333rem /* 28/75 */;
-						height: 0.34667rem /* 26/75 */;
-						top: 32%;
-						img {
-							width: 0.18667rem /* 14/75 */;
-							margin-top: -10px;
-						}
-					}
-				}
-			}
-		}
-	}
-	.nut-cell .nut-cell-title,
-	.nut-cell .nut-cell-right {
-		font-size: 0.4rem;
-	}
-	.nut-cell .nut-cell-icon img {
-		display: none;
-	}
-	.nut-button {
-		height: 0.96rem /* 72/75 */;
-		background: $index-banner-bg;
-		font-size: 0.34667rem /* 26/75 */;
-	}
-	.nut-button.circle {
-		border-radius: 0.13333rem /* 10/75 */;
-	}
-	/deep/ .nut-cell .nut-cell-box {
-		min-height: 1.22667rem /* 92/75 */;
-		.nut-cell-right {
-			.nut-cell-desc {
-				.selected-option {
-					.show-value {
-						color: $placeholder-color;
-					}
-				}
-			}
-		}
-	}
-	/deep/ .nut-cell .nut-cell-icon img {
-		margin-left: 6px;
-	}
-</style>
 <template>
 	<div class="about" ref="about">
-		<nut-navbar
-			class="info-header"
-			:rightShow="false"
-			@on-click-back="back('my')"
-		>
+		<nut-navbar class="pk-title" :rightShow="false" @on-click-back="back('my')">
 			账号信息
 			<a class="spans" slot="back-icon">
-				<img
-					class="imgsbank"
-					src="../../../assets/img/my-icon/fanhui.png"
-				/>
+				<img class="imgsbank" src="../../../assets/img/my-icon/fanhui.png"/>
 			</a>
 		</nut-navbar>
 		<div class="pk-form-content">
@@ -551,3 +414,133 @@ export default {
 	}
 };
 </script>
+<style lang="scss" scoped>
+	@import "../../../components/scss/pk-pwd.scss";
+	.height100b {
+		height: 100%;
+	}
+	.width100b {
+		width: 100%;
+	}
+	.pk-borth {
+		height: 100%;
+		width: 100%;
+		font-size: 0.4rem /* 30/75 */;
+		line-height: 1.22667rem /* 92/75 */;
+		padding: 0 0.26667rem;
+		padding-right: 0.5rem;
+		text-decoration: none;
+		background-color: $forminput-color !important;
+		span,
+		label {
+			font-size: 0.4rem /* 30/75 */;
+		}
+        /deep/ .nut-cell-box{
+            .nut-cell-left{
+                min-width: 1.86667rem /* 140/75 */;
+            }
+        }
+	}
+	.pk-borth-active,
+	.pk-place-active {
+		.show-value {
+			color: #141414 !important;
+		}
+	}
+	.bot {
+		height: 1.22667rem /* 92/75 */;
+		line-height: 1.22667rem /* 92/75 */;
+		text-align: center;
+		font-size: 0.4rem /* 30/75 */;
+	}
+
+	.about {
+		background-color: $forminput-color;
+		.pk-form-content {
+			background-color: $forminput-color;
+			.pk-input {
+				position: relative;
+				display: flex;
+				padding: 0 0.26667rem /* 20/75 */;
+				height: 1.22667rem /* 92/75 */;
+				justify-content: space-between;
+				font-size: 0.4rem /* 30/75 */;
+				color: $about-color;
+				align-items: center;
+				.icon-img {
+					width: 1rem;
+					height: 1rem;
+				}
+				&::after {
+					content: " ";
+					position: absolute;
+					left: 0;
+					bottom: 0;
+					right: 0;
+					height: 0.01333rem /* 1/75 */;
+					border-bottom: 0.01333rem /* 1/75 */ solid $inputbotline-color;
+					-webkit-transform-origin: 0 100%;
+					transform-origin: 0 100%;
+					-webkit-transform: scaleY(0.5);
+					transform: scaleY(0.5);
+				}
+				.pk-foricon {
+					height: 100%;
+					padding-right: 0.53333rem /* 40/75 */;
+				}
+				.el-input {
+					width: 100%;
+					position: relative;
+					input {
+						width: 100%;
+						height: 1.22667rem /* 92/75 */;
+						border: none;
+						text-align: right;
+						background-color: $forminput-color;
+					}
+					i {
+						position: absolute;
+						right: -0.5rem /* 30/75 */;
+						width: 0.37333rem /* 28/75 */;
+						height: 0.34667rem /* 26/75 */;
+						top: 32%;
+						img {
+							width: 0.18667rem /* 14/75 */;
+							margin-top: -10px;
+						}
+					}
+				}
+			}
+		}
+	}
+	.nut-cell .nut-cell-title,
+	.nut-cell .nut-cell-right {
+		font-size: 0.4rem;
+	}
+	.nut-cell .nut-cell-icon img {
+		display: none;
+	}
+	.nut-button {
+		height: 0.96rem /* 72/75 */;
+		background: $index-banner-bg;
+		font-size: 0.34667rem /* 26/75 */;
+	}
+	.nut-button.circle {
+		border-radius: 0.13333rem /* 10/75 */;
+	}
+	/deep/ .nut-cell .nut-cell-box {
+		min-height: 1.22667rem /* 92/75 */;
+		.nut-cell-right {
+			.nut-cell-desc {
+				.selected-option {
+					.show-value {
+						color: $placeholder-color;
+					}
+				}
+			}
+		}
+	}
+	/deep/ .nut-cell .nut-cell-icon img {
+		margin-left: 6px;
+	}
+</style>

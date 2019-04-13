@@ -2,10 +2,6 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 import VueLazyload from 'vue-lazyload'
-import "@nutui/nutui/dist/styles/index.scss";
-import "@/components/scss/skin.scss";
-import "@/components/scss/common.scss";
-
 Vue.use(VueLazyload, {
     error: require('./assets/img/error_img.png'),
     loading: require('./assets/img/icon_loadingimage.gif')

@@ -70,6 +70,11 @@ function getPopMsg() {
         return res.data
     })
 }
+function openGame(data){
+    return axios.post(api.INDEX_OPEN_GAME,data).then(res => {
+        return res.data
+    })
+}
 export {
     getCarouse,
     getAnnouncement,
@@ -81,5 +86,6 @@ export {
     recovery,
     getRedStyle,
     openRed,
-    getPopMsg
+    getPopMsg,
+    openGame
 }

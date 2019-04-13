@@ -1,7 +1,12 @@
 
 <template>
 	<div class="lowerReport" ref="lowerReport">
-        <nut-navbar class="pk-title" @on-click-back="$router.go(-1)" :rightShow="false">下级报表</nut-navbar>
+        <nut-navbar class="pk-title" @on-click-back="$router.go(-1)" :rightShow="false">
+			<a class="spans" slot="back-icon">
+				<img class="imgsbank" src="../../../assets/img/my-icon/fanhui.png"/>
+			</a>
+			下级报表
+		</nut-navbar>
 		
 		<div class="tab">
 			<nut-tab @tab-switch="tabSwitch" :contentShow="false">
@@ -82,7 +87,8 @@ export default {
             }).then((res) => {
                 loading.hide();
                 if(res.success){
-                    this.list = res.data.list;
+					this.list = res.data.list;
+					this.list = this.list === null ? 0 : this.list
                 }else {
                     this.$toast.fail(res.message,{cover:true,duration:4000});
                 }
@@ -150,6 +156,7 @@ export default {
 				margin-top: 0.26667rem /* 20/75 */;
 				width: 100%;
 				height: auto;
+				// padding: .30667rem /* 23/75 */ .4rem /* 30/75 */;
 				ul {
 					width: auto;
 					font-size: 0.32rem /* 24/75 */;

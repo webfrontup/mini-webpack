@@ -85,9 +85,10 @@
 
                 .more {
                     position: absolute;
-                    right: -0.1333rem;
+                    right: 0;
                     top: 0;
-                    font-size: 0.64rem;
+                    height: 0.6667rem;
+                    
                 }
             }
         }
@@ -425,7 +426,10 @@
                         color: $default-color;
                         border: 0.0267rem solid $index-menu-toMy-bg;
                     }
-
+                    img{
+                        width: 0.88rem;
+                        height: 0.88rem;
+                    }
 
 
                 }
@@ -443,10 +447,13 @@
                         color: $default-color;
                         font-size: 0.3467rem;
 
-                        i {
+                        img {
                             position: absolute;
                             left: 0.5333rem;
-                            font-size: 0.8rem;
+                            top: 50%;
+                            transform: translate(0,-50%);
+                            width: 0.8rem;
+                            height:  0.8rem;
                         }
 
                         &.active {

@@ -17,9 +17,9 @@ const plugins = [
 		inject: true,
 		chunksSortMode: "none"
 	}),
-	// new CleanWebpackPlugin(["dist"], {
-	// 	root: path.resolve(__dirname, "../")
-	// }),
+	new CleanWebpackPlugin(["dist"], {
+		root: path.resolve(__dirname, "../")
+	}),
 	new VueLoaderPlugin(),
 	new CopyWebpackPlugin([
 		{
@@ -48,6 +48,17 @@ files.forEach(file => {
 });
 
 module.exports = {
+    context: path.resolve(__dirname, '../'),
+    entry: {
+        app: './src/index.js'
+    },
+    output: {
+        path: path.resolve(__dirname, '../dist'),
+        filename: '[name].js',
+        publicPath: process.env.NODE_ENV === 'production'
+            ? './'
+            : '/'
+    },
 	resolve: {
 		extensions: [".js", ".vue", ".json"],
 		alias: {

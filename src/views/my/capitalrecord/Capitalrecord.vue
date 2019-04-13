@@ -2,6 +2,9 @@
 	<div class="capitalrecord">
         <nut-navbar class="pk-title" :rightShow="false"
         @on-click-back="$router.go(-1)">
+            <a class="spans" slot="back-icon">
+				<img class="imgsbank" src="../../../assets/img/my-icon/fanhui.png"/>
+			</a>
             <div class="chooseTit" @click="chooseTable()">
 				{{tableText}}
                 <i class="kailong"></i>
@@ -168,6 +171,7 @@
                 </div>
             </div>
         </div>
+        
 	</div>
 </template>
 

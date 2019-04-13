@@ -1,20 +1,3 @@
-<style lang="scss" scoped>
-	@import "../../../components/scss/pk-pwd.scss";
-	.editpwd {
-		background: $center-background;
-	}
-</style>
-<style lang="scss">
-	.nut-button {
-		height: 0.96rem /* 72/75 */;
-		background: $index-banner-bg;
-		font-size: 0.34667rem /* 26/75 */;
-	}
-	.nut-button.circle {
-		border-radius: 0.13333rem /* 10/75 */;
-	}
-</style>
-
 <template>
 	<div class="editpwd" ref="editpwd">
 		<nut-navbar
@@ -237,4 +220,17 @@ export default {
 	}
 };
 </script>
-
+<style lang="scss" scoped>
+	@import "../../../components/scss/pk-pwd.scss";
+	.editpwd {
+		background: $center-background;
+	}
+	.nut-button {
+		height: 0.96rem /* 72/75 */;
+		background: $index-banner-bg;
+		font-size: 0.34667rem /* 26/75 */;
+	}
+	.nut-button.circle {
+		border-radius: 0.13333rem /* 10/75 */;
+	}
+</style>

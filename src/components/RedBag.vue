@@ -1,7 +1,7 @@
 <template>
     <div id="customer">
         <!-- 悬浮的HTML -->
-        <div class="redbagBtn" id="moveDiv" @mousedown="down" @touchstart="down" @mousemove="move" @touchmove="move" @mouseup="end" @touchend="end" @click="clickBag">
+        <div class="redbagBtn" v-show="redInfo.id !=0 " id="moveDiv" @mousedown="down" @touchstart="down" @mousemove="move" @touchmove="move" @mouseup="end" @touchend="end" @click="clickBag">
         </div>
         <div class="popup" v-show="getShow">
             <div class="popbg"></div>
@@ -10,8 +10,8 @@
                 <div v-show="deposit" class="deposit">
                     <div class="title">
                         <!-- 2018.04.44 12:45<br>
-                                    至2018.04.44 12:45<br> -->
-                        <!-- {{info.inStartTime | filterDate('YYYY.MM.DD HH:mm')}}<br> 至{{info.inEndTime | filterDate('YYYY.MM.DD HH:mm')}}<br> 期间还需存款{{info.inSum}}元即可领取红包 -->
+                                                至2018.04.44 12:45<br> -->
+                        {{info.inStartTime | filterDate('YYYY.MM.DD HH:mm')}}<br> 至{{info.inEndTime | filterDate('YYYY.MM.DD HH:mm')}}<br> 期间还需存款{{info.inSum}}元即可领取红包
                     </div>
                     <router-link tag="div" :to="{name:'deposit'}" class="goDeposit">去存款</router-link>
                     <div class="text">
@@ -22,9 +22,9 @@
                 </div>
     
                 <!-- 存款成功 -->
-                <div v-show="success" class="success">
+                <div v-show="success" class="success-info">
                     <div class="title">恭喜!</div>
-                    <div class="money">{{info.money}}元</div>
+                    <div class="money">{{info.award}}元</div>
                     <div class="text">红包领取成功！</div>
                 </div>
     
@@ -32,7 +32,7 @@
                 <div v-show="consume" class="consume">
                     <div class="title">
                         <!-- 2018.04.44 12:45<br>
-                                    至2018.04.44 12:45<br> -->
+                                                至2018.04.44 12:45<br> -->
                         {{info.auditStartTime | filterDate('YYYY.MM.DD HH:mm')}}<br> 至{{info.auditEndTime | filterDate('YYYY.MM.DD HH:mm')}}<br> 期间还需投注{{info.betSum}}元即可领取红包
                     </div>
                     <div @click="close" class="goDeposit">去游戏</div>
@@ -64,7 +64,7 @@
                 <div v-show="widthelsedraw" class="widthelsedraws">
                     <div class="title">
                         <!-- 2018.04.44 12:45<br>
-                                    至2018.04.44 12:45<br> -->
+                                                至2018.04.44 12:45<br> -->
                         {{info.auditStartTime | filterDate('YYYY.MM.DD HH:mm')}}<br> 至{{info.auditEndTime | filterDate('YYYY.MM.DD HH:mm')}}<br> 期间还需存款{{info.inSum}}元即可领取红包
                     </div>
                     <div @click="close();goDeposits()" class="goDeposit">去存款</div>
@@ -201,55 +201,52 @@
                     let data = {
                         setId: this.redInfo.id
                     }
-                    openRed(data).then(res => {
-                        if (res.success) {
-                            // this.redInfo = res.data;
-                            console.log(res.data);
-                            // if (res.returnType === 1) { //成功
-                            //     this.success = true
-                            //     this.deposit = false
-                            //     this.consume = false
-                            //     this.unbegin = false
-                            //     this.widthelsedraw
-                            //     this.checkbg = 'successbg'
-                            // } else if (res.returnType === 2) { //存款不足
-                            //     this.deposit = true
-                            //     this.success = false
-                            //     this.consume = false
-                            //     this.unbegin = false
-                            //     this.widthelsedraw = false
-                            //     this.checkbg = 'depositbg'
-                            // } else if (res.returnType === 3) { //投注不足
-                            //     this.consume = true
-                            //     this.success = false
-                            //     this.deposit = false
-                            //     this.unbegin = false
-                            //     this.widthelsedraw = false
-                            //     this.checkbg = 'consumebg'
-                            // } else if (res.returnType === 4) { //未开始
-                            //     this.unbegin = true
-                            //     this.success = false
-                            //     this.deposit = false
-                            //     this.consume = false
-                            //     this.widthelsedraw = false
-                            //     this.checkbg = 'successbg'
-                            //     this.countdown(res.startTime)
-                            // } else if (res.returnType === 5) { //错误返回 额外存款不足
-                            //     this.widthelsedraw = true
-                            //     this.success = false
-                            //     this.deposit = false
-                            //     this.consume = false
-                            //     this.unbegin = false
-                            //     this.checkbg = 'widthelsedraw'
-                            // }
-                            // this.getShow = true
-                            // console.log(res, 'resssss')
-    
-    
-    
-    
+                    openRed(data).then(resq => {
+                        let res = resq.data;
+                        if (resq.success) {
+                            // this.redInfo = res;
+                            this.info = res;
+                            if (res.returnType === 1) { //成功
+                                this.success = true
+                                this.deposit = false
+                                this.consume = false
+                                this.unbegin = false
+                                this.widthelsedraw = false
+                                this.checkbg = 'successbg'
+                            } else if (res.returnType === 2) { //存款不足
+                                this.deposit = true
+                                this.success = false
+                                this.consume = false
+                                this.unbegin = false
+                                this.widthelsedraw = false
+                                this.checkbg = 'depositbg'
+                            } else if (res.returnType === 3) { //投注不足
+                                this.consume = true
+                                this.success = false
+                                this.deposit = false
+                                this.unbegin = false
+                                this.widthelsedraw = false
+                                this.checkbg = 'consumebg'
+                            } else if (res.returnType === 4) { //未开始
+                                this.unbegin = true
+                                this.success = false
+                                this.deposit = false
+                                this.consume = false
+                                this.widthelsedraw = false
+                                this.checkbg = 'successbg'
+                                this.countdown(res.startTime)
+                            } else if (res.returnType === 5) { //错误返回 额外存款不足
+                                this.widthelsedraw = true
+                                this.success = false
+                                this.deposit = false
+                                this.consume = false
+                                this.unbegin = false
+                                this.checkbg = 'widthelsedraw'
+                            }
+                            this.getShow = true
+                            console.log(res, 'resssss')
                         } else {
-                            this.$toast.fail(res.message, {
+                            this.$toast.fail(resq.message, {
                                 cover: true,
                                 duration: 1500
                             });
@@ -318,7 +315,7 @@
 </script>
 
 <style lang="scss" scoped>
-    
+    // @import url("../components/less/common.less");
     $color-default :#fff;
     .redbagBtn {
         width: 2.0667rem;
@@ -341,7 +338,7 @@
         .popbg {
             width: 100%;
             height: 100%;
-            background: $color-default;
+            background: $nondefault-color;
             opacity: 0.7;
         }
         .popbox {
@@ -354,9 +351,9 @@
             transform: translate(-50%, -50%);
             margin: auto;
             text-align: center;
-            color: $color-default;
+            color: $color-s;
             .deposit,
-            .success,
+            .success-info,
             .consume,
             .unbegin,
             .widthelsedraws {
@@ -364,9 +361,10 @@
                 margin-top: 5.2rem;
                 width: 5.6rem;
             }
-            .success {
+            .success-info {
                 margin-top: 5.6rem;
                 font-weight: bold;
+                line-height: 1;
                 .title {
                     font-size: 0.8rem;
                 }
@@ -404,11 +402,11 @@
                     line-height: 0.8rem;
                     font-size: 0.4rem;
                     font-weight: bold;
-                    background-color: $color-default;
-                    box-shadow: 0rem 0.027rem 0.067rem 0rem $color-default;
+                    background-color: $color-s;
+                    box-shadow: 0rem 0.027rem 0.067rem 0rem $color-rgab-black2;
                     ;
                     border-radius: 0.133rem;
-                    color: $color-default;
+                    color: $color-h;
                 }
                 .text {
                     font-size: .32rem/* 24/75 */

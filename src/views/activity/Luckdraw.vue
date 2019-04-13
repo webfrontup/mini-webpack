@@ -1,8 +1,9 @@
 <template>
     <div class="container">
-        <nut-navbar class="pk-title"
-		:rightShow="false"
-        @on-click-back="$router.go(-1)">
+        <nut-navbar class="pk-title" :rightShow="false" @on-click-back="$router.go(-1)">
+            <a class="spans" slot="back-icon">
+				<img class="imgsbank" src="../../assets/img/my-icon/fanhui.png"/>
+			</a>
             幸运大抽奖
         </nut-navbar>
         <div class="conts">
@@ -57,7 +58,7 @@
                         <div class="content-top">
                             <div class="lucking">
                                 <div class="title">恭喜!</div>
-                                <div class="money" v-show="hasPrize.prizeType != 2">获得{{hasPrize.prizeName}}</div>
+                                <div class="money" v-show="hasPrize.prizeType != 2">获得{{hasPrize.prizeName}}{{hasPrize.prizeFee}}</div>
                                 <!-- 抽到再来一次 -->
                                 <div class="money" v-show="hasPrize.prizeType === 2">获得一次抽奖机会</div>
                             </div>
@@ -249,7 +250,7 @@
                             let turnDraw = this.drawList.prizes;
                             this.turnId = res.data;
                             for(let i = 0 ; i < turnDraw.length; i++){
-                                if (turnDraw[i].id == res.id) {
+                                if (turnDraw[i].id == res.data) {
                                     this.winnum = i
                                 }
                             }
@@ -730,8 +731,8 @@
                                     font-size: .4rem /* 30/75 */;
                                     font-weight: bold;
                                     border-radius: .4rem /* 30/75 */;
-                                    background-color: $text-color;
-                                    color: $text-color;
+                                    background-color: $color-u;
+                                    color: $color-m;
                                 }
                             }
                             .nochanges{
@@ -933,7 +934,7 @@
                                 overflow: hidden;
                                 ul {
                                     font-size: 0.187rem;
-                                    color: $text-color;
+                                    color: $color-e;
                                     li {
                                         line-height: 0.627rem;
                                         font-size: 0.373rem;

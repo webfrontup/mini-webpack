@@ -1,6 +1,11 @@
 <template>
     <div class="pay-result">
-        <nut-navbar class="pk-title" @on-click-back="$router.go(-1)" :rightShow="false">{{title}}</nut-navbar>
+        <nut-navbar class="pk-title" @on-click-back="$router.go(-1)" :rightShow="false">
+            <a class="spans" slot="back-icon">
+				<img class="imgsbank" src="../../assets/img/my-icon/fanhui.png"/>
+			</a>
+            {{title}}
+        </nut-navbar>
         <div class="content">
             <pay-success :dataObj="dataObj" @ok="$router.go(-3)"></pay-success>
         </div>

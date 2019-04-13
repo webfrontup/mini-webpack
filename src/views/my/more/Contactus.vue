@@ -2,6 +2,9 @@
     <div class="contactus">
          <nut-navbar class="pk-title" :rightShow="false"
         @on-click-back="$router.go(-1)">
+            <a class="spans" slot="back-icon">
+				<img class="imgsbank" src="../../../assets/img/my-icon/fanhui.png"/>
+			</a>
             联系我们
         </nut-navbar>
         <div v-show="!list" class="skeleton">

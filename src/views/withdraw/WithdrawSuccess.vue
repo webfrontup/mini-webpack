@@ -1,6 +1,11 @@
 <template>
     <div class="widthdraw-success">
-        <nut-navbar class="pk-title" @on-click-back="$router.go(-1)" :rightShow="false">取款</nut-navbar>
+        <nut-navbar class="pk-title" @on-click-back="$router.go(-1)" :rightShow="false">
+            <a class="spans" slot="back-icon">
+				<img class="imgsbank" src="../../assets/img/my-icon/fanhui.png"/>
+			</a>
+            取款
+        </nut-navbar>
         <div class="content">
             <pay-success :dataObj="dataObj" @ok="$router.go(-2)"></pay-success>
             <!-- <adv-common :advType="2" :typeId="2"></adv-common> -->

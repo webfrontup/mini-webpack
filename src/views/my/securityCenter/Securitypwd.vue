@@ -1,3 +1,156 @@
+<template>
+	<div class="bankcard" ref="bankcard">
+		<nut-navbar
+			class="info-header"
+			:rightShow="false"
+			@on-click-back="$router.go(-1)"
+		>
+			修改取款密码
+			<a class="spans" slot="back-icon">
+				<img
+					class="imgsbank"
+					src="../../../assets/img/my-icon/fanhui.png"
+				/>
+			</a>
+			<a class="spans" slot="more-icon" v-if="false"></a>
+		</nut-navbar>
+		<div class="pk-form-content mgb30">
+			<div class="pk-input">
+				<label>
+					{{isSet?'旧密码':'登录密码'}}:
+				</label>
+				<nut-col :span="9">
+					<div class="flex-content el-input">
+						<!-- <p class="names">p*d</p> -->
+						<input
+							type="password"
+							class="inputs"
+                            :placeholder="placeholder"
+                            v-model="password"
+						/>
+					</div>
+				</nut-col>
+			</div>
+		</div>
+		<div class="pk-form-content">
+			<div class="pk-input">
+				<label>新密码：</label>
+				<nut-col :span="16">
+					<div class="flex-content el-input">
+						<input
+							type="password"
+							class="inputs"
+                            placeholder="请输入新取款密码"
+                            v-model="newPassword"
+                            
+						/>
+					</div>
+				</nut-col>
+			</div>
+			<div class="pk-input">
+				<label>
+					确认新密码：
+				</label>
+				<nut-col :span="16">
+					<div class="flex-content el-input">
+						<input
+							type="password"
+							class="inputs"
+                            placeholder="请再次输入取款密码"
+                            v-model="confirmPassword"
+						/>
+					</div>
+				</nut-col>
+			</div>
+		</div>
+		<div class="btns">
+			<nut-button block shape="circle" @click="submit()">保存设置</nut-button>
+		</div>
+	</div>
+</template>
+<script>
+import { memBankList,getIsSetPwd,modifyWithdrawlPwd } from "@/services/securityCenter.js";
+export default {
+	data() {
+		return {
+            password:'',
+            newPassword:'',
+            confirmPassword:'',
+            isSet:false,//是否设置过取款密码
+            placeholder:"请输入登录密码"
+		};
+	},
+	mounted() {
+		this.$refs.bankcard.style.height = window.innerHeight + "px";
+		this.getIsSetPwd();
+	},
+	methods: {
+        getIsSetPwd(){
+            let loading = this.$toast.loading('加载中...');
+            getIsSetPwd().then((res) => {
+                loading.hide();
+                if(res.success){
+                    this.isSet = res.data.isSet;
+                    this.placeholder = this.isSet?'请输入旧取款密码':'请输入登录密码'
+                }else {
+                    this.$toast.fail(res.message, {
+						cover: true,
+						duration: 4000
+					});
+                }
+            })
+        },
+        submit(){
+            let postData = {
+                password:this.password,
+                newPassword:this.newPassword
+            }
+
+            if(!this.password){
+                this.$toast.fail(`请输入${this.isSet?'取款':'登录'}密码`, {
+                    cover: true,
+                });
+                return;
+            }
+            if(!this.newPassword){
+                this.$toast.fail('请输入新密码！', {
+                    cover: true,
+                });
+                return;
+            }
+
+            if(this.newPassword!=this.confirmPassword){
+                this.$toast.fail('两次密码不一致', {
+                    cover: true,
+                });
+                return;
+            }
+            if(this.newPassword==this.password){
+                this.$toast.fail('新密码不能和旧密码一致', {
+                    cover: true,
+                });
+                return;
+            }
+            
+            let loading = this.$toast.loading('提交中...');
+            modifyWithdrawlPwd(postData).then((res) => {
+                loading.hide();
+                if(res.success){
+                    this.$toast.success('修改成功!', {
+						cover: true,
+                    });
+                    this.$route.push({name:'securityCenter'})
+                }else {
+                    this.$toast.fail(res.message, {
+						cover: true,
+						duration: 4000
+					});
+                }
+            })
+        }
+	}
+};
+</script>
 <style lang="scss" scoped>
 	@import "../../../components/scss/pk-pwd.scss";
 	.bankcard {
@@ -18,6 +171,8 @@
 		.pk-bankcard {
 			height: 100%;
 			width: 100%;
+			// padding: 0 0.26667rem;
+			// padding-right: 0.5rem;
 			text-decoration: none;
 			padding-left: 0;
 			background-color: $default-color !important;
@@ -34,8 +189,6 @@
 	small {
 		color: $label-color;
 	}
-</style>
-<style lang="scss">
 	.nut-button {
 		height: 0.96rem /* 72/75 */;
 		background: $index-banner-bg;
@@ -65,138 +218,3 @@
 		}
 	}
 </style>
-
-<template>
-	<div class="bankcard" ref="bankcard">
-		<nut-navbar
-			class="info-header"
-			:rightShow="false"
-			@on-click-back="back('securityCenter')"
-		>
-			修改取款密码
-			<a class="spans" slot="back-icon">
-				<img
-					class="imgsbank"
-					src="../../../assets/img/my-icon/fanhui.png"
-				/>
-			</a>
-			<a class="spans" slot="more-icon" v-if="false"></a>
-		</nut-navbar>
-		<div class="pk-form-content mgb30">
-			<div class="pk-input">
-				<label>
-					登录密码：
-				</label>
-				<nut-col :span="9">
-					<div class="flex-content el-input">
-						<!-- <p class="names">p*d</p> -->
-						<input
-							type="password"
-							class="inputs"
-							placeholder="请输入您的登录密码"
-						/>
-					</div>
-				</nut-col>
-			</div>
-		</div>
-		<div class="pk-form-content">
-			<div class="pk-input">
-				<label>取款密码：</label>
-				<nut-col :span="16">
-					<div class="flex-content el-input">
-						<input
-							type="password"
-							class="inputs"
-							placeholder="请输入您的取款密码"
-						/>
-					</div>
-				</nut-col>
-			</div>
-			<div class="pk-input">
-				<label>
-					确认新密码：
-				</label>
-				<nut-col :span="16">
-					<div class="flex-content el-input">
-						<input
-							type="text"
-							class="inputs"
-							placeholder="请再次输入您的取款密码"
-						/>
-					</div>
-				</nut-col>
-			</div>
-		</div>
-		<div class="btns">
-			<nut-button block shape="circle">保存设置</nut-button>
-		</div>
-	</div>
-</template>
-<script>
-import { memBankList } from "@/services/securityCenter.js";
-export default {
-	data() {
-		return {
-			bankcardActive: false,
-			isVisible: false,
-			date: null,
-
-			year: null,
-			isVisible1: false,
-			defaultValueData1: null,
-			listData1: [],
-			backList: [],
-			bankId: null
-		};
-	},
-	mounted() {
-		this.$refs.bankcard.style.height = window.innerHeight + "px";
-		this.getBankList();
-	},
-	methods: {
-		getBankList() {
-			memBankList().then(res => {
-				if (res.success) {
-					let data = res.data;
-					if (data) {
-						var arr = [];
-						data.map(v => {
-							arr.push(v.bankName);
-						});
-						this.backList = data;
-						this.listData1.push(arr);
-					}
-				} else {
-					this.$toast.fail(res.message, {
-						cover: true,
-						duration: 1000
-					});
-				}
-			});
-		},
-		back(path) {
-			this.$router.push({
-				name: path
-			});
-		},
-		switchPicker(param) {
-			this[`${param}`] = !this[`${param}`];
-		},
-		setYearValue(chooseData) {
-			// this.year = `${chooseData[0]}年`;
-			this.year = chooseData[0];
-			this.bankcardActive = true;
-			console.log(chooseData[0], "chooseData[0]");
-			var data = this.backList;
-			if (data) {
-				data.map(v => {
-					if (this.year == v.bankName) {
-						this.bankId = v.bankId;
-					}
-				});
-				console.log(this.bankId, "this.bankId");
-			}
-		}
-	}
-};
-</script>

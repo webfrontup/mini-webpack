@@ -1,6 +1,11 @@
 <template>
 	<div class="generalizeLink">
-        <nut-navbar class="pk-title" @on-click-back="$router.go(-1)" :rightShow="false">会员管理</nut-navbar>
+        <nut-navbar class="pk-title" @on-click-back="$router.go(-1)" :rightShow="false">
+			<a class="spans" slot="back-icon">
+				<img class="imgsbank" src="../../../assets/img/my-icon/fanhui.png"/>
+			</a>
+			会员管理
+		</nut-navbar>
 		<div class="content">
 			<div class="generalizeLink-top">
 				<div class="generalizeLink-top-title pk-1px-b">当前级数：<span class="current">{{level}}</span></div>

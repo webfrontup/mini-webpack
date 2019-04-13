@@ -1,66 +1,6 @@
-<style lang="scss" scoped>
-	@import "../../../components/scss/pk-pwd.scss";
-	.videopwd {
-		background: #dedede;
-		.pk-bankcard {
-			height: 100%;
-			width: 100%;
-			text-decoration: none;
-			
-			background-color: $default-color !important;
-			span,
-			label {
-				font-size: 0.29333rem;
-			}
-		}
-
-		/deep/.nut-actionsheet-menu {
-			display: none;
-		}
-	}
-	.tipbox {
-		color: #757575;
-		font-size: 0.32rem /* 24/75 */;
-		text-align: center;
-		margin-top: 0.24rem /* 18/75 */;
-		margin-bottom: 0.33333rem; /* 25/75 */
-    }
-    
-</style>
-<style lang="scss">
-	.nut-button {
-		height: 0.96rem /* 72/75 */;
-		background: #151515;
-		font-size: 0.34667rem /* 26/75 */;
-	}
-	.nut-button.circle {
-		border-radius: 0.13333rem /* 10/75 */;
-	}
-	.pk-bankcard-active {
-		.show-value {
-			color: $about-color !important;
-		}
-	}
-	.pk-bankcard {
-		.nut-cell-box {
-			min-height: 1.06667rem /* 80/75 */;
-			.nut-cell-right {
-				.nut-cell-icon {
-					img {
-						margin-left: 0.08rem /* 6/75 */;
-					}
-				}
-			}
-		}
-		.show-value {
-			color: $color-W;
-		}
-	}
-</style>
-
 <template>
 	<div class="videopwd" ref="videopwd">
-		<nut-navbar class="info-header" @on-click-back="back('securityCenter')">
+		<nut-navbar class="info-header" :rightShow="false" @on-click-back="back('securityCenter')">
 			修改视讯密码
 			<a class="spans" slot="back-icon">
 				<img class="imgsbank" src="../../../assets/img/my-icon/fanhui.png">
@@ -261,3 +201,61 @@ export default {
 	}
 };
 </script>
+<style lang="scss" scoped>
+	@import "../../../components/scss/pk-pwd.scss";
+	.videopwd {
+		background: #dedede;
+		.pk-bankcard {
+			height: 100%;
+			width: 100%;
+			// padding: 0 0.26667rem;
+			// padding-right: 0.5rem;
+			text-decoration: none;
+			// padding-left: 0;
+			background-color: $default-color !important;
+			span,
+			label {
+				font-size: 0.29333rem;
+			}
+		}
+
+		/deep/.nut-actionsheet-menu {
+			display: none;
+		}
+	}
+	.tipbox {
+		color: #757575;
+		font-size: 0.32rem /* 24/75 */;
+		text-align: center;
+		margin-top: 0.24rem /* 18/75 */;
+		margin-bottom: 0.33333rem; /* 25/75 */
+    }
+    .nut-button {
+		height: 0.96rem /* 72/75 */;
+		background: #151515;
+		font-size: 0.34667rem /* 26/75 */;
+	}
+	.nut-button.circle {
+		border-radius: 0.13333rem /* 10/75 */;
+	}
+	.pk-bankcard-active {
+		.show-value {
+			color: $about-color !important;
+		}
+	}
+	.pk-bankcard {
+		.nut-cell-box {
+			min-height: 1.06667rem /* 80/75 */;
+			.nut-cell-right {
+				.nut-cell-icon {
+					img {
+						margin-left: 0.08rem /* 6/75 */;
+					}
+				}
+			}
+		}
+		.show-value {
+			color: $color-W;
+		}
+	}
+</style>

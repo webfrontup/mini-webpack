@@ -1,19 +1,3 @@
-<style lang="scss" scoped>
-	@import "../../../../components/scss/pk-pwd.scss";
-	.msgDetail {
-		background: #f2f2f2;
-		margin-top: 0.26667rem /* 20/75 */;
-		.blue-header {
-			background-color: #1766bb;
-		}
-		.ps {
-			padding-right: 0.26667rem;
-		}
-		.pf {
-			color: #666 !important;
-		}
-	}
-</style>
 <template>
 	<div class="msgDetail" ref="msgDetail">
 		<nut-navbar
@@ -81,6 +65,7 @@ export default {
 			this.$router.push({
                 name: path,
                 query: {
+                    active:this.$route.query.status == 1 ? 0 : 1,
                     startTime: this.$route.query.startTime,
                     endTime: this.$route.query.endTime,
                     searchGameType: this.$route.query.searchGameType+""
@@ -90,3 +75,19 @@ export default {
 	}
 };
 </script>
+<style lang="scss" scoped>
+	@import "../../../../components/scss/pk-pwd.scss";
+	.msgDetail {
+		background: #f2f2f2;
+		margin-top: 0.26667rem /* 20/75 */;
+		.blue-header {
+			background-color: #1766bb;
+		}
+		.ps {
+			padding-right: 0.26667rem;
+		}
+		.pf {
+			color: #666 !important;
+		}
+	}
+</style>

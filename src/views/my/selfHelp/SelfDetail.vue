@@ -3,6 +3,9 @@
         <nut-navbar class="pk-title" 
             @on-click-back="$router.go(-1)"
             @on-click-more="selfmore">
+            <a class="spans" slot="back-icon">
+				<img class="imgsbank" src="../../../assets/img/my-icon/fanhui.png"/>
+			</a>
             自助优惠申请
             <a slot="more-icon">
                 <div class="selfmore"></div>

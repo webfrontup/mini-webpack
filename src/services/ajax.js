@@ -18,7 +18,7 @@ axios.interceptors.request.use(config => {
 axios.interceptors.response.use(response => {
     let code = response.data.code;
     if (code === 71001) {
-        // vue.$router.push({ name: 'login' });
+        vue.$router.push({ name: 'login' });
     }
     return response;
 }, error => {

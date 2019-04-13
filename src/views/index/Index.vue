@@ -13,7 +13,8 @@
                 <div class="login" v-if="isLogin" @click="showChangeMoney = true">
                     <p>{{userinfo.account}}</p>
                     <p><img src="../../assets/img/icon/icon_account@2x.png" alt="">￥{{userinfo.balance}}</p>
-                    <i class="iconfont icon-bank-normal more"></i>
+                    <!-- <i class="iconfont icon-bank-normal more"></i> -->
+                    <img src="../../assets/img/index-icon/header_right_more.png" alt="" class="more">
                 </div>
             </div>
         </header>
@@ -145,7 +146,6 @@
                                     <p>{{gameChild.aspiName}}</p>
                                     <div class="wh-mask" v-if=" gameTypeActiveList.whStatus == 2">游戏维护中...</div>
                                 </div>
-    
                             </div>
                         </swiper-slide>
                     </swiper>
@@ -166,19 +166,19 @@
                         <router-link :to="{ name: 'login'}" tag="button">用户登录</router-link>
                     </div>
                     <div class="login" v-if="isLogin">
-                        <i class="iconfont icon-tab-mine"></i>
-                        <p>{{userinfo.username}}</p>
+                        <img src="../../assets/img/index-icon/icon_sidebar_mine.png" alt="">
+                        <p>{{userinfo.account}}</p>
                         <router-link :to="{ name: 'my'}" tag="button">个人中心</router-link>
                     </div>
                 </div>
                 <div class="menu-list">
                     <ul>
-                        <router-link class="active" :to="{ name: 'index'}" tag="li"><i class="iconfont icon-nav-home"></i>首页</router-link>
-                        <router-link :to="{ name: 'activity'}" tag="li"><i class="iconfont icon-nav-home"></i>活动中心</router-link>
-                        <router-link :to="{ name: 'betRecord'}" tag="li"><i class="iconfont icon-nav-home"></i>投注记录</router-link>
-                        <router-link :to="{ name: 'msgCenter'}" tag="li"><i class="iconfont icon-fanshui-yiwen"></i>通知消息</router-link>
-                        <router-link :to="{ name: 'spread'}" tag="li"><i class="iconfont icon-sanfang-wx"></i>分享返佣</router-link>
-                        <router-link :to="{ name: 'my'}" tag="li"><i class="iconfont icon-sanfang-wx"></i>联系客服</router-link>
+                        <router-link class="active" :to="{ name: 'index'}" tag="li"><img src="../../assets/img/index-icon/icon_sidebar_kefu.png" alt="">首页</router-link>
+                        <router-link :to="{ name: 'activity'}" tag="li"><img src="../../assets/img/index-icon/icon_sidebar_huodong.png" alt="">活动中心</router-link>
+                        <router-link :to="{ name: 'betRecord'}" tag="li"><img src="../../assets/img/index-icon/icon_sidebar_order.png" alt="">投注记录</router-link>
+                        <router-link :to="{ name: 'msgCenter'}" tag="li"><img src="../../assets/img/index-icon/icon_sidebar_msg.png" alt="">通知消息</router-link>
+                        <router-link :to="{ name: 'spread'}" tag="li"><img src="../../assets/img/index-icon/icon_sidebar_share.png" alt="">分享返佣</router-link>
+                        <router-link :to="{ name: 'contactus'}" tag="li"><img src="../../assets/img/index-icon/icon_sidebar_kefu.png" alt="">联系客服</router-link>
                         <li>
                             首页广告
                             <nut-switch :active.sync="showBanner">
@@ -251,7 +251,7 @@
         <!--全屏动画 登录或未登录-->
         <animation v-if="fullScreen" :fullScreen="fullScreen" :cdnUrl='gameImgUrl' v-on:close="closeAnimation"></animation>
         <!-- 快捷额度转换 -->
-        <Gamepop :allmoney="userinfo.totalBalance" :state="toast_control" :platformId="platformId"  :gameName="productName"  :balances="balance" @returnState="returnState">
+        <Gamepop :allmoneyPop="userinfo.balance" :state="toast_control" :platformId="platformId" :platformName="platformName" :gameName="productName" :gameId="gameId" :isDW="userinfo.isShill == 1" :balances="balance" @returnState="returnState">
         </Gamepop>
         <!-- 底部导航 -->
         <nut-tabbar @tab-switch="tabSwitch3" :tabbarList="tabList3" :bottom="true"></nut-tabbar>
@@ -259,6 +259,18 @@
 </template>
 
 <script>
+    import home from "../../assets/img/index-icon/home.png";
+    import homeLight from "../../assets/img/index-icon/home_light.png";
+    import ck from "../../assets/img/index-icon/ck.png";
+    import ckLight from "../../assets/img/index-icon/ck_light.png";
+    import yh from "../../assets/img/index-icon/yh.png";
+    import yhLight from "../../assets/img/index-icon/yh_light.png";
+    import kf from "../../assets/img/index-icon/kf.png";
+    import kfLight from "../../assets/img/index-icon/kf_light.png";
+    import my from "../../assets/img/index-icon/my.png";
+    import myLight from "../../assets/img/index-icon/my_light.png";
+    
+    
     import "swiper/dist/css/swiper.css";
     import Redbag from "../../components/RedBag";
     import BallNotice from "../../components/BallNotice";
@@ -297,34 +309,35 @@
                 tabList3: [{
                         tabTitle: "主页",
                         curr: true,
-                        icon: "http://img13.360buyimg.com/uba/jfs/t1/29316/38/1115/3203/5c0f3d61E35d0c7da/9e557f2cb5c9dab6.jpg",
-                        activeIcon: "http://img20.360buyimg.com/uba/jfs/t1/9996/36/8646/4833/5c0f3d61E7c1b7e0f/c98ad61124172e93.jpg"
+                        icon: home,
+                        activeIcon: homeLight
                     },
                     {
                         tabTitle: "存款",
                         curr: false,
-                        icon: "http://img12.360buyimg.com/uba/jfs/t1/25443/23/1062/4600/5c0f3d61E2e9f1360/c9b3421fe18614e2.jpg",
-                        activeIcon: "http://img20.360buyimg.com/uba/jfs/t1/19241/12/1048/8309/5c0f3d61E17ed5a56/c3af0964cade47f8.jpg"
+                        icon: ck,
+                        activeIcon: ckLight
                     },
                     {
                         tabTitle: "优惠",
                         curr: false,
-                        icon: "http://img13.360buyimg.com/uba/jfs/t1/10361/35/4713/4643/5c0f3d62E437a3c94/273fd0fb90798f03.jpg",
-                        activeIcon: "http://img14.360buyimg.com/uba/jfs/t1/26604/35/1073/7896/5c0f3d61Eb9f5f184/5f01c938abe4216d.jpg"
+                        icon: yh,
+                        activeIcon: yhLight
                     },
                     {
                         tabTitle: "客服",
                         curr: false,
-                        icon: "http://img11.360buyimg.com/uba/jfs/t1/14848/18/1066/3723/5c0f41bdE9f2a38fe/e6ed6768717297fb.jpg",
-                        activeIcon: "http://img30.360buyimg.com/uba/jfs/t1/17538/16/1070/6214/5c0f41bdE4bc9a1db/74cf978e5015454b.jpg"
+                        icon: kf,
+                        activeIcon: kfLight
                     },
                     {
                         tabTitle: "我的",
                         curr: false,
-                        icon: "http://img20.360buyimg.com/uba/jfs/t1/20004/20/1045/3620/5c0f3d61Eaaec1670/9e59db63983b7b9f.jpg",
-                        activeIcon: "http://img14.360buyimg.com/uba/jfs/t1/23967/14/1072/6714/5c0f3d61E0ad8991e/8f741953f6e38f15.jpg"
+                        icon: my,
+                        activeIcon: myLight
                     }
                 ],
+                meunList:['index','deposit','selfhelp','contactus','my'],
                 showLoading: false,
                 domain: location.host,
                 bannerImg: [],
@@ -338,7 +351,7 @@
                 showMenu: false,
                 showChangeMoney: false,
                 userinfo: {},
-                money:{},
+                money: {},
                 swiperOptionTop: {
                     spaceBetween: 0,
                     loop: true,
@@ -362,9 +375,10 @@
                 gameTypeActiveList: {},
                 loginPopNotice: {},
                 //---额度转换
-                platformId: "",
+                platformId: 0,
+                platformName: "",
                 productName: "",
-                gameType: 0,
+                gameId: 0,
                 balance: 0,
                 toast_control: false
             };
@@ -532,6 +546,7 @@
                         }
                     });
                 } else {
+                    console.log(111);
                     if (!this.isLogin && game.swHref && game.whStatus == 1) {
                         if (game.swHref.indexOf("://") != -1) {
                             window.open(
@@ -551,8 +566,10 @@
                             this.userinfo.apis.map(gameApi => {
                                 if (game.apiPlatformId == gameApi.apiId) {
                                     this.balance = gameApi.balance;
-                                    this.platformId = game.apiPlatform;
+                                    this.platformId = game.apiPlatformId;
+                                    this.platformName = game.apiPlatform;
                                     this.productName = game.name;
+                                    this.gameId = game.apiId;
                                     if (game.isChange == 1) {
                                         this.toast_control = true;
                                     }
@@ -567,7 +584,7 @@
                 }
             },
             toPlay(game) {
-                if (game.swHref && game.whStatus == 1) {
+                if (!this.isLogin && game.swHref && game.whStatus == 1) {
                     if (game.swHref.indexOf("://") != -1) {
                         window.open(
                             game.swHref,
@@ -582,7 +599,20 @@
                         );
                     }
                 } else {
-                    if (this.isLogin) {} else {
+                    if (this.isLogin) {
+                        this.userinfo.apis.map(gameApi => {
+                            if (game.apiPlatformId == gameApi.apiId) {
+                                this.balance = gameApi.balance;
+                                this.platformId = game.apiPlatformId;
+                                this.platformName = game.apiPlatform;
+                                this.productName = game.name;
+                                this.gameId = game.apiId;
+                                if (game.isChange == 1) {
+                                    this.toast_control = true;
+                                }
+                            }
+                        });
+                    } else {
                         this.$router.push({
                             name: "login"
                         });
@@ -599,7 +629,9 @@
                 }
             },
             tabSwitch3: function(value, index) {
-                console.log(index);
+                this.$router.push({
+                    name:this.meunList[index]
+                })
             },
             logout() {
                 logout().then(res => {

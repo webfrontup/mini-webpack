@@ -37,6 +37,9 @@
         </div>
         <nut-navbar class="pk-title" :rightShow="false"
         @on-click-back="$router.go(-1)">
+            <a class="spans" slot="back-icon">
+				<img class="imgsbank" src="../../../assets/img/my-icon/fanhui.png"/>
+			</a>
             自助返水
         </nut-navbar>
         <div class="content">

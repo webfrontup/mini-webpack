@@ -1,6 +1,11 @@
 <template>
 	<div class="deposit">
-        <nut-navbar class="pk-title" @on-click-back="$router.go(-1)" :rightShow="false">选择支付方式</nut-navbar>
+        <nut-navbar class="pk-title" @on-click-back="$router.go(-1)" :rightShow="false">
+			<a class="spans" slot="back-icon">
+				<img class="imgsbank" src="../../assets/img/my-icon/fanhui.png"/>
+			</a>
+			选择支付方式
+		</nut-navbar>
 
 		<!-- 文案详情弹框 -->
         <div v-show="isShowCopyWriterMask">

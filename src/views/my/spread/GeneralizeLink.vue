@@ -1,7 +1,12 @@
 
 <template>
     <div class="generalizeLink">
-        <nut-navbar class="pk-title" @on-click-back="$router.go(-1)" :rightShow="false">推广链接</nut-navbar>
+        <nut-navbar class="pk-title" @on-click-back="$router.go(-1)" :rightShow="false">
+			<a class="spans" slot="back-icon">
+				<img class="imgsbank" src="../../../assets/img/my-icon/fanhui.png"/>
+			</a>
+			推广链接
+		</nut-navbar>
 		<div class="content">
 			<div class="generalizeLink-add" @click="addModal">添加推广链接</div>
             

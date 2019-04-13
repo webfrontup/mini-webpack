@@ -1,6 +1,11 @@
 <template>
 	<div class="transfer">
-        <nut-navbar class="pk-title" @on-click-back="$router.go(-1)" :rightShow="false">额度转换</nut-navbar>
+        <nut-navbar class="pk-title" @on-click-back="$router.go(-1)" :rightShow="false">
+			<a class="spans" slot="back-icon">
+				<img class="imgsbank" src="../../assets/img/my-icon/fanhui.png"/>
+			</a>
+			额度转换
+		</nut-navbar>
 		<div class="transfer-fixed">
 			<div class="pk-trans-type">
 				<h2 @click="isShowTransType = true"><span>转换方式</span><i>?</i></h2>

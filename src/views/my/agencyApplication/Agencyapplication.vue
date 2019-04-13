@@ -1,11 +1,11 @@
 <template>
 	<div id="agencyappli">
-		<nut-navbar
-			class="pk-title"
-			:rightShow="false"
-			@on-click-back="$router.go(-1)"
-			>代理申请</nut-navbar
-		>
+		<nut-navbar class="pk-title" :rightShow="false" @on-click-back="$router.go(-1)">
+			<a class="spans" slot="back-icon">
+				<img class="imgsbank" src="../../../assets/img/my-icon/fanhui.png"/>
+			</a>
+			代理申请
+		</nut-navbar>
 		<div class="content" v-show="step == 1">
 			<div class="pk-input clearfix">
 				<label class="title must">代理账号</label>
@@ -666,11 +666,15 @@
                     {field:'idCard',value:3},
                     {field:'email',value:3},
                 ];
+                //去掉 后台返回的id 和 isOpen 这两个字段不需要参与验证
                 for(let key in this.setting){
+                    if(key === 'id' || key === 'isOpen'){
+                        continue;
+                    }
                     arr.push({'field':key,'value':this.setting[key]});
                 }
-                let validateResult = arr.reverse().some((item,index)=>{
-                    this.validateField(item.field,item.value,this.addData[item.field]);
+                let validateResult = arr.every((item,index)=>{
+                    return this.validateField(item.field,item.value,this.addData[item.field]);
                 })
                 if(validateResult){
                     this.step = 3;
@@ -679,7 +683,6 @@
 
             //第二步 根据后台配置 验证
             actions(){
-                
                 /**
                  * filed 字段名
                  * filedChinese 字段中文翻译
@@ -696,9 +699,13 @@
                 }
                 //格式错误 处理
                 let formatError = (filed,filedChinese,value,regexp) => {
-                    if(value && !regexp.test(value)){
-                        this.$toast.text(`${filedChinese}格式错误!`,{cover:true});
-                        return false;
+                    if(value){
+                        if(!regexp.test(value)){
+                            this.$toast.text(`${filedChinese}格式错误!`,{cover:true});
+                            return false;
+                        }else {
+                            return true;
+                        }
                     }else {
                         return true;
                     }
@@ -747,6 +754,12 @@
                         }
                     ],
                     [
+                        {field:'qq',status:2},
+                        (qq)=>{
+                            return true;
+                        }
+                    ],
+                    [
                         {field:'qq',status:3},
                         (qq)=>{
                             if(noNull('qq','qq',qq)){
@@ -760,6 +773,12 @@
                         {field:'wechat',status:1},
                         (wechat)=>{
                             return  formatError('wechat','微信',wechat,/^[a-zA-Z0-9_-]{5,20}$/);
+                        }
+                    ],
+                     [
+                        {field:'wechat',status:2},
+                        (wechat)=>{
+                            return true;
                         }
                     ],
                     [
@@ -780,6 +799,12 @@
                         }
                     ],
                     [
+                        {field:'telephone',status:2},
+                        (telephone)=>{
+                            return true;
+                        }
+                    ],
+                    [
                         {field:'telephone',status:3},
                         (telephone)=>{
                             if(noNull('telephone','手机号',telephone)){
@@ -796,6 +821,12 @@
                         {field:'englishNickName',status:1},
                         (englishNickName)=>{
                             return formatError('englishNickName','英文昵称',englishNickName,/^[A-Za-z]{1,12}$/);
+                        }
+                    ],
+                     [
+                        {field:'englishNickName',status:2},
+                        (englishNickName)=>{
+                            return true;
                         }
                     ],
                     [
@@ -818,6 +849,12 @@
                         }
                     ],
                     [
+                        {field:'chineseNickName',status:2},
+                        (chineseNickName)=>{
+                            return true;
+                        }
+                    ],
+                    [
                         {field:'chineseNickName',status:3},
                         (chineseNickName)=>{
                             if(noNull('chineseNickName','中文昵称',chineseNickName)){
@@ -833,6 +870,12 @@
                         (promoteSite)=>{
                             let reg = /^((https|http|ftp|rtsp|mms):\/\/)(([0-9a-z_!~*'().&=+$%-]+: )?[0-9a-z_!~*'().&=+$%-]+@)?(([0-9]{1,3}.){3}[0-9]{1,3}|([0-9a-z_!~*'()-]+.)*([0-9a-z][0-9a-z-]{0,61})?[0-9a-z].[a-z]{2,6})(:[0-9]{1,4})?((\/?)|(\/[0-9a-z_!~*'().;?:@&=+$,%#-]+)+\/?)$/;
                             return formatError('promoteSite','推广网址',promoteSite,reg);
+                        }
+                    ],
+                    [
+                        {field:'promoteSite',status:2},
+                        (promoteSite)=>{
+                            return true;
                         }
                     ],
                     [
@@ -855,6 +898,12 @@
                         }
                     ],
                     [
+                        {field:'otherPromoteWay',status:2},
+                        (otherPromoteWay)=>{
+                            return true;
+                        }
+                    ],
+                    [
                         {field:'otherPromoteWay',status:3},
                         (otherPromoteWay)=>{
                             if(noNull('otherPromoteWay','其它方式',otherPromoteWay)){
@@ -870,7 +919,12 @@
                         {field:'remark',status:1},
                         (remark)=>{
                             return formatError('remark','备注',remark,/^.{0,20}$/);
-
+                        }
+                    ],
+                    [
+                        {field:'remark',status:2},
+                        (remark)=>{
+                            return true;
                         }
                     ],
                     [
@@ -1023,11 +1077,15 @@
 			overflow: hidden;
 			background: $default-color;
 			.pk-input {
+				// position: relative;
 				height: $fourtrem;
 				line-height: $fourtrem;
 				border-bottom: $onerem solid $border-color;
 				display: flex;
 				justify-content: space-between;
+				.title {
+					// position: absolute;
+				}
 				.input {
 					flex: 1;
 					input {

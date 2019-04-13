@@ -62,6 +62,7 @@ export default {
         font-size: .42667rem /* 32/75 */;
         position: relative;
         padding: 0 0.4rem; /* 20/75 */
+        // padding: 0.26667rem /* 20/75 */ 0.4rem /* 30/75 */;
     }
 
 </style>

@@ -2,6 +2,9 @@
     <div class="dz-game-list pk-index">
         <nut-navbar class="pk-title" @on-click-back="back" @on-click-more="isShowSearchBox = true">
             游戏大厅
+            <a class="spans" slot="more-icon">
+                <img src="../../assets/img/index-icon/query.png" alt="">
+            </a>
         </nut-navbar>
     
         <div class="all-game" v-if="classArr.siteApis.length > 0">
@@ -31,12 +34,13 @@
                             <p>{{gameChild.name}}</p>
                             <div class="wh-mask" v-if="gameTypeActiveObj.whStatus == 2">游戏维护中...</div>
                         </div>
-                        <div v-show="gameList<=0 && !showLoading" class="no-data">
-                            <div class="no-data-box">
-                                <i class="iconfont icon-list-zanwusj"></i>
-                                <p>暂无数据哦~~</p>
-                            </div>
-                        </div>
+                        <!-- <div v-show="gameList<=0 && !showLoading" class="no-data">
+                                            <div class="no-data-box">
+                                                <i class="iconfont icon-list-zanwusj"></i>
+                                                <p>暂无数据哦~~</p>
+                                            </div>
+                                        </div> -->
+                        <no-data v-show="gameList<=0 && !showLoading"></no-data>
                         <div class="skeleton vue-skeleton-loading" v-if="showLoading && gameList<=0">
                             <div class="skeleton-bac-animation"></div>
                             <div class="skeleton-bac-content" v-for="idx in skeletonLen" :key="idx">
@@ -63,12 +67,16 @@
 </template>
 
 <script>
+    import NoData from "@/components/NoData.vue";
     import {
         getImgUrl,
         getGameType,
         getDzGameList
     } from "../../services/index.js";
     export default {
+        components: {
+            NoData,
+        },
         data() {
             return {
                 showLoading: true,
@@ -255,4 +263,17 @@
 
 <style lang="scss" scoped>
     @import "./index.scss";
+    /deep/.nut-navbar {
+        .nav-right {
+            margin: 0;
+            transform: translate(0, -50%);
+            height: 0.64rem;
+        }
+    }
+    
+    .spans {
+        img {
+            width: 0.64rem;
+        }
+    }
 </style>

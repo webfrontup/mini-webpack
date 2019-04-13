@@ -1,6 +1,11 @@
 <template>
 	<div class="company-alipay">
-        <nut-navbar class="pk-title" @on-click-back="$router.go(-1)" :rightShow="false">公司存款</nut-navbar>
+        <nut-navbar class="pk-title" @on-click-back="$router.go(-1)" :rightShow="false">
+			<a class="spans" slot="back-icon">
+				<img class="imgsbank" src="../../assets/img/my-icon/fanhui.png"/>
+			</a>
+			公司存款
+		</nut-navbar>
 
          <nut-datepicker class="begin-time"
                 :is-visible="isShowTime"

@@ -1,73 +1,3 @@
-<style lang="scss" scoped>
-	@import "../../../components/scss/pk-pwd.scss";
-	@import "./betRecord.scss";
-	.detailRecord {
-		background: $bet-record-bg;
-		.top-fifter {
-			text-align: left;
-			padding-left: 0.4rem;
-            justify-content: start;
-            box-sizing:border-box;
-		}
-		.tbody {
-			margin-bottom: 0 !important;
-			position: relative;
-			border-bottom: 1px solid $bet-record-bdr;
-			&:last-child {
-				border-bottom: none;
-			}
-			.flex-content {
-				border-right: none !important;
-			}
-		}
-		.gray {
-			color: #707070;
-        }
-        .contents{
-            padding-bottom: 1.093333rem;
-            ul{
-                padding:0 0.4rem;
-                background:$default-color;
-                li{
-                    display: flex;
-                    justify-content: space-between;
-                    border-bottom:1px solid $border-color;
-                    p{
-                        line-height: 3;
-                    }
-                    &:last-child{
-                        border-bottom:none;
-                    }
-                }
-            }
-        }
-        .theadpro{
-            background: $default-color;
-            height: .90667rem /* 68/75 */;
-            padding: 0 .53333rem /* 40/75 */;
-            border-bottom: 1px solid $bet-record-bdr;
-            .title{
-                width: auto;
-                height: 100%;
-                line-height: .90667rem /* 68/75 */;
-                color: #666666;
-                div{
-                    border-bottom: 1px solid $bet-record-bdr;
-                }
-            }
-        }
-    }
-    .bottom{
-        position: fixed;
-        left: 0;
-        bottom: 0;
-        right: 0;
-        z-index: 10;
-    }
-    .table{
-        padding-bottom:1.093333rem;
-    }
-</style>
 <template>
 	<div class="detailRecord">
 		<nut-picker
@@ -317,3 +247,73 @@ export default {
 	
 };
 </script>
+<style lang="scss" scoped>
+	@import "../../../components/scss/pk-pwd.scss";
+	@import "./betRecord.scss";
+	.detailRecord {
+		background: $bet-record-bg;
+		.top-fifter {
+			text-align: left;
+			padding-left: 0.4rem;
+            justify-content: start;
+            box-sizing:border-box;
+		}
+		.tbody {
+			margin-bottom: 0 !important;
+			position: relative;
+			border-bottom: 1px solid $bet-record-bdr;
+			&:last-child {
+				border-bottom: none;
+			}
+			.flex-content {
+				border-right: none !important;
+			}
+		}
+		.gray {
+			color: #707070;
+        }
+        .contents{
+            padding-bottom: 1.093333rem;
+            ul{
+                padding:0 0.4rem;
+                background:$default-color;
+                li{
+                    display: flex;
+                    justify-content: space-between;
+                    border-bottom:1px solid $border-color;
+                    p{
+                        line-height: 3;
+                    }
+                    &:last-child{
+                        border-bottom:none;
+                    }
+                }
+            }
+        }
+        .theadpro{
+            background: $default-color;
+            height: .90667rem /* 68/75 */;
+            padding: 0 .53333rem /* 40/75 */;
+            border-bottom: 1px solid $bet-record-bdr;
+            .title{
+                width: auto;
+                height: 100%;
+                line-height: .90667rem /* 68/75 */;
+                color: #666666;
+                div{
+                    border-bottom: 1px solid $bet-record-bdr;
+                }
+            }
+        }
+    }
+    .bottom{
+        position: fixed;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        z-index: 10;
+    }
+    .table{
+        padding-bottom:1.093333rem;
+    }
+</style>
