@@ -3,7 +3,6 @@
 const webpack = require("webpack");
 const merge = require("webpack-merge");
 const baseConfig = require("./webpack.config.base");
-const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const path = require("path");
 
