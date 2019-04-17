@@ -9,6 +9,7 @@ const AddAssetHtmlWebpackPlugin = require("add-asset-html-webpack-plugin");
 const webpack = require("webpack");
 
 const utils = require("./utils");
+const api = require("./dev.env")
 
 const plugins = [
 	new HtmlWebpackPlugin({
@@ -46,19 +47,17 @@ files.forEach(file => {
 		);
 	}
 });
-
+console.log(process.env.NODE_ENV, "process.env.NODE_ENV");
 module.exports = {
-    context: path.resolve(__dirname, '../'),
-    entry: {
-        app: './src/index.js'
-    },
-    output: {
-        path: path.resolve(__dirname, '../dist'),
-        filename: '[name].js',
-        publicPath: process.env.NODE_ENV === 'production'
-            ? './'
-            : '/'
-    },
+	context: path.resolve(__dirname, "../"),
+	entry: {
+		app: "./src/index.js"
+	},
+	output: {
+		path: path.resolve(__dirname, "../dist"),
+		filename: "[name].js",
+		publicPath: process.env.NODE_ENV === "production" ? `${api.test}` : "/"
+	},
 	resolve: {
 		extensions: [".js", ".vue", ".json"],
 		alias: {
@@ -86,18 +85,17 @@ module.exports = {
 			},
 			{
 				test: /\.js$/,
-                // exclude: path.resolve(__dirname, '/node_modules'),
-                exclude: /node_modules/,
+				// exclude: path.resolve(__dirname, '/node_modules'),
+				exclude: /node_modules/,
 				use: {
-                    loader: "babel-loader", 
+					loader: "babel-loader",
 					options: {
 						//预设
 						presets: ["@babel/preset-env"],
 						//插件
 						plugins: ["@babel/plugin-syntax-dynamic-import"]
-                    },
-                },
-                
+					}
+				}
 			},
 			// {
 			// 	test: /\.(sa|sc)ss$/,
